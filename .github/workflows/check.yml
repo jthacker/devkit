@@ -1,0 +1,22 @@
+# Runs just check, and the commit check on every commit since it was added, on every push
+# and pull request (D9, D19.2).
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: jdx/mise-action@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install -g @anthropic-ai/claude-code@2.1.287
+      - run: just check
+      - run: plugin/conventions/templates/check-commits.sh HEAD

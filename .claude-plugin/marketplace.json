@@ -1,0 +1,14 @@
+{
+  "name": "devkit",
+  "owner": {
+    "name": "Jon Thacker"
+  },
+  "description": "Lightweight change management for AI-assisted projects, kept in the repo.",
+  "plugins": [
+    {
+      "name": "devkit",
+      "source": "./plugin",
+      "description": "Lightweight change management for AI-assisted projects, kept in the repo."
+    }
+  ]
+}

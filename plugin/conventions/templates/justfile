@@ -1,0 +1,12 @@
+# Components are added as modules: mod <name> '<path>'
+
+_default:
+    @just --justfile {{source_file()}} --list
+
+# Check the docs and unpushed commits against the devkit conventions
+lint:
+    .devkit/lint-docs.sh
+    .devkit/check-commits.sh
+
+# Lint and test, as CI runs it
+check: lint
