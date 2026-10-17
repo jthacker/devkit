@@ -14,6 +14,16 @@ Ask for a proposal when a change needs a decision. Claude writes it in `docs/pro
 
 Say you accept the proposal, or describe a change you have already decided. Claude writes the change into the docs as they will read once it is built. Sections that aren't built yet are marked as planned. Claude also adds the work to the plan. You review all of it as one diff.
 
+### Why the decision comes before the code
+
+Approving that diff is the decision. Reviewers see the design before any code exists. Rejecting it throws away no work.
+
+One decision often takes many tasks to build. Each task reads the agreed design from main. Without it, every agent would work from a proposal or a chat.
+
+The docs stay honest until the work ships. A planned section says on its first line that it isn't built. It also names the milestone that builds it. User docs describe only what is built.
+
+A small change skips this step. Ask Claude to make it. The docs change in the same commit as the code.
+
 ## Design the experience
 
 Ask for UX docs when the product has screens. They live in `docs/ux.md`, with screen images in `docs/ux/`.
