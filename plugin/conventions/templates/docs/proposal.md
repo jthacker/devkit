@@ -20,7 +20,7 @@ What is wrong or missing, with evidence. Cite the R, U and D numbers it touches.
 
 ## 3. Dependencies
 
-What must be true before this change can start, such as another proposal accepted, a plan task done or an outside condition met. Link each one and say whether it holds yet. Write "None" if nothing.
+What must be true before this change can start, such as another proposal accepted, a plan task done or an outside condition met. Link each one and say whether it is met yet. Write "None" if nothing.
 
 ## 4. Proposal
 

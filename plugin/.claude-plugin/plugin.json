@@ -1,7 +1,7 @@
 {
   "name": "devkit",
   "description": "Lightweight change management for AI-assisted projects, kept in the repo: start a project, write its PRD, design, plan, proposals, analyses and user docs, and keep projects up to date as the conventions change.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": { "name": "Jon Thacker" },
   "license": "MIT"
 }
