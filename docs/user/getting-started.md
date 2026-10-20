@@ -19,21 +19,7 @@ Ask Claude in plain words.
 Start a new project called recipes that stores my recipes as Markdown files.
 ```
 
-Claude asks for anything it can't work out. Then it creates the repo and drafts a PRD. It tells you what the PRD still needs from you.
-
-## Choose where projects go
-
-New projects go next to the project you are in. To put them somewhere else, set `DEVKIT_PROJECTS_DIR` in your Claude Code user settings. Open `~/.claude/settings.json` and add it under `env`.
-
-```json
-{
-  "env": {
-    "DEVKIT_PROJECTS_DIR": "/Users/you/code"
-  }
-}
-```
-
-Use the full path, since `~` is not expanded here. If the file already has an `env` section, add the line to it. Start a new session so the setting loads.
+Claude asks where to put the project. It suggests a folder next to the project you are in. It also asks for anything else it can't work out. Then it creates the repo and drafts a PRD. It tells you what the PRD still needs from you.
 
 ## Get updates
 

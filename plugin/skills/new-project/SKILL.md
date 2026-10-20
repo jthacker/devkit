@@ -11,13 +11,13 @@ Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first. Templates are in 
 
 - **Name** and **slug**, lowercase kebab-case, naming the directory.
 - **Pitch**: one or two sentences on what it is and why it matters.
-- **Location**: default `<projects>/<slug>`, with no spaces. The projects directory is `DEVKIT_PROJECTS_DIR` if set, or else the parent of the current directory's git repo. If neither gives one, ask.
+- **Location**: from the request if it names one, with no spaces. Otherwise ask for it, suggesting `<parent>/<slug>` where the parent is the directory holding the current directory's git repo, if there is one.
 - **Source idea**: an idea doc the user points to, if one exists. It is the PRD's starting point.
 - **Stack**, if the user knows it yet.
 - **Mode**: solo, the default, or team, where changes go through reviewed pull requests.
 - **Repos**: whether it is one repo, a component of a product that has a product repo, or the product repo itself. A product repo holds the PRD, UX and cross-repo design, and its code lives in the component repos.
 
-Ask once for only what you can't work out. Confirm the name and location before creating anything. If the directory exists and isn't empty, stop and ask.
+Ask once for the location and anything else you can't work out. Confirm the name and location before creating anything. If the directory exists and isn't empty, stop and ask.
 
 ## 2. Create the skeleton
 

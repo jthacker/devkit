@@ -324,7 +324,7 @@ Every skill the plugin ships produces, updates or depends on a lifecycle doc ([P
 
 `devkit:new-project` turns one request into a committed repo:
 
-1. Work out the name, pitch, location, stack and any source idea from the request, and ask once for what's missing. The location defaults to `<projects>/<slug>`, where the projects directory is `DEVKIT_PROJECTS_DIR`, or else the parent of the current directory when that is a git repo. If neither gives one, it asks.
+1. Work out the name, pitch, location, stack and any source idea from the request, and ask once for what's missing. Unless the request names a location, the question asks for one, suggesting `<parent of the current repo>/<slug>` when the current directory is in a git repo. There is no setting for it, since where a user keeps code is outside the lifecycle ([PRD: Only the lifecycle](prd.md#prd-a6kk)).
 2. Create the repo with `AGENTS.md`, `CLAUDE.md` containing `@AGENTS.md`, `README.md`, a justfile, `docs/README.md` and `docs/prd.md`. If the stack is known, add a first component with its own justfile as a module.
 3. If the user points to an idea doc, start from it, and follow any graduation steps its repo's `AGENTS.md` gives, so the two flows join.
 4. Draft the PRD with `devkit:prd`, leaving unknowns as open questions.
