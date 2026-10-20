@@ -39,7 +39,8 @@ Numbered IDs also race. Two branches adding a design section both take the next 
 
 - Section numbers on the page are always in reading order.
 - References between docs read naturally and can be clicked.
-- Reordering, merging, splitting or promoting sections, or moving them to another doc or file, keeps every reference and citation working.
+- Reordering, merging, splitting or promoting sections, or moving them to another doc, keeps every reference and citation working.
+- Every ID is a full address. `design-7kq3` is always at `docs/design.md#design-7kq3`, so a link to it can be built anywhere without a search.
 - Removing a section makes the lint name every reference and citation still pointing at it.
 - A reorder changes only the headings and contents list of the doc it reorders, so it doesn't conflict with other branches' edits elsewhere.
 - An ID says which doc it belongs to, so a reader of code knows what it is and where to look.
@@ -147,7 +148,7 @@ Code cites the bare ID:
 const maxAttempts = 5
 ```
 
-The doc name in the ID says which doc to open, and `git grep design-7kq3` finds the section in whichever file holds it. A bare ID has no path, so it never goes stale when a doc splits or a section moves to another file, and nothing has to rewrite code when that happens. It works the same in any language's comments, since it is plain text.
+The doc name in the ID says which file to open, since each doc is one file (section 4.6). It works the same in any language's comments, since it is plain text, and nothing has to rewrite code when sections are reordered.
 
 Commits cite IDs in a `Refs:` trailer, so subjects say what changed in words:
 
@@ -160,6 +161,8 @@ Changelog: Edits made offline are no longer lost if the connection drops.
 ```
 
 `git log --grep` finds trailers as it finds subjects. Every form contains the same ID, so `git grep design-7kq3` finds the code and docs about a section, and `git log --grep design-7kq3` finds its commits, wherever it has moved. To find a section's ID, read its heading in the source, or copy it from any link that points there. Agents read the source, so they see IDs directly.
+
+Outside the repo, in a pull request, issue or chat, relative links don't work, so a full link is built from the ID, as in `https://github.com/<owner>/<repo>/blob/main/docs/design.md#design-7kq3`. On GitHub plans that have them, an autolink per doc, such as prefix `design-` pointing at `.../blob/main/docs/design.md#design-<num>`, turns every bare ID in commits, pull requests and issues into that link. These links break only if the section later moves to another doc.
 
 ### 4.4 The ID
 
@@ -179,7 +182,7 @@ Nobody writes a number or a link's text by hand. A new script, `.devkit/fmt-docs
 
 1. Numbers every heading in the PRD, UX doc and design in reading order, and every requirement within its area.
 2. Gives a fresh ID to any heading or requirement that lacks one.
-3. Turns each bare ID in a doc into a link, and rewrites every link's text to its target's title and its path to its target's file.
+3. Turns each bare ID in a doc into a link, and rewrites every link's text to its target's title and its path to its target's doc.
 4. Rewrites links and code citations that name an extra anchor to the section's main ID.
 5. Rewrites the contents list.
 
@@ -205,11 +208,21 @@ An author may also write a new section's anchor by hand, as in `<a id="design-h8
 
 Minting needs the whole history, so in a shallow clone `fmt` refuses to mint IDs and says why. `fmt-docs.sh --check` changes nothing and mints nothing, and exits non-zero when `fmt` would change something. The linter runs it, so the two never disagree, and it works in a shallow CI checkout.
 
-Analyses are never rewritten, so `fmt` leaves them alone and doesn't turn their bare IDs into links. An analysis cites the bare ID, which stays findable wherever its section moves, where a link would name a file the section may later leave.
+Analyses are never rewritten, so `fmt` leaves them alone and doesn't turn their bare IDs into links. An analysis cites the bare ID, which stays findable wherever its section moves, where a link would name a doc the section may later leave.
 
-A split doc keeps its title, contents list and first chapter in its top file, as today, and the contents list sets the order of its chapter files. Chapter files are named by slug, as in `docs/design/sync.md`, so renumbering never renames a file. If a section moves to another file, `fmt` rewrites the paths of links to it in docs. Code cites bare IDs, so it needs no change.
 
-### 4.6 Restructuring
+### 4.6 One file per doc
+
+The PRD, UX doc and design are each always one file. Docs are no longer split by chapter, so an ID's doc name is also its file, and every link built from an ID keeps working however the doc is reorganized.
+
+Splitting served two purposes, and both are covered without it:
+
+- **Agent context.** An agent loads only what its task needs by ID: `grep -n 'id="design-7kq3"'` gives the line, and it reads to the next heading. That is narrower than a chapter file.
+- **Fewer conflicts in team mode.** Git merges by line, so two people editing different sections of one file merge cleanly. The numbering race is gone with random IDs, and the contents list is regenerated, so a conflict there is resolved by running `fmt` again.
+
+Size is still worth watching, since people read these docs too. Past 600 lines the linter warns instead of failing, and the doc skills look for content that belongs elsewhere: evidence in an analysis, how-to in the user docs, or Alternatives considered trimmed. A design that keeps growing past that usually describes a system ready to split into components, each with its own repo and docs (CONVENTIONS section 15). That is a design decision, not a file layout.
+
+### 4.7 Restructuring
 
 Each move is an edit to the text followed by `just fmt`. Starting from the design in section 4.2:
 
@@ -253,7 +266,7 @@ Each one is fixed in the same commit: pointed at the section that now covers it,
 ### 3.4 Sign in <a id="ux-k2rf"></a><a id="design-m8wd"></a>
 ```
 
-Links from outside the repo name a file, so they break when their section moves to another file. Bare IDs don't, which is why code, commits and analyses use them.
+Links from outside the repo name a doc, so they break when their section moves to another doc. Bare IDs don't, which is why code, commits and analyses use them.
 
 The commit body lists what merged, moved and was deleted, so history is easy to follow:
 
@@ -267,7 +280,7 @@ Refs: design-7kq3, design-b6tn, design-r3wq
 Change: docs
 ```
 
-### 4.7 What the linter checks
+### 4.8 What the linter checks
 
 `lint-docs.sh` runs `fmt-docs.sh --check`, and also fails on mistakes `fmt` can't fix:
 
@@ -285,9 +298,9 @@ src/sync/retry.go:9: cites design-b6tn, which is now design-7kq3; run just fmt
 
 Today the linter leaves code to `audit`, since identifiers such as `R2` mean other things in code (D13). The new IDs can't be mistaken for anything else, so the linter checks citations in code too. Code is every text file git tracks outside `docs/`. Files given the `devkit-examples` attribute in `.gitattributes` are skipped, so test fixtures, vendored code and docs about the conventions can hold example IDs. In markdown, IDs in backticks are examples, as today.
 
-### 4.8 Moving existing projects
+### 4.9 Moving existing projects
 
-The v1 to v2 migration runs `fmt-docs.sh --adopt`. It gives each section a new ID, keeps the old number as a second anchor, and turns references in docs into links:
+The v1 to v2 migration first joins a split doc back into one file, its top file followed by its chapter files in contents order, and shows the result before going on. Then it runs `fmt-docs.sh --adopt`, which gives each section a new ID, keeps the old number as a second anchor, and turns references in docs into links:
 
 Before:
 
@@ -311,13 +324,13 @@ Citations in code are rewritten too, and this step isn't optional. Once the docs
 
 Commits keep their old IDs. The agents block says an old-style ID such as `D4.2` is found by grepping for its anchor, `id="D4.2"`, never by reading heading numbers. A doc citing an old ID fails the lint with the new ID to use, as citing an alias does today. After that, the project can reorder freely, and the numbers stay right.
 
-### 4.9 Docs this changes
+### 4.10 Docs this changes
 
-- **CONVENTIONS.md:** section 2 describes IDs, anchors, title links and generated numbers. Section 5 names chapter files by slug and orders them by the contents list. Section 7 adds `fmt-docs.sh` to the managed files and `just fmt`. Section 9 puts IDs in a `Refs:` trailer. Section 18, from v2, becomes the restructure rules above.
+- **CONVENTIONS.md:** section 2 describes IDs, anchors, title links and generated numbers. Section 5 drops splitting by chapter: each doc is one file, and past 600 lines the linter warns and the doc skills look for content to move or cut. Section 7 adds `fmt-docs.sh` to the managed files and `just fmt`. Section 9 puts IDs in a `Refs:` trailer. Section 18, from v2, becomes the restructure rules above.
 - **Templates:** the PRD, UX and design templates use anchored headings and linked references, and the PRD template numbers requirements within their areas. The justfile template runs `fmt-docs.sh` from `fmt`.
 - **Agents block:** cite bare IDs in code and in a commit's `Refs:` trailer, write references in docs as bare IDs or links, run `just fmt` after editing docs or moving sections, grep a section's ID and its extra anchors for history, and find an old-style ID by its anchor.
 - **Skills:** `restructure` reduces to moving text, keeping anchors and running `just fmt`. The doc skills and `design-review` stop choosing numbers. `audit` and `upgrade` learn the new form, and `upgrade` rewrites old citations in code.
-- **devkit's design:** D3's paragraph on stable IDs, D13 and D20 describe this. D13 gains the check of citations in code and the `--check` mode. D10.18, "IDs that can't collide", is reversed: random IDs are now the choice, and numbered IDs move to Alternatives considered. A new alternative records v2's fixed numbers.
+- **devkit's design:** D3's paragraph on stable IDs, D13 and D20 describe this. D13 gains the check of citations in code and the `--check` mode, and its size check becomes a warning. D3's row for the design and D16.3 drop splitting by chapter, which team projects did from the start. D10.18, "IDs that can't collide", is reversed: random IDs are now the choice, and numbered IDs move to Alternatives considered. A new alternative records v2's fixed numbers.
 - **devkit's PRD:** R17 adds that reorganizing a doc never breaks a citation, as v2 already does.
 - **devkit's own docs** migrate as any project would, which shows the result on a real 600-line design.
 
@@ -326,8 +339,8 @@ Commits keep their old IDs. The agents block says an old-style ID such as `D4.2`
 One milestone, done when devkit's own docs are on the new form and `just check` passes.
 
 1. Rework `lint-docs.sh` and its tests to run `fmt-docs.sh --check` and to check citations in code, honoring `devkit-examples`.
-2. Write `fmt-docs.sh` with `--check` and `--adopt`, with tests for numbering, requirements, minted and hand-written IDs, refusing to mint in a shallow clone, title links, contents, chapter order and paths in split docs, code rewrites after a merge or move, and adoption.
-3. Check on a scratch repo that GitHub and VS Code render the anchors and follow links within and between docs, including chapter files.
+2. Write `fmt-docs.sh` with `--check` and `--adopt`, with tests for numbering, requirements, minted and hand-written IDs, refusing to mint in a shallow clone, title links, contents, link paths after a move to another doc, code rewrites after a merge or move, and adoption, including joining a split doc.
+3. Check on a scratch repo that GitHub and VS Code render the anchors and follow links within and between docs, and that a GitHub autolink opens the section.
 4. Rewrite v2's conventions, changelog, templates, agents block and skills.
 5. Migrate devkit's PRD and design, rewrite their citations in code, and restructure the design into reading order.
 
@@ -351,7 +364,7 @@ Short, and close to today's `D4.2`. But in code it means nothing to someone who 
 
 ### 6.5 Link style: `design#7kq3`
 
-Reads as "this section of the design", like the links in docs. But `#` means something to chat tools, issue trackers and markdown at the start of a line, and a split doc breaks the literal mapping to a file.
+Reads as "this section of the design", like the links in docs. But `#` means something to chat tools, issue trackers and markdown at the start of a line.
 
 ### 6.6 A tool prefix: `devkit:D-7kq3`
 
@@ -379,11 +392,15 @@ References could read "§3.2" and "PRD §1.2", which is short and familiar. But 
 
 ### 6.12 Paths in code citations
 
-Code could cite `docs/design.md#design-7kq3`, which tells a reader which file to open, and some editors open it there. But the path goes stale when a doc splits or a section moves to another file, so `fmt` would have to rewrite code on every such move, and few editors open the section rather than the file. The doc name in the ID already says which doc.
+Code could cite `docs/design.md#design-7kq3`, which tells a reader which file to open, and some editors open it there. But the path repeats what the doc name in the ID already says, goes stale when a section moves to another doc, so `fmt` would have to rewrite code on every such move, and few editors open the section rather than the file.
 
 ### 6.13 IDs in commit subjects
 
 v1 cites IDs in the subject, where `git log --oneline` shows them. A random ID is 11 characters, a sixth of the 72-character limit, and two or three crowd out what changed.
+
+### 6.14 Split docs
+
+Docs past 600 lines could keep splitting into one file per chapter, as v1 does. Then an ID names a doc but not a file, so links from outside the repo, autolinks and editor tools need a search to find the section, and break when it moves between chapter files. `fmt` would also have to name chapter files, order them and rewrite link paths. Reading by ID gives agents the narrow context splitting was for, and git merges edits to different sections of one file cleanly.
 
 ## 7. Open questions
 
