@@ -26,13 +26,13 @@ Users install from GitHub, which caches the plugin. Install from this checkout w
 - Never change what an existing version's migration does. Fix it in a new version.
 - Commit subjects say what changed and why, in plain sentences.
 
-<!-- devkit:begin conventions=1 -->
+<!-- devkit:begin conventions=2 -->
 ## Docs
 
-This project follows the devkit conventions, version 1. Only devkit's upgrade edits this block and `.devkit/`.
+This project follows the devkit conventions, version 2. Only devkit's upgrade edits this block and `.devkit/`.
 
-- `docs/README.md` indexes the docs: `prd.md` says what to build and why, `ux.md` how people experience it, `design.md` how it works, `plan.md` and `plan/` what is left. Read the design before changing behavior, and `git log --grep` a section's ID for why it is that way.
-- Cite requirements, UX and design sections and plan tasks by ID in code comments and commits: `R3`, `U2.1`, `D4.2`, `M2.3`. Never renumber a cited section. Qualify another repo's IDs, as in `api:D4.2`.
+- `docs/README.md` indexes the docs: `prd.md` says what to build and why, `ux.md` how people experience it, `design.md` how it works, `plan.md` and `plan/` what is left. Read the design before changing behavior, and `git log --grep` a section's ID and its `**Also:**` aliases for why it is that way.
+- Cite requirements, UX and design sections and plan tasks by ID in code comments and commits: `R3`, `U2.1`, `D4.2`, `M2.3`. An ID never changes meaning or leaves its doc. Sections may sit in any order, and a merged, moved or removed section's ID becomes an `**Also:**` alias of the section that took its text. Docs cite current IDs. Qualify another repo's IDs, as in `api:D4.2`.
 - Main holds the reviewed state of the whole process. Undecided changes are proposals in `docs/proposals/`. A decided change is one design review: the PRD, UX and design in final wording, unbuilt sections marked `**Planned:** M<n>`, plan tasks added, and the proposal deleted. A planned section is a spec to build, not existing code.
 - Evidence goes in `docs/analyses/` and is never rewritten: spikes, research, incident and outcome reviews. Unscheduled ideas go under Later in the plan.
 - A milestone is done when `docs/user/`, the UX and the design match what was built, its planned markers are gone and its plan file is deleted.
