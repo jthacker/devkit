@@ -3,6 +3,10 @@
 _default:
     @just --justfile {{source_file()}} --list
 
+# Number the docs' sections and link their citations, then format the code
+fmt:
+    .devkit/fmt-docs.sh
+
 # Check the docs and unpushed commits against the devkit conventions
 lint:
     .devkit/lint-docs.sh

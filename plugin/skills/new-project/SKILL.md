@@ -26,7 +26,7 @@ Ask once for only what you can't work out. Confirm the name and location before 
    - `AGENTS.md`, with `{{DEVKIT_BLOCK}}` replaced by `agents-block.md` for the current version.
    - `CLAUDE.md`, `justfile`, `docs/README.md`, `docs/prd.md`, and `gitignore` as `.gitignore`.
    - `README.md`, with the pitch as the one-line `{{SUMMARY}}` and `{{WHY}}` as a few sentences on what changes for its users compared with today. `{{START}}` follows section 10, which before there is anything to use is one line saying so.
-   - `lint-docs.sh` and `check-commits.sh` in `.devkit/`, executable.
+   - `lint-docs.sh`, `fmt-docs.sh` and `check-commits.sh` in `.devkit/`, executable.
    - For team mode, a line in `AGENTS.md` outside the block saying the project is in team mode, and a `CODEOWNERS` file suggesting doc owners by role, with placeholders for the user to fill.
    - For a product or component repo, a `## Related repos` section in `AGENTS.md` outside the block, listing each related repo's short name, role and clone URL (CONVENTIONS section 15).
 3. Leave the UX, design, plan, proposals, analyses and user docs until there is something to put in them.
@@ -39,7 +39,7 @@ If the idea doc's repo has graduation steps in its `AGENTS.md`, follow them. Lin
 
 ## 4. Draft the PRD
 
-Draft `docs/prd.md` with `devkit:prd` from the pitch, the idea doc and the conversation. Put unknowns under Open questions rather than inventing detail.
+Draft `docs/prd.md` with `devkit:prd` from the pitch, the idea doc and the conversation. Put unknowns under Open questions rather than inventing detail. Run `just fmt` to number its sections and give its requirements IDs.
 
 ## 5. Commit and hand off
 

@@ -11,7 +11,7 @@ A proposal is an argument for one change: the problem, the options and the case 
 
 1. If `docs/proposals/` already has one for this change, update it instead.
 2. Read the PRD, the UX and design sections the change touches, related analyses, open proposals, `git log --grep` for the cited IDs, and the code.
-3. Write `docs/proposals/<slug>.md` from the template, with Status draft. Ask which docs the change touches: requirements, UX, design or several. Name the R, U and D sections it adds or alters, and what each would say.
+3. Write `docs/proposals/<slug>.md` from the template, with Status draft. Ask which docs the change touches: requirements, UX, design or several. Name the sections it adds or alters by ID, and what each would say.
 4. Under Dependencies, link each proposal that must be accepted, plan task that must be done or outside condition that must be met first, and say whether it is met yet.
 5. For a spike, list the questions it answers, each with a pass bar set before it runs.
 6. Put each rejected option under Alternatives considered with its concrete trade-off.

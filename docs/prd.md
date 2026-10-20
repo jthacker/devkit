@@ -2,7 +2,7 @@
 
 devkit gives every project one lightweight process for product development, kept in its repo. Changes to the requirements, UX and design get the same review, history and tracing as changes to code. The people who own each part of the product and the agents that assist them work from the same current docs.
 
-## Problem
+## 1. Problem <a id="prd-2cvv"></a>
 
 Code has the tools to change safely: review, history, blame and tests. The rest of product development rarely does. Agents now write much of the code and docs, so requirements, UX and design change fast too. Without the same tools, that speed exposes problems slower teams could absorb:
 
@@ -17,7 +17,7 @@ Code has the tools to change safely: review, history, blame and tests. The rest 
 
 Agents make docs cheap to write. Two things are missing. One is a standard for which docs a project keeps and what goes in each. The other is a process that changes them with the same care as code, as part of every change rather than after it.
 
-## Users
+## 2. Users <a id="prd-d3f2"></a>
 
 devkit serves people and agents working together. People are the experts. They own a part of the product, make its decisions and review changes to it. Agents are their assistants. They research, draft, build and keep the docs current, and they bring each change to the right person to decide.
 
@@ -25,7 +25,7 @@ The people are product managers, designers, engineers, writers and operators. On
 
 The agents need to find the right doc, know what is built and what is only planned, and know where new material goes, without being told each session.
 
-## What we're building
+## 3. What we're building <a id="prd-88c1"></a>
 
 A Claude Code plugin that holds conventions, templates and skills in one repo.
 
@@ -43,33 +43,33 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 
 **The conventions evolve.** The conventions carry a version, and each project records the version it follows. A hook tells a project when it is behind. Each version has a migration that brings a project up to date.
 
-## Goals and success criteria
+## 4. Goals and success criteria <a id="prd-kx4h"></a>
 
-- **R1. Start a project in one request.** "Start a new project called X that does Y" produces a committed repo with a draft PRD and the open questions to answer, with no other setup.
-- **R2. One format.** Every doc type has one template and one set of rules, and the skills follow them without being reminded.
-- **R3. Agents know the rules without the plugin.** A project's `AGENTS.md` carries a summary of the conventions, so agents that don't load Claude Code plugins follow them too.
-- **R4. Conventions evolve in one place.** Changing a convention takes one edit in the devkit repo, and new projects get it immediately.
-- **R5. Existing projects catch up on request.** When a project falls behind, its next session says so and lists what changed. The project can upgrade in one step. Nothing changes without the user's approval.
-- **R6. Existing projects are untouched until adopted.** A project that doesn't use devkit sees no hook output and no changes.
-- **R7. One way of working.** Implementing a task, fixing a bug, committing, testing, adding a dependency and keeping secrets follow the same steps in every project, whatever its language, libraries or domain.
-- **R8. Drift is visible.** On request, devkit finds a project's departures from the current conventions. `just lint` checks some of them.
-- **R9. Anyone can install it.** devkit installs from GitHub in two commands and updates when its conventions change. Someone who wants different conventions can fork it and change the fork. Nothing in it assumes one person's directories.
-- **R10. Lightweight change management in the repo.** Every stage from an idea to checking whether it worked has a home in the repo and a skill: proposals, design review, planned and built specs for each role, plan, code, release, incidents and outcome reviews. Main holds the reviewed state of all of it, and git holds how it got there.
-- **R11. Any team size.** One structure serves a person playing every role and a team with a person per role. A solo project writes less, and a team adds review, with no change of layout between them. It also works across several repos that make up one product.
-- **R12. The repo is all an agent needs.** Starting from `AGENTS.md`, an agent finds the context for any stage by following links, IDs and git history. It can tell what is built from what is planned, and it loads only what its stage needs.
-- **R13. Feedback without git.** People who don't use git can review and comment, and what their feedback decides lands in the repo.
-- **R14. Only the lifecycle.** Every skill devkit ships produces, updates or depends on a lifecycle doc. devkit leaves general coding advice and views across projects to other tools. The skills that maintain devkit itself live in its repo.
-- **R15. History by kind of change.** Every commit says what kind of change it is. Each reader filters history to what they care about with git alone. A release's notes come from the commits, in words users read.
-- **R16. Docs current with the code.** A commit holds its code, tests and docs together. A finished milestone leaves no planned markers, and its user docs, UX and design describe what was built.
-- **R17. Every change traces.** Using IDs and git alone, a reader goes from any requirement, UX or design section to the commits, code and plan tasks that cite it. From any commit or cited code, they find the sections behind it. `just lint` finds citations to sections that don't exist. Reorganizing a doc never breaks a citation.
+1. **Start a project in one request.** <a id="prd-gfx8"></a><a id="R1"></a> "Start a new project called X that does Y" produces a committed repo with a draft PRD and the open questions to answer, with no other setup.
+2. **One format.** <a id="prd-830w"></a><a id="R2"></a> Every doc type has one template and one set of rules, and the skills follow them without being reminded.
+3. **Agents know the rules without the plugin.** <a id="prd-68zv"></a><a id="R3"></a> A project's `AGENTS.md` carries a summary of the conventions, so agents that don't load Claude Code plugins follow them too.
+4. **Conventions evolve in one place.** <a id="prd-by6e"></a><a id="R4"></a> Changing a convention takes one edit in the devkit repo, and new projects get it immediately.
+5. **Existing projects catch up on request.** <a id="prd-a19r"></a><a id="R5"></a> When a project falls behind, its next session says so and lists what changed. The project can upgrade in one step. Nothing changes without the user's approval.
+6. **Existing projects are untouched until adopted.** <a id="prd-4svd"></a><a id="R6"></a> A project that doesn't use devkit sees no hook output and no changes.
+7. **One way of working.** <a id="prd-27en"></a><a id="R7"></a> Implementing a task, fixing a bug, committing, testing, adding a dependency and keeping secrets follow the same steps in every project, whatever its language, libraries or domain.
+8. **Drift is visible.** <a id="prd-5j7p"></a><a id="R8"></a> On request, devkit finds a project's departures from the current conventions. `just lint` checks some of them.
+9. **Anyone can install it.** <a id="prd-25zb"></a><a id="R9"></a> devkit installs from GitHub in two commands and updates when its conventions change. Someone who wants different conventions can fork it and change the fork. Nothing in it assumes one person's directories.
+10. **Lightweight change management in the repo.** <a id="prd-8z7e"></a><a id="R10"></a> Every stage from an idea to checking whether it worked has a home in the repo and a skill: proposals, design review, planned and built specs for each role, plan, code, release, incidents and outcome reviews. Main holds the reviewed state of all of it, and git holds how it got there.
+11. **Any team size.** <a id="prd-77ak"></a><a id="R11"></a> One structure serves a person playing every role and a team with a person per role. A solo project writes less, and a team adds review, with no change of layout between them. It also works across several repos that make up one product.
+12. **The repo is all an agent needs.** <a id="prd-5h1g"></a><a id="R12"></a> Starting from `AGENTS.md`, an agent finds the context for any stage by following links, IDs and git history. It can tell what is built from what is planned, and it loads only what its stage needs.
+13. **Feedback without git.** <a id="prd-kb8q"></a><a id="R13"></a> People who don't use git can review and comment, and what their feedback decides lands in the repo.
+14. **Only the lifecycle.** <a id="prd-a6kk"></a><a id="R14"></a> Every skill devkit ships produces, updates or depends on a lifecycle doc. devkit leaves general coding advice and views across projects to other tools. The skills that maintain devkit itself live in its repo.
+15. **History by kind of change.** <a id="prd-6v2e"></a><a id="R15"></a> Every commit says what kind of change it is. Each reader filters history to what they care about with git alone. A release's notes come from the commits, in words users read.
+16. **Docs current with the code.** <a id="prd-2c17"></a><a id="R16"></a> A commit holds its code, tests and docs together. A finished milestone leaves no planned markers, and its user docs, UX and design describe what was built.
+17. **Every change traces.** <a id="prd-x3qg"></a><a id="R17"></a> Using IDs and git alone, a reader goes from any requirement, UX or design section to the commits, code and plan tasks that cite it. From any commit or cited code, they find the sections behind it. `just lint` finds citations to sections that don't exist, in docs and code. Reorganizing a doc never breaks a citation.
 
-## Non-goals
+## 5. Non-goals <a id="prd-f08m"></a>
 
 - Scaffolding application code or picking a stack. devkit sets up docs and tooling structure. The stack is the project's decision.
 - Rules for a particular language, library or domain. Those belong to the project.
 - Supporting agents other than Claude Code beyond what `AGENTS.md` gives them.
 - General coding advice and views across projects. devkit covers the steps that produce or depend on docs.
 
-## Open questions
+## 6. Open questions <a id="prd-4dvg"></a>
 
 None yet.

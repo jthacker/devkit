@@ -12,8 +12,8 @@ Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sectio
 1. Read `docs/prd.md`, `docs/ux.md` if there is one, and `docs/design.md`, including the planned sections, which are what the plan builds.
 2. Order the work so the riskiest assumptions are tested first and something runs end to end early, usually a thin walking skeleton.
 3. Each milestone has its own file, `docs/plan/M<n>.md`, with a goal, a **Done when** line with an observable result, and tasks numbered `M<n>.<m>`. `docs/plan.md` lists the milestones in order with a link and a line each. A milestone's number matches the planned markers that name it.
-4. Write each task for an agent to pick up cold: the files or components it touches, the U and D sections it implements, and the test or recipe that checks it. A task fits in one working session. Never name who does it. In a product repo, say which repo each task is in, as in `M7.2 (api)`.
-5. Fill the requirement coverage table. Every R number maps to a milestone or is listed as deferred.
+4. Write each task for an agent to pick up cold: the files or components it touches, the sections it implements by ID, which `just fmt` turns into links, and the test or recipe that checks it. A task fits in one working session. Never name who does it. In a product repo, say which repo each task is in, as in `M7.2 (api)`.
+5. Fill the requirement coverage table. Every requirement maps to a milestone or is listed as deferred.
 6. List decisions that block upcoming work under Decisions needed, with the options. Don't decide them silently.
 
 ## Keeping it current

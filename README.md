@@ -8,7 +8,7 @@ Code changes get review and history. The rest of product development usually doe
 
 ### Find out why anything works the way it does
 
-Today the reason behind a decision lives in an old chat thread or in someone's head. Teams argue settled questions again. Sometimes they undo one by accident. With devkit every requirement and decision has an ID. Code and commits cite it. A search such as `git log --grep D4.2` shows the decision and every change that followed from it. When an auditor or an executive asks why, you show them the record.
+Today the reason behind a decision lives in an old chat thread or in someone's head. Teams argue settled questions again. Sometimes they undo one by accident. With devkit every requirement and decision has an ID. Code and commits cite it. A search such as `git log --grep design-7kq3` shows the decision and every change that followed from it. When an auditor or an executive asks why, you show them the record.
 
 ### Ship what the designer approved
 

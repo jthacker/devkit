@@ -14,7 +14,7 @@
 
 ## 1. Problem
 
-What is wrong or missing, with evidence. Cite the R, U and D numbers it touches.
+What is wrong or missing, with evidence. Cite the sections it touches by ID.
 
 ## 2. Goals and non-goals
 

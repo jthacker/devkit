@@ -1,0 +1,3 @@
+# Fixtures hold example section IDs, so the doc linter doesn't check them.
+tests/lint-docs.sh devkit-examples
+tests/fmt-docs.sh devkit-examples

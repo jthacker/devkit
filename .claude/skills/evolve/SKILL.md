@@ -5,7 +5,7 @@ description: Change the devkit conventions, templates or skills, with a version 
 
 # Evolve the conventions
 
-This skill lives in devkit's repo, so it runs in a session in a devkit checkout or a fork (D8.1). Changes made here reach new projects at once, and existing projects through `devkit:upgrade`. Read `AGENTS.md` first.
+This skill lives in devkit's repo, so it runs in a session in a devkit checkout or a fork (design-79rj). Changes made here reach new projects at once, and existing projects through `devkit:upgrade`. Read `AGENTS.md` first.
 
 ## 1. Decide what kind of change it is
 
@@ -14,7 +14,7 @@ This skill lives in devkit's repo, so it runs in a session in a devkit checkout 
 
 Rules stay independent of language, library and domain. Separate what is general from what belongs to one project. Project-only rules go in that project's `AGENTS.md`, outside the managed block.
 
-A new skill must produce, update or depend on a lifecycle doc (D5.1). Anything else doesn't ship in the plugin.
+A new skill must produce, update or depend on a lifecycle doc (design-0qqy). Anything else doesn't ship in the plugin.
 
 ## 2. Make the change
 

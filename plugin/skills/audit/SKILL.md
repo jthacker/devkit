@@ -11,11 +11,11 @@ If `AGENTS.md` has no `devkit:begin` block, offer `devkit:upgrade` to adopt devk
 
 ## 1. Check
 
-1. Run `${CLAUDE_PLUGIN_ROOT}/conventions/templates/lint-docs.sh .`, and diff that file against `.devkit/lint-docs.sh`, and `check-commits.sh` against `.devkit/check-commits.sh`.
+1. Run `${CLAUDE_PLUGIN_ROOT}/conventions/templates/lint-docs.sh .`, and diff that file, `fmt-docs.sh` and `check-commits.sh` against their copies in `.devkit/`.
 2. Check what the linter can't, section by section:
    - **1, 3:** no docs outside the document set, such as `todo.md` or a decisions file. No changelogs, done lists or decision logs in docs. The plan is in milestone files. No milestone with every task ticked. No proposal the docs already contain. No planned section whose code is already built and shipped.
-   - **2:** run `git grep -nE '[^A-Za-z0-9_][DRU][0-9]+(\.[0-9]+)*'` outside `docs/`. Each citation names a section that exists, directly or through an `**Also:**` alias, and still describes that code, or a planned section the code is building. M citations to finished milestones are fine.
-   - **15:** qualified citations such as `api:D4.2`, with the related repos `AGENTS.md` lists cloned. Each names a section that exists there.
+   - **2:** the linter checks that each ID cited in code exists. Read the citations, and check that each section still describes the code that cites it, or is a planned section the code is building. Old IDs such as `D4.2` left in code after the v2 migration are rewritten to the new ID. M citations to finished milestones are fine. Commits since the upgrade cite IDs in `Refs:`, not the subject.
+   - **15:** qualified citations such as `api:design-7kq3`, with the related repos `AGENTS.md` lists cloned. Each names a section that exists there.
    - **6:** `CLAUDE.md` is only `@AGENTS.md`. The managed block matches `${CLAUDE_PLUGIN_ROOT}/conventions/templates/agents-block.md` for the recorded version.
    - **7:** each justfile against the recipe rules.
    - **8:** where the app keeps data.

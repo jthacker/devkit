@@ -19,4 +19,4 @@ Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sectio
 6. **Fix it** with the smallest change that removes the cause. Restructuring waits for a separate commit.
 7. Run `just check` until it passes.
 8. If users can hit it again, such as through bad input or an old config, add a `docs/user/troubleshooting.md` entry.
-9. Commit the test and fix together. If the bug caused an incident, suggest an incident review with `devkit:analysis`. The subject says what was wrong, such as `Fix lost edits when two sync retries overlap, D8.3`. End it with `Change: fixed` and a `Changelog:` sentence saying what users no longer hit, or `Change: security` for a vulnerability.
+9. Commit the test and fix together. If the bug caused an incident, suggest an incident review with `devkit:analysis`. The subject says what was wrong, such as `Fix lost edits when two sync retries overlap`. End it with a `Refs:` trailer naming the sections involved, `Change: fixed` and a `Changelog:` sentence saying what users no longer hit, or `Change: security` for a vulnerability.

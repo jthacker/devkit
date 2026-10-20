@@ -22,23 +22,21 @@ expect() { # name, project dir, expected output
 good="$tmp/good"
 mkdir -p "$good/docs/user"
 cat > "$good/docs/README.md" <<'MD'
-| [prd.md](prd.md) | [design.md](design.md#1-overview) | [Guide](user/README.md) |
+| [prd.md](prd.md) | [design.md](design.md) | [Guide](user/README.md) |
 MD
 cat > "$good/docs/prd.md" <<'MD'
-### R1. Area
-- **R1.1** A requirement.
+## 1. Area <a id="prd-m2c7"></a>
+1. **A requirement.** <a id="prd-4hz8"></a> It says what.
 MD
 cat > "$good/docs/design.md" <<'MD'
-## 1. Overview
-Serves R1.1. Examples such as `D9.9` aren't checked.
-### 1.2 Detail
-See D1.2 and the D4 chapter. [Web](https://example.com)
+## 1. Overview <a id="design-q2m8"></a>
+Serves [PRD: A requirement](prd.md#prd-4hz8). Examples such as `design-zz9z` aren't checked.
+### 1.1 Detail <a id="design-7kq3"></a>
+See [Overview](#design-q2m8). [Web](https://example.com)
 ```
-D7 in a code block isn't checked.
+design-zz9z in a code block isn't checked.
 ```
 MD
-mkdir -p "$good/docs/design"
-printf '# 4. Chapter\n' > "$good/docs/design/4-chapter.md"
 printf '# Guide\n' > "$good/docs/user/README.md"
 expect good "$good" "ok   docs"
 
@@ -46,36 +44,37 @@ bad="$tmp/bad"
 mkdir -p "$bad/docs/proposals"
 printf '[gone](missing.md)\n' > "$bad/README.md"
 printf '[prd.md](prd.md)\n' > "$bad/docs/README.md"
-printf '### R1. Area\nCovered in D3 \xe2\x80\x94 later.\n' > "$bad/docs/prd.md"
+printf '## 1. Area <a id="prd-m2c7"></a>\nCovered in design-q9q9 \xe2\x80\x94 later.\n## Plain\n' > "$bad/docs/prd.md"
 printf '# Proposal\n' > "$bad/docs/proposals/x.md"
 for _ in $(seq 601); do echo; done > "$bad/docs/long.md"
 expect bad "$bad" "docs/prd.md:2: em dash
-docs/long.md: 601 lines, past 600; split it by chapter
+warn docs/long.md: 601 lines, past 600; move what belongs elsewhere
 README.md:1: broken link to missing.md
 docs/README.md: doesn't link long.md
 docs/README.md: doesn't link proposals/x.md
-docs/prd.md:2: cites D3, which doesn't exist"
+docs/prd.md:2: cites design-q9q9, which doesn't exist
+docs/prd.md:3: heading has no ID; run just fmt"
 
-# Planned sections, UX IDs, milestone files and qualified citations.
+# Planned sections, milestone files and qualified citations.
 lifecycle="$tmp/lifecycle"
 mkdir -p "$lifecycle/docs/plan" "$lifecycle/docs/user"
 cat > "$lifecycle/docs/README.md" <<'MD'
 [prd.md](prd.md) [ux.md](ux.md) [design.md](design.md) [plan.md](plan.md)
 MD
 cat > "$lifecycle/docs/prd.md" <<'MD'
-- **R1. Sync.** **Planned:** M2. Edits reach every device.
+## 1. Sync <a id="prd-m2c7"></a>
+1. **Edits reach every device.** <a id="prd-4hz8"></a> **Planned:** M2. They do.
 MD
 cat > "$lifecycle/docs/ux.md" <<'MD'
-## 3. Flows
-### 3.1 Sign in
-Serves R1. The API is described in api:D4.2 and api:U1.
+## 1. Flows <a id="ux-c3pa"></a>
+### 1.1 Sign in <a id="ux-k2rf"></a>
+Serves [PRD: Sync](prd.md#prd-m2c7). The API is described in api:design-7kq3.
 MD
 cat > "$lifecycle/docs/design.md" <<'MD'
-## 1. Overview
+## 1. Overview <a id="design-q2m8"></a>
 **Planned:** M1
-Follows U3.1.
+Follows [UX: Sign in](ux.md#ux-k2rf).
 ```markdown
-## 1. An example heading isn't a definition
 **Planned:** M9
 ```
 `**Planned:** M8` in backticks is an example.
@@ -94,9 +93,6 @@ expect lifecycle "$lifecycle" "ok   docs"
 
 drift="$tmp/drift"
 cp -R "$lifecycle" "$drift"
-printf '## 3. Again
-See U5.
-' >> "$drift/docs/ux.md"
 printf '**Planned:** M7
 ' >> "$drift/docs/design.md"
 printf '**Planned:** M1
@@ -104,68 +100,18 @@ printf '**Planned:** M1
 printf '# M3. Third
 ' > "$drift/docs/plan/M3.md"
 expect drift "$drift" "docs/plan.md: doesn't link plan/M3.md
-docs/ux.md:4: defines U3, which is already defined
-docs/ux.md:5: cites U5, which doesn't exist
-docs/design.md:9: planned for M7, which isn't in the plan
+docs/design.md:8: planned for M7, which isn't in the plan
 docs/user/README.md:2: planned marker in user docs"
 
-# Restructured docs: sections out of order, merged and promoted sections
-# listed as aliases, and citations that must use current IDs.
-moved="$tmp/moved"
-mkdir -p "$moved/docs"
-cat > "$moved/docs/README.md" <<'MD'
-[prd.md](prd.md) [design.md](design.md)
-MD
-cat > "$moved/docs/prd.md" <<'MD'
-- **R1. Sync.** Edits reach every device.
-- **R2. Merge.** Concurrent edits merge. **Also:** R3
-MD
-cat > "$moved/docs/design.md" <<'MD'
-## 1. Overview
-Serves R2. See D9, D9.2 and D4.2.
-## 9. Retries
-**Planned:** M1
-**Also:** D4.3
-### 9.2 Backoff
-## 4. Architecture
-### 4.2 Sync
-**Also:** D6.1, D6.3
-## 5. Alternatives considered
-An `**Also:** D1` in backticks is an example.
-MD
-expect "moved, no plan" "$moved" "docs/design.md:4: planned for M1, which isn't in the plan"
-printf '# Plan\n\n## M1. First\n' > "$moved/docs/plan.md"
-printf '[plan.md](plan.md)\n' >> "$moved/docs/README.md"
-expect moved "$moved" "ok   docs"
-
-stale="$tmp/stale"
-cp -R "$moved" "$stale"
-cat >> "$stale/docs/design.md" <<'MD'
-Uses D6.3 and D4.3.2, and R3.
-## 6. Again
-**Also:** D9
-MD
-expect stale "$stale" "docs/design.md:14: defines D9, which is already defined
-docs/design.md:12: cites D6.3, which is now D4.2
-docs/design.md:12: cites D4.3.2, which is now D9.2
-docs/design.md:12: cites R3, which is now R2"
-
-# IDs at the base commit must still be defined or aliased.
-history="$tmp/history"
-cp -R "$moved" "$history"
-(
-  cd "$history"
-  export GIT_AUTHOR_NAME=user GIT_AUTHOR_EMAIL=user@example.com
-  export GIT_COMMITTER_NAME=user GIT_COMMITTER_EMAIL=user@example.com
-  export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
-  git init -q && git add -A && git commit -q -m base
-  sed -i.bak '/^### 9.2 Backoff$/d; s/^\*\*Also:\*\* D6.1, D6.3$/**Also:** D6.1/' docs/design.md
-  sed -i.bak 's/ \*\*Also:\*\* R3//; s/D9.2 and //' docs/prd.md docs/design.md
-  rm docs/*.bak
-)
-expect history "$history" "docs/design.md: D9.2 is gone; list it under **Also:** where its text went
-docs/design.md: D6.3 is gone; list it under **Also:** where its text went
-docs/prd.md: R3 is gone; list it under **Also:** where its text went"
+# Citations in code are checked, except in files marked as examples.
+code="$tmp/code"
+cp -R "$lifecycle" "$code"
+mkdir -p "$code/src"
+printf '// Sign in, ux-k2rf. Gone, design-p2x9.\n' > "$code/src/auth.go"
+printf 'design-p2x9\n' > "$code/src/fixture.txt"
+printf 'src/fixture.txt devkit-examples\n' > "$code/.gitattributes"
+(cd "$code" && git init -q && git add -A)
+expect code "$code" "src/auth.go:1: cites design-p2x9, which doesn't exist"
 
 expect empty "$tmp" "ok   docs (none found)"
 

@@ -20,12 +20,12 @@ What has to be true for this to count as working. Each criterion should be check
 
 ## Requirements
 
-Numbered so the design and plan can cite them. Each says what, not how. A requirement not built yet carries `**Planned:** M<n>` after its title.
+Grouped by area, each a numbered item with a bold title, so the design and plan can cite it. Each says what, not how. `just fmt` numbers them and gives each an ID. A requirement not built yet carries `**Planned:** M<n>` after its ID.
 
-### R1. <Area>
+### <Area>
 
-- **R1.1** <Requirement>
-- **R1.2** <Requirement>
+1. **<Requirement title>.** <What it requires.>
+2. **<Requirement title>.** <What it requires.>
 
 ## Non-goals
 

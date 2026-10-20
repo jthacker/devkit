@@ -10,7 +10,7 @@ version=$(tr -d '[:space:]' < conventions/VERSION)
 latest=$(sed -n 's/^## v\([0-9][0-9]*\):.*/\1/p' conventions/CHANGELOG.md | head -n 1)
 [[ "$version" == "$latest" ]] || fail "VERSION is $version but the newest changelog entry is v$latest"
 # The plugin version's major is the conventions version, so a convention
-# change always moves it and cached installs update (D14.1).
+# change always moves it and cached installs update (design-chm4).
 plugin_version=$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' .claude-plugin/plugin.json)
 [[ "$plugin_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail "plugin version $plugin_version isn't semver"
 [[ "${plugin_version%%.*}" == "$version" ]] || fail "plugin version is $plugin_version but VERSION is $version"
@@ -25,7 +25,7 @@ for skill in skills/*/SKILL.md; do
   grep -q "^name: $name$" "$skill" || fail "$skill: name doesn't match its directory"
   grep -q '^description: ' "$skill" || fail "$skill: no description"
   # Skills that only make sense in a devkit project say so first, so they
-  # aren't offered elsewhere (D5, R6).
+  # aren't offered elsewhere (design-e8ng, prd-4svd).
   case $name in
     new-project|upgrade) ;;
     *) grep -q '^description: In a project that uses devkit, ' "$skill" \

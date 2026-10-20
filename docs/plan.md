@@ -1,6 +1,6 @@
 # devkit: Plan
 
-The work left to do, in order. Design references such as D7.3 point into [design.md](design.md), and requirement references such as R5 into [prd.md](prd.md). Each milestone has its own file in [plan/](plan/), listed here in order. Check tasks off as they land. When a milestone is done, delete its file and its line here.
+The work left to do, in order. Tasks cite the sections they build by ID, and `just fmt` links them. Each milestone has its own file in [plan/](plan/), listed here in order. Check tasks off as they land. When a milestone is done, delete its file and its line here.
 
 ## Milestones
 
@@ -14,17 +14,17 @@ The work left to do, in order. Design references such as D7.3 point into [design
 
 | Requirement | Milestones |
 | --- | --- |
-| R1 | M2.1 |
-| R2 | M2.2 |
-| R4 | M2.4 |
-| R5 | M2.4, M3 |
-| R7 | M2.5 |
-| R8 | M3.3 |
-| R9 | M4 |
-| R10 | M5, M6 |
-| R11 | M6 |
-| R12 | M5 |
-| R13 | M6 |
+| [PRD: Start a project in one request](prd.md#prd-gfx8) | M2.1 |
+| [PRD: One format](prd.md#prd-830w) | M2.2 |
+| [PRD: Conventions evolve in one place](prd.md#prd-by6e) | M2.4 |
+| [PRD: Existing projects catch up on request](prd.md#prd-a19r) | M2.4, M3 |
+| [PRD: One way of working](prd.md#prd-27en) | M2.5 |
+| [PRD: Drift is visible](prd.md#prd-5j7p) | M3.3 |
+| [PRD: Anyone can install it](prd.md#prd-25zb) | M4 |
+| [PRD: Lightweight change management in the repo](prd.md#prd-8z7e) | M5, M6 |
+| [PRD: Any team size](prd.md#prd-77ak) | M6 |
+| [PRD: The repo is all an agent needs](prd.md#prd-5h1g) | M5 |
+| [PRD: Feedback without git](prd.md#prd-kb8q) | M6 |
 
 ## Risks
 
@@ -34,5 +34,4 @@ The work left to do, in order. Design references such as D7.3 point into [design
 
 ## Later
 
-- Check code citations in the doc linter, if a pattern proves reliable enough across stacks.
-- Mirrors for feedback outside git: publish a proposal or design review's docs as a copy to a tool people comment in, and pull the comments back as proposed edits, never syncing edits back (D10.14).
+- Mirrors for feedback outside git: publish a proposal or design review's docs as a copy to a tool people comment in, and pull the comments back as proposed edits, never syncing edits back ([Design: Syncing with a wiki](design.md#design-pwq5)).

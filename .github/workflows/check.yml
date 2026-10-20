@@ -1,5 +1,5 @@
 # Runs just check, and the commit check on every commit since it was added, on every push
-# and pull request (D9, D19.2).
+# and pull request (design-axx8, design-ba7b).
 name: check
 
 on:

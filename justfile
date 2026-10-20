@@ -1,10 +1,15 @@
 _default:
     @just --justfile {{source_file()}} --list
 
-# Run the hook, linter, commit check and consistency tests
+# Number the docs' sections and link their citations
+fmt:
+    plugin/conventions/templates/fmt-docs.sh
+
+# Run the hook, linter, formatter, commit check and consistency tests
 test:
     tests/session-start.sh
     tests/lint-docs.sh
+    tests/fmt-docs.sh
     tests/check-commits.sh
     tests/consistency.sh
 

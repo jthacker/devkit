@@ -4,16 +4,22 @@ Each version of the conventions gets a section, newest first. The heading is `##
 
 A migration must be safe to run on a project with work in progress. It moves and rewrites docs rather than deleting content, and says so when a step needs the user's judgment.
 
-## v2: Restructure docs, keeping IDs as aliases
+## v2: Section IDs that never change, with generated numbers
 
-Sections in the PRD, `ux.md` and design may sit in any order, since an ID is a label, not a position. A restructure merges, splits, moves or removes sections and keeps every ID: the section that takes over an ID's text lists it on an `**Also:**` line (section 18). Docs cite current IDs, while code and commits may keep citing aliases. `lint-docs.sh` reads aliases, fails on a doc citing one, and fails when an ID defined at the base commit is gone. The new `devkit:restructure` skill does the work.
+Each section of the PRD, `ux.md` and design gets an ID that names its doc and never changes, such as `design-7kq3`, in an anchor at the end of its heading (section 2). The new `.devkit/fmt-docs.sh`, run by `just fmt`, numbers the sections in reading order, gives new ones IDs and turns citations in docs into links titled with their target. Code cites bare IDs, and commits cite them in a `Refs:` trailer, so docs can be reordered, merged and split without breaking either (section 18). Each doc is one file again, and past 600 lines the linter warns instead of failing (section 5). `lint-docs.sh` runs `fmt-docs.sh --check` and checks citations in code too. The new `devkit:restructure` skill does the moves.
 
 ### Migration from v1
 
-1. Replace `.devkit/lint-docs.sh` and the managed block.
-2. Run `just lint`. A project that followed v1 passes unchanged.
-3. If a section was removed or merged under v1 and code still cites its number, list those citations and ask the user which section each now belongs to. Add the old ID to that section's `**Also:**` line. Skip this if the user doesn't want to look.
-4. If CI runs on pull requests, offer to pass the target branch as the base, as in `.devkit/lint-docs.sh . origin/main`, with the full history fetched.
+1. Check `git status`, and ask before touching docs with uncommitted changes. In a shallow clone, fetch the full history with `git fetch --unshallow`.
+2. Replace `.devkit/lint-docs.sh` and the managed block, and copy `fmt-docs.sh` into `.devkit/`, executable. Run `.devkit/fmt-docs.sh` from the root `fmt` recipe, adding the recipe if there isn't one.
+3. Run `.devkit/fmt-docs.sh --adopt`. It joins each doc split by chapter back into one file, its top file followed by its chapter files in contents order. It gives every heading of the PRD, `ux.md` and design, and every requirement, a new ID, and keeps the old number as a second anchor, as in `<a id="design-7kq3"></a><a id="D4.2"></a>`. It turns the PRD's `**R1.2**` items into numbered requirements and citations in docs into links. Show the user the diff before going on.
+4. Fix what `--adopt` couldn't: requirements written another way, such as in a table, and sentences that read oddly once a citation became a link.
+5. `--adopt` ends with a list of the lines outside `docs/` that name an old ID. Rewrite each one that cites a section to the new ID, and leave identifiers such as a variable named `R2`. Show the user the rewrite as one diff. This step isn't optional, since once the docs are reordered, heading 4.2 may be a different section.
+6. Give test fixtures and vendored code that hold example IDs the `devkit-examples` attribute in `.gitattributes`.
+7. Run `just lint` and fix what it reports.
+8. Offer the user a GitHub autolink per doc, such as prefix `design-` pointing at `https://github.com/<owner>/<repo>/blob/main/docs/design.md#design-<num>`, so bare IDs in commits, pull requests and issues link to their section. Autolinks need a GitHub plan that has them.
+
+Commits keep their old IDs, and `git log --grep D4.2` still finds them. The section an old ID names is found by grepping for its anchor, `id="D4.2"`.
 
 ## v1: First version of the conventions
 

@@ -18,9 +18,15 @@ Claude reads only what is on main. Work on other branches isn't context. Merge a
 
 ## Ask why
 
-Every requirement and design section has an ID, such as `D4.2`. Commits cite them. Ask Claude why a section says what it does. It reads the commits that cite the ID and tells you the reasons.
+Every requirement and design section has an ID, such as `design-7kq3`. Code and commits cite them. Ask Claude why a section says what it does. It reads the commits that cite the ID and tells you the reasons.
 
 Cite IDs yourself too. "Implement M2.3" is clearer than describing the task.
+
+## Reorganize the docs freely
+
+Write a new section as a plain heading. Claude runs `just fmt`, which numbers it and gives it an ID. Move or merge sections whenever the docs read better. Links and citations keep working.
+
+To cite a section in a comment, copy its ID from the doc's source. GitHub's link icon copies the heading's number instead. That number can change.
 
 ## Keep the plan current
 

@@ -26,9 +26,26 @@ A project starts with the PRD. The design follows a reviewed PRD, and the plan a
 
 ## 2. Stable references
 
-Docs and code cite each other by IDs that don't change when text moves: `R3.2` for requirements in the PRD, `U3.2` for sections of `ux.md`, `D4.2` for design sections, and `M2.3` for plan milestones and tasks. Code comments, commits and docs use them, as in `// Retry with backoff, D8.3`.
+Every section of the PRD, `ux.md` and design has an ID that never changes: the doc's name, a hyphen and four characters, such as `prd-4hz8`, `ux-c3pa` or `design-7kq3`. The characters are lowercase Crockford base32, with at least one letter and one digit. Plan milestones and tasks are `M2` and `M2.3`.
 
-An ID never changes meaning and never leaves its doc. A number is a label, not a position, so sections may sit in any order. New sections take the next free number at their level. A merged, moved or removed section's ID is kept as an alias (section 18). Each ID is defined once, live or as an alias. When a change on a branch takes a number that main took first, renumber it on rebase, since nothing on main cites it yet. An ID in another repo is qualified by that repo's short name, as in `api:D4.2` (section 15).
+The ID sits in an anchor at the end of the section's heading. In the PRD, each requirement is a numbered item whose bold lead is its title, with its anchor after it. Bulleted items aren't requirements.
+
+```markdown
+### 3.2 Retries <a id="design-7kq3"></a>
+
+1. **Edits reach every device.** <a id="prd-4hz8"></a> An edit made offline
+   appears on the user's other devices within a minute of reconnecting.
+```
+
+- Docs link to a section by its ID, with the section's title as the link text, after the doc's name when the section is in another doc: `[Queue](#design-b6tn)`, `[PRD: Edits reach every device](prd.md#prd-4hz8)`. Words such as "see" go outside the link.
+- Code comments cite the bare ID, as in `// Give up after five attempts, design-7kq3.` Analyses cite bare IDs too, since they are never rewritten.
+- Commits cite IDs in a `Refs:` trailer (section 17).
+- An ID never changes meaning, and is never reused after its section is deleted. A heading may hold extra anchors after its main ID, for sections merged into it or its ID in another doc (section 18). Each ID is defined once.
+- An ID in another repo is qualified by that repo's short name, as in `api:design-7kq3` (section 15).
+
+Nobody writes section numbers, IDs or link text by hand. `just fmt` runs `.devkit/fmt-docs.sh`, which numbers every heading of the PRD, `ux.md` and design in reading order and every requirement within its area, gives an ID to any heading or requirement without one, turns bare IDs in docs into links, rewrites each link's text and path to match its target, points links and code citations that name an extra anchor at the main ID, and rewrites the contents list. It leaves analyses alone. So a new section is a plain heading, and a doc may cite a bare ID for `fmt` to link. An author may write a new section's anchor by hand, and `fmt` keeps it if it has the right form and isn't in the repo or its history. New IDs are checked against the history, so `fmt` won't mint them in a shallow clone.
+
+To read a section, grep for its anchor, as in `grep -n 'id="design-7kq3"' docs/design.md`, and read to the next heading. `git log --grep design-7kq3` finds its history, and each extra anchor finds the history of what merged into it. An old ID such as `D4.2` is an extra anchor too, found the same way and never by heading number.
 
 ## 3. Lifecycles
 
@@ -59,7 +76,7 @@ A milestone is done when `docs/user/` describes the behavior as built, the desig
 
 ### 3.5 Design review
 
-A decided change is one reviewed change. It writes the PRD, `ux.md` and design into their final wording, marks new or changed sections planned, takes the next free R, U and D numbers, adds the plan tasks, moves rejected options to Alternatives considered, and deletes the proposal if there is one. Reviewers read the docs as they will be, as a diff against main, so approving it is the decision. After approval the text changes only to remove the planned marker when it ships, or through another design review.
+A decided change is one reviewed change. It writes the PRD, `ux.md` and design into their final wording, marks new or changed sections planned, writes new sections as plain headings that `just fmt` numbers and gives IDs, adds the plan tasks, moves rejected options to Alternatives considered, and deletes the proposal if there is one. Reviewers read the docs as they will be, as a diff against main, so approving it is the decision. After approval the text changes only to remove the planned marker when it ships, or through another design review.
 
 Before merging, a design review is checked against what is new on main. Two reviews that change the same section are a design conflict, and the later one is made against the earlier.
 
@@ -68,12 +85,12 @@ Before merging, a design review is checked against what is new on main. Two revi
 A section decided but not built has a marker naming the milestone that builds it, as the first line under its heading:
 
 ```markdown
-## 15. Sync engine
+## 4. Sync engine <a id="design-r3wq"></a>
 
 **Planned:** M5
 ```
 
-A PRD requirement carries it after its title, as in `- **R10. Sync.** **Planned:** M5. Edits reach every device.` A change to a built section is a planned subsection, and the built text stays as it is until the change ships.
+A PRD requirement carries it after its anchor, as in `1. **Sync.** <a id="prd-m2c7"></a> **Planned:** M5. Edits reach every device.` A change to a built section is a planned subsection, and the built text stays as it is until the change ships.
 
 The marker names a milestone in the plan. `docs/user/` has no markers, since it describes only what is built. Dropping planned work removes its sections, or moves them to Alternatives considered, in a reviewed change.
 
@@ -85,7 +102,7 @@ The marker names a milestone in the plan. `docs/user/` has no markers, since it 
 - No time estimates. Say what makes the work hard, and whether it needs research.
 - Mark assumptions, and separate what is known from what is guessed.
 - Never use a real person's name. Use a placeholder such as `user`.
-- Long docs get a table of contents and numbered sections: `## 1. Problem`, `### 1.1 ...`.
+- Long docs get a contents list and numbered sections, as in `## 1. Problem` and `### 1.1 ...`. In the PRD, `ux.md` and design, `just fmt` keeps both.
 - Diagrams are Mermaid code blocks. Images are separate files referenced by relative path, never pasted SVG. Every diagram or image has a one-line caption.
 - Keep docs as short as they can be while complete. Agents load them as context.
 
@@ -95,7 +112,7 @@ Text users read is stricter. That covers `docs/user/`, the README and every mess
 
 ## 5. Size
 
-A doc past 600 lines splits by chapter. Its file keeps the title, contents and section 1. Every other top-level section moves to its own file in a folder named after the doc, keeping its number, so section 4 of `docs/design.md` becomes `docs/design/4-architecture.md`. The contents links to each chapter, and IDs such as `D4.4` keep their meaning. New chapters in a split doc get their own files.
+The PRD, `ux.md` and design are each one file, so an ID's doc name is also its file. An agent loads one section by its ID rather than a whole doc. Past 600 lines, the linter warns about any doc. Move what belongs elsewhere: evidence to an analysis, how-to to `docs/user/`, and long Alternatives considered trimmed. A design that keeps growing may describe a system ready to split into components (section 15).
 
 ## 6. Agent instructions
 
@@ -103,20 +120,20 @@ A doc past 600 lines splits by chapter. Its file keeps the title, contents and s
 
 AGENTS.md has a block between `<!-- devkit:begin conventions=N -->` and `<!-- devkit:end -->` that summarizes these conventions for agents without the plugin. `N` is the version the project follows. Everything outside the block belongs to the project: what it is, its layout, its commands and its own rules.
 
-devkit manages that block, `.devkit/lint-docs.sh` and `.devkit/check-commits.sh`. Only devkit's upgrade changes them.
+devkit manages that block, `.devkit/lint-docs.sh`, `.devkit/fmt-docs.sh` and `.devkit/check-commits.sh`. Only devkit's upgrade changes them.
 
 ## 7. Tooling
 
 - Every justfile starts with a private `_default` recipe: `@just --justfile {{source_file()}} --list`. `source_file()` makes a module list its own recipes, not the root's.
 - Each component has its own justfile with `build`, `test` and `clean`, exposed to the root with `mod`. The root `build`, `test`, `lint` and `check` cover every component, by aggregating them or by running one workspace tool, such as a TypeScript solution build.
 - `check` runs `lint` and `test`, and is what CI runs. `lint` checks formatting without changing files, and runs `.devkit/lint-docs.sh` and `.devkit/check-commits.sh`. A build never runs tests.
+- `fmt` runs `.devkit/fmt-docs.sh` (section 2) and formats the code in place.
 - Where they apply, the root also has:
-  - `fmt` formats the code in place.
   - `run *args` runs the project from the checkout.
   - `setup` installs what a fresh checkout needs, such as toolchains and dependencies, and is safe to run again.
   - `install` builds something the user runs on their own machine, such as a CLI, app or plugin, and installs it from the checkout, such as with `cargo install --path` or a copy to `~/.local/bin`. Running it again updates it. Libraries and services deployed elsewhere don't have one.
-- `.devkit/lint-docs.sh` checks the docs for em dashes, docs past 600 lines, broken links, docs missing from their index, R, U and D citations to sections that don't exist or that cite an alias, IDs defined twice, IDs that were defined at the base commit and are now gone, and planned markers naming a milestone the plan doesn't have or sitting in user docs. IDs in backticks count as examples, and qualified IDs such as `api:D4.2` aren't checked.
-- `.devkit/lint-docs.sh [root [base]]` takes the base commit for the check on gone IDs. It defaults to the upstream branch, or `HEAD` without one. CI on a pull request passes the target branch.
+- `.devkit/lint-docs.sh [root]` checks the docs for em dashes, broken links, docs missing from their index, and planned markers naming a milestone the plan doesn't have or sitting in user docs, and warns about docs past 600 lines. It runs `.devkit/fmt-docs.sh --check`, which changes nothing and fails where `fmt` would change something, where a link or citation in docs or code names an ID that doesn't exist, and where an ID is defined twice. It needs no history, so it runs in a shallow CI checkout.
+- Code is every text file git tracks outside `docs/`. Files given the `devkit-examples` attribute in `.gitattributes`, such as test fixtures, aren't checked. In Markdown, IDs in backticks are examples. Qualified IDs such as `api:design-7kq3` aren't checked.
 - `.devkit/check-commits.sh [range]` checks the trailers of section 17 on each commit in a git range, by default those not yet on the upstream branch. It skips merges and commits made before it was added.
 - Paths in the project never contain spaces.
 
@@ -132,8 +149,8 @@ People copy these paths into terminals, so they never contain spaces. On macOS t
 - A project in team mode says so in `AGENTS.md` outside the managed block. Every change, including a design review, goes through a branch and a reviewed pull request. Branches are current with main before they merge, or merge through a merge queue, so checks run on the merged result. `CODEOWNERS` maps doc paths to the people who review them, such as designers for `docs/ux.md`.
 - People who don't use git review pull requests in the browser, or pass feedback to an agent. A commit that resolves feedback says in its body what was raised and how it was resolved.
 - A commit holds one change, with its tests and docs, and `just check` passes before it.
-- The subject is a short plain sentence, under 72 characters, saying what changed and why, citing IDs, such as `Retry failed syncs so edits survive a dropped connection, D8.3`. No type prefixes such as `feat:`.
-- Every commit ends with a `Change:` trailer naming its kind, and a commit users notice also has a `Changelog:` trailer (section 17).
+- The subject is a short plain sentence, under 72 characters, saying what changed and why, such as `Retry failed syncs so edits survive a dropped connection`. IDs go in the `Refs:` trailer, not the subject. No type prefixes such as `feat:`.
+- Every commit ends with trailers: `Refs:` with the IDs it touches, `Change:` naming its kind, and `Changelog:` when users notice it (section 17).
 - When the why doesn't fit in the subject, the subject says what changed and a body says why. The body also covers what the diff doesn't show, such as options rejected or effects elsewhere. A change the subject fully explains has no body.
 - A project that publishes versions uses semantic versioning, with the version in one place, such as the package manifest. Each release is an annotated tag `v<version>` on `main`, whose message lists the user-visible changes, built from the `Changelog:` trailers since the last tag. There is no CHANGELOG file.
 
@@ -175,7 +192,7 @@ An agent needs nothing outside the repo to work at any stage. Everything else in
 
 - `AGENTS.md` points to `docs/README.md`, which indexes every doc with a line on what it holds. IDs lead from there to the exact section.
 - A built section matches the code, and a planned section says it isn't built, so an agent never guesses which it is reading.
-- Commits cite IDs, so `git log --grep D7.3` returns a section's history with its reasons. Read it before changing a section.
+- Commits cite IDs, so `git log --grep design-7kq3` returns a section's history with its reasons. Read it before changing a section.
 - Load what the stage needs, not every doc. Building a task reads the task, the planned sections it cites, the built sections they depend on, and the code. Fixing a bug reads the user docs and design for the behavior, incident reviews, and the history of the cited sections.
 - Unreviewed work on other branches isn't context. Discussion held outside the repo is input, and its outcome lands in a commit or a doc.
 
@@ -185,7 +202,7 @@ Keep a product in one repo where possible. When components must live apart, a pr
 
 - A change that crosses repos has one design review, in the product repo. Component repos follow with implementation, and planned sections where their internals change.
 - Each repo's `AGENTS.md` has a Related repos section, outside the managed block, listing each related repo's short name, role and clone URL. Clone them to read, and change a repo only from its own checkout.
-- A citation of another repo's section is qualified, as in `api:D4.2`.
+- A citation of another repo's section is qualified, as in `api:design-7kq3`.
 - A product milestone lists tasks per repo, as in `M7.2 (api)`. Its planned markers are removed once the component changes it cites have merged.
 
 ## 16. Refactors
@@ -193,8 +210,8 @@ Keep a product in one repo where possible. When components must live apart, a pr
 A refactor changes how code is built, not what it does.
 
 - ID citations move with the code they describe. One is dropped only when its code is gone.
-- D sections that describe the old structure are updated in the same change. An approach the refactor rules out moves to Alternatives considered.
-- A refactor that changes a D section or moves code between components starts as a proposal, unless the design or plan already calls for it.
+- Design sections that describe the old structure are updated in the same change. An approach the refactor rules out moves to Alternatives considered.
+- A refactor that changes a design section or moves code between components starts as a proposal, unless the design or plan already calls for it.
 - If `docs/user/` would change, behavior changed, so it is a task of its own.
 
 ## 17. Typed commits
@@ -202,16 +219,17 @@ A refactor changes how code is built, not what it does.
 Every commit says what kind of change it is, so each reader can filter history with git alone, and release notes come from the commits.
 
 ```text
-Retry failed syncs so edits survive a dropped connection, D8.3
+Retry failed syncs so edits survive a dropped connection
 
 The client gave up after one failed attempt, so offline edits were
 dropped when the connection returned mid-sync.
 
+Refs: design-7kq3, M2.3
 Change: fixed
 Changelog: Edits made offline are no longer lost if the connection drops.
 ```
 
-- The last paragraph of the message holds the trailers. `Change:` takes one value from the table. A change that is two kinds is two commits.
+- The last paragraph of the message holds the trailers. `Refs:` lists the section and task IDs the commit touches, separated by commas, and is left out when there are none. `Change:` takes one value from the table. A change that is two kinds is two commits.
 - `Changelog:` is one sentence for users, following section 4.1. It says what users notice, not what the code does.
 - On a squash merge, the squash message keeps the trailers.
 
@@ -231,20 +249,13 @@ Filter with `git log --grep '^Change: fixed' v1.2.0..`, and read the notes with 
 
 ## 18. Restructuring docs
 
-The PRD, `ux.md` and design can be reorganized as they grow. Sections merge, split, move between chapters or change order, and chapters are added. Restructuring changes where text sits, not what it says. A change to what a section says is a design review.
+The PRD, `ux.md` and design can be reorganized as they grow. Restructuring changes where text sits, not what it says. A change to what a section says is a design review. Each move is an edit to the text followed by `just fmt`, which renumbers the headings and contents and fixes the links.
 
-Every ID survives a restructure, since code, commits and other repos cite it. The section that takes over an ID's text lists it on an `**Also:**` line under its heading, after any planned marker:
+- **Reorder.** Move the text. IDs and links stay as they were.
+- **Merge.** One section's ID survives, usually the one cited most, even if the merged section gets a new title. A merge never mints an ID. The heading keeps the absorbed ID as an extra anchor, as in `### 2.1 Retries <a id="design-7kq3"></a><a id="design-b6tn"></a>`, and `fmt` points links and code citations at the surviving ID. Subsections keep their IDs wherever they move.
+- **Split.** The original ID stays with the part that keeps its main meaning, and `fmt` gives the new part an ID. Update by hand the links and citations whose meaning moved, in the same commit.
+- **Promote or demote.** The ID moves with the section, so only numbers change.
+- **Delete.** Delete the section, leaving no anchor elsewhere. In the same commit, fix each link and citation the linter names: point it at the section that now covers it, or remove it with the code that needed it. Dropped planned work moves to Alternatives considered with its anchor if a reader would wonder about it.
+- **Move to another doc.** `fmt` gives the section that doc's ID and keeps its old ID as an extra anchor, then points links and code citations at the new ID. An ID naming another doc is allowed only as an extra anchor.
 
-```markdown
-### 4.2 Sync
-
-**Also:** D6.1, D6.3
-```
-
-- **Reorder.** Move the text. Numbers stay, and the contents lists sections in reading order.
-- **Merge.** One section keeps its ID, and the others become its aliases.
-- **Split.** The original ID stays with the part that keeps its main meaning. Other parts take the next free numbers.
-- **Promote or demote.** The section takes the next free number at its new level and lists its old ID. An alias covers its subsections, so with `**Also:** D4.3` under section 9, `D4.3.2` means `D9.2`.
-- **Remove.** Built text that is gone leaves its ID as an alias of the section closest in meaning. Dropped planned work moves to Alternatives considered, which lists its ID.
-
-Docs cite current IDs. Code and commits may keep citing aliases, except where a split moved the meaning to a new section. `git log --grep` finds a section's history under its ID and each alias. The restructure is one commit with `Change: docs`, whose body maps each old ID to its new one.
+A restructure is one commit with `Change: docs`. Its `Refs:` names every ID involved, and its body says what merged, moved and was deleted, such as `Merged design-b6tn into design-7kq3`.
