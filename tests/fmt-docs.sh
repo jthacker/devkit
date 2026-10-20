@@ -324,4 +324,59 @@ Retries [PRD: Sync](prd.md#prd-new3) with backoff. The [plan](plan.md) has more.
 Builds [Design: Retries](design.md#design-new3), in [Sync](design.md).' "$(cd "$v1" && show "$v1.known" docs/prd.md docs/design.md docs/plan.md)"
 same "adopt leaves no old design dir" "" "$(ls "$v1/docs/design" 2> /dev/null || true)"
 
+# A v1 design split into one file per section, named by section number,
+# with two files the contents list doesn't link, which follow in number
+# order.
+sections="$tmp/sections"
+mkdir -p "$sections/docs/design"
+cat > "$sections/docs/design.md" <<'MD'
+# Old: Design
+
+1. [Retries](design/2.1-retries.md)
+2. [Queue](design/2.2-queue.md)
+3. [Alternatives](design/3-alternatives.md)
+MD
+printf '# 2.1 Retries\n\nRetries run in D2.10.\n' > "$sections/docs/design/2.1-retries.md"
+printf '# 2.2 Queue\n\nSee [retries](2.1-retries.md).\n' > "$sections/docs/design/2.2-queue.md"
+printf '# 2.10 Later\n\nLast part.\n' > "$sections/docs/design/2.10-later.md"
+printf '# 2.9 Soon\n\nNext part.\n' > "$sections/docs/design/2.9-soon.md"
+printf '# 3. Alternatives\n\nNone.\n' > "$sections/docs/design/3-alternatives.md"
+printf '# Plan\n\nBuilds [queue](design/2.2-queue.md).\n' > "$sections/docs/plan.md"
+repo "$sections"
+known "$sections"
+run "$sections" --adopt > /dev/null
+same "adopt joins section files" '== docs/design.md
+# Old: Design
+
+1. [Retries](#design-new1)
+2. [Queue](#design-new2)
+3. [Alternatives](#design-new3)
+4. [Soon](#design-new4)
+5. [Later](#design-new5)
+
+## 1. Retries <a id="design-new1"></a><a id="D2.1"></a>
+
+Retries run in [Later](#design-new5).
+
+## 2. Queue <a id="design-new2"></a><a id="D2.2"></a>
+
+See [retries](design.md).
+
+## 3. Alternatives <a id="design-new3"></a><a id="D3"></a>
+
+None.
+
+## 4. Soon <a id="design-new4"></a><a id="D2.9"></a>
+
+Next part.
+
+## 5. Later <a id="design-new5"></a><a id="D2.10"></a>
+
+Last part.
+== docs/plan.md
+# Plan
+
+Builds [queue](design.md).' "$(cd "$sections" && show "$sections.known" docs/design.md docs/plan.md)"
+same "adopt leaves no section files" "" "$(ls "$sections/docs/design" 2> /dev/null || true)"
+
 (( failures == 0 ))

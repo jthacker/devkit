@@ -101,13 +101,15 @@ for k in prd ux design; do [[ -f "docs/$k.md" ]] && kinds="$kinds $k"; done
 if [[ $mode == adopt ]]; then
   # Join each doc split by chapter, top file first, then its chapter files
   # in contents order. Chapter headings move up a level if they start at #.
+  # A chapter file is named by its number, as in 3-sync.md or 4.1-retries.md,
+  # and files the contents list doesn't link follow in number order.
   for k in $kinds; do
-    chapters=$( { ls docs/$k/ 2> /dev/null || true; } | grep -E '^[0-9]+-.*\.md$' || true)
+    chapters=$( { ls docs/$k/ 2> /dev/null || true; } | grep -E '^[0-9]+(\.[0-9]+)*-.*\.md$' || true)
     [[ -n "$chapters" ]] || continue
     order=$(for c in $chapters; do
       n=$(grep -n -F "($k/$c" "docs/$k.md" | head -n 1 | cut -d: -f1)
       echo "${n:-99999} ${c%%-*} $c"
-    done | sort -n -k1,1 -k2,2 | cut -d' ' -f3)
+    done | sort -k1,1n -k2,2V | cut -d' ' -f3)
     for c in $order; do
       printf '\n' >> "docs/$k.md"
       awk -v dir="$k" 'BEGIN { demote = 0 }
@@ -130,7 +132,7 @@ if [[ $mode == adopt ]]; then
     rmdir "docs/$k" 2> /dev/null || true
     # Links to a chapter file now go to the doc.
     find docs -name '*.md' -type f | while read -r f; do
-      sed -E "s|\]\(((\.\./)*)$k/[0-9]+-[^)#]*\.md|](\1$k.md|g" "$f" > "$tmp/out"
+      sed -E "s|\]\(((\.\./)*)$k/[0-9]+(\.[0-9]+)*-[^)#]*\.md|](\1$k.md|g" "$f" > "$tmp/out"
       cmp -s "$tmp/out" "$f" || cat "$tmp/out" > "$f"
     done
   done
