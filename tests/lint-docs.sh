@@ -109,6 +109,64 @@ docs/ux.md:5: cites U5, which doesn't exist
 docs/design.md:9: planned for M7, which isn't in the plan
 docs/user/README.md:2: planned marker in user docs"
 
+# Restructured docs: sections out of order, merged and promoted sections
+# listed as aliases, and citations that must use current IDs.
+moved="$tmp/moved"
+mkdir -p "$moved/docs"
+cat > "$moved/docs/README.md" <<'MD'
+[prd.md](prd.md) [design.md](design.md)
+MD
+cat > "$moved/docs/prd.md" <<'MD'
+- **R1. Sync.** Edits reach every device.
+- **R2. Merge.** Concurrent edits merge. **Also:** R3
+MD
+cat > "$moved/docs/design.md" <<'MD'
+## 1. Overview
+Serves R2. See D9, D9.2 and D4.2.
+## 9. Retries
+**Planned:** M1
+**Also:** D4.3
+### 9.2 Backoff
+## 4. Architecture
+### 4.2 Sync
+**Also:** D6.1, D6.3
+## 5. Alternatives considered
+An `**Also:** D1` in backticks is an example.
+MD
+expect "moved, no plan" "$moved" "docs/design.md:4: planned for M1, which isn't in the plan"
+printf '# Plan\n\n## M1. First\n' > "$moved/docs/plan.md"
+printf '[plan.md](plan.md)\n' >> "$moved/docs/README.md"
+expect moved "$moved" "ok   docs"
+
+stale="$tmp/stale"
+cp -R "$moved" "$stale"
+cat >> "$stale/docs/design.md" <<'MD'
+Uses D6.3 and D4.3.2, and R3.
+## 6. Again
+**Also:** D9
+MD
+expect stale "$stale" "docs/design.md:14: defines D9, which is already defined
+docs/design.md:12: cites D6.3, which is now D4.2
+docs/design.md:12: cites D4.3.2, which is now D9.2
+docs/design.md:12: cites R3, which is now R2"
+
+# IDs at the base commit must still be defined or aliased.
+history="$tmp/history"
+cp -R "$moved" "$history"
+(
+  cd "$history"
+  export GIT_AUTHOR_NAME=user GIT_AUTHOR_EMAIL=user@example.com
+  export GIT_COMMITTER_NAME=user GIT_COMMITTER_EMAIL=user@example.com
+  export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+  git init -q && git add -A && git commit -q -m base
+  sed -i.bak '/^### 9.2 Backoff$/d; s/^\*\*Also:\*\* D6.1, D6.3$/**Also:** D6.1/' docs/design.md
+  sed -i.bak 's/ \*\*Also:\*\* R3//; s/D9.2 and //' docs/prd.md docs/design.md
+  rm docs/*.bak
+)
+expect history "$history" "docs/design.md: D9.2 is gone; list it under **Also:** where its text went
+docs/design.md: D6.3 is gone; list it under **Also:** where its text went
+docs/prd.md: R3 is gone; list it under **Also:** where its text went"
+
 expect empty "$tmp" "ok   docs (none found)"
 
 (( failures == 0 ))

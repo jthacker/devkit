@@ -4,6 +4,17 @@ Each version of the conventions gets a section, newest first. The heading is `##
 
 A migration must be safe to run on a project with work in progress. It moves and rewrites docs rather than deleting content, and says so when a step needs the user's judgment.
 
+## v2: Restructure docs, keeping IDs as aliases
+
+Sections in the PRD, `ux.md` and design may sit in any order, since an ID is a label, not a position. A restructure merges, splits, moves or removes sections and keeps every ID: the section that takes over an ID's text lists it on an `**Also:**` line (section 18). Docs cite current IDs, while code and commits may keep citing aliases. `lint-docs.sh` reads aliases, fails on a doc citing one, and fails when an ID defined at the base commit is gone. The new `devkit:restructure` skill does the work.
+
+### Migration from v1
+
+1. Replace `.devkit/lint-docs.sh` and the managed block.
+2. Run `just lint`. A project that followed v1 passes unchanged.
+3. If a section was removed or merged under v1 and code still cites its number, list those citations and ask the user which section each now belongs to. Add the old ID to that section's `**Also:**` line. Skip this if the user doesn't want to look.
+4. If CI runs on pull requests, offer to pass the target branch as the base, as in `.devkit/lint-docs.sh . origin/main`, with the full history fetched.
+
 ## v1: First version of the conventions
 
 The document set with stable R, U, D and M references, proposals as arguments decided by one design review, planned sections, a plan with one file per milestone, kept analyses, the AGENTS.md managed block, and shared rules for justfiles, app data locations, git, typed commits, the README, tests, dependencies, secrets, agent context, products across repos and refactors. `.devkit/lint-docs.sh` and `.devkit/check-commits.sh` check docs and commits from `just lint`.

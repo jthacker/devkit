@@ -19,6 +19,7 @@
 17. [Agent context](#17-agent-context)
 18. [Products across repos](#18-products-across-repos)
 19. [Typed commits](#19-typed-commits)
+20. [Restructuring docs](#20-restructuring-docs)
 
 ## 1. Overview
 
@@ -89,7 +90,7 @@ The conventions in [CONVENTIONS.md](../plugin/conventions/CONVENTIONS.md) codify
 
 Analyses hold every kind of evidence: spikes, benchmarks, user research, incident reviews and outcome reviews.
 
-Four kinds of stable ID tie the docs and code together: R for requirements, U for UX sections, D for design sections and M for plan milestones and tasks. mycraft's D numbers and omnix's task IDs showed that agents use them well. They make a citation like `D8.3` in a code comment mean one thing for the life of the project, so sections are never renumbered.
+Four kinds of stable ID tie the docs and code together: R for requirements, U for UX sections, D for design sections and M for plan milestones and tasks. mycraft's D numbers and omnix's task IDs showed that agents use them well. They make a citation like `D8.3` in a code comment mean one thing for the life of the project, so an ID never changes meaning, even when its doc is restructured (D20).
 
 The rules for writing style come from the user's global preferences and the ideas repo: plain sentences, no em dashes, no time estimates, images as separate files.
 Text users read has stricter rules from the user's own editing: one point per sentence, no colons and no lists of three.
@@ -135,6 +136,7 @@ The skills are:
 | `implement`, `fix-bug` | Section 12 |
 | `upgrade` | Section 7.3 |
 | `audit` | Section 12.3 |
+| `restructure` | Merge, split, move or reorder sections, keeping every ID (D20) |
 
 Each skill names its template and the conventions by `${CLAUDE_PLUGIN_ROOT}` paths and reads them when it runs. A skill's description says when to use it, so plain requests such as "write a proposal for switching to SQLite" find the right one. Every description except those of `new-project` and `upgrade` starts with "In a project that uses devkit", so the skills aren't offered in projects that don't (R6).
 
@@ -142,7 +144,7 @@ The doc skills check for the managed block in `AGENTS.md` first. In a project wi
 
 ### 5.1 What the plugin ships
 
-Every skill the plugin ships produces, updates or depends on a lifecycle doc (R14). Each one costs context in every session of every project and a chance of triggering on an unrelated request, so a skill that doesn't touch the docs doesn't ship. There is no skill for refactoring, whose doc rules fit in the conventions (D12.4), and none for a view across projects, since the hook tells each project when it is behind (D7.3). `evolve` changes devkit itself, so it lives in devkit's repo (D8.1). Only `new-project` and `upgrade` lack the "In a project that uses devkit" opening, since both run before a project uses devkit.
+Every skill the plugin ships produces, updates or depends on a lifecycle doc (R14). Each one costs context in every session of every project and a chance of triggering on an unrelated request, so a skill that doesn't touch the docs doesn't ship. There is no skill for refactoring code, whose doc rules fit in the conventions (D12.4), though `restructure` reorganizes the lifecycle docs themselves (D20), and none for a view across projects, since the hook tells each project when it is behind (D7.3). `evolve` changes devkit itself, so it lives in devkit's repo (D8.1). Only `new-project` and `upgrade` lack the "In a project that uses devkit" opening, since both run before a project uses devkit.
 
 ## 6. Starting a project
 
@@ -289,7 +291,7 @@ A change spanning repos could live in whichever repo owns most of it. But nothin
 
 ### 10.18 IDs that can't collide
 
-Names or random suffixes such as `D-sync` would remove numbering races. But numbers show where a section sits and are short to cite, and with branches kept current a race costs one rebase.
+Names or random suffixes such as `D-sync` would remove numbering races. But numbers show a section's level and are short to cite, and with branches kept current a race costs one rebase.
 
 ### 10.19 Open pull requests as agent context
 
@@ -331,6 +333,14 @@ GitHub's generated notes and Kubernetes' release-note block work well for hosted
 
 towncrier or Changesets keep one file per change with a note in user words. They add a folder that fills and empties each release, a tool per ecosystem, and a file that repeats the commit. A `Changelog:` trailer carries the same sentence in the commit itself.
 
+### 10.29 Renumbering with citations rewritten
+
+A restructure could renumber sections in order and rewrite every citation to match. Code and docs can be rewritten, but commit messages and other repos can't, so `git log --grep` and qualified IDs would point at the wrong section.
+
+### 10.30 A list of retired IDs
+
+Old IDs could live in one table per doc. An alias next to the text it names needs no lookup, moves with its section, and is read by anyone reading the section.
+
 ## 11. Open questions
 
 - **The first trial.** The skills haven't been used on a real new project yet. The first real use will show where they ask too much or too little.
@@ -369,7 +379,7 @@ A refactor keeps behavior, so its only effect on the docs is keeping them true. 
 
 ## 13. The doc linter
 
-`lint-docs.sh` is a plain bash script, compatible with the bash 3.2 that ships with macOS, with no other dependency. It checks the docs for em dashes, docs past 600 lines, broken relative links, docs missing from their index, R, U and D citations to sections that don't exist (R17), IDs defined twice, planned markers naming a milestone the plan doesn't have, and planned markers in user docs. IDs in backticks are examples and aren't checked, and neither are qualified IDs such as `api:D4.2`, which name another repo (D18). Analyses aren't checked for citations, since they are never rewritten. M citations aren't checked, since finished milestones leave the plan.
+`lint-docs.sh` is a plain bash script, compatible with the bash 3.2 that ships with macOS, with no other dependency. It checks the docs for em dashes, docs past 600 lines, broken relative links, docs missing from their index, R, U and D citations to sections that don't exist or that cite an alias (R17), IDs defined twice, IDs defined at the base commit that are now gone (D20.2), planned markers naming a milestone the plan doesn't have, and planned markers in user docs. IDs in backticks are examples and aren't checked, and neither are qualified IDs such as `api:D4.2`, which name another repo (D18). Analyses aren't checked for citations, since they are never rewritten. M citations aren't checked, since finished milestones leave the plan.
 
 Each project gets a copy at `.devkit/lint-docs.sh`, run by its root `lint` recipe. A project's justfile can't reach the plugin's install path, and CI runs without the plugin, so the script must live in the repo. Like the managed block, the copy belongs to devkit and is replaced on every upgrade, so a change to it is a convention change with a version bump.
 
@@ -556,4 +566,16 @@ They don't show in `--oneline`, and each commit gains two lines. Agents write ne
 ### 19.3 Release notes
 
 `release` builds the tag message from the `Changelog:` trailers since the last tag, grouped under the `Change:` values in table order, with `ops` notes in a section for operators. It then checks the notes against `docs/user/` as before. For commits from before a project added the commit check, it reads the log and judges, as it did.
+
+## 20. Restructuring docs
+
+A PRD, UX doc or design outgrows its first outline. Chapters need merging, splitting, reordering or adding, and a subsection grows into a chapter. With IDs taken from heading numbers, that would change what a citation means. So a number is a label, not a position, and an ID survives every restructure (CONVENTIONS section 18).
+
+### 20.1 Aliases
+
+The section that takes over an ID's text lists it on an `**Also:**` line under its heading. An alias covers its subsections, so a promoted section needs one alias, not one per child. The alias sits next to the text it names, so a reader of the section sees its old IDs and greps history for each (R17). Docs cite current IDs, which keeps them readable. Code and commits keep their citations, which still resolve. `restructure` does the work and maps old IDs to new in the commit body (D5).
+
+### 20.2 What the linter checks
+
+`lint-docs.sh` reads aliases as definitions, so the duplicate check stops an alias from being reused. A doc citing an alias fails with the current ID to use. Every ID defined at the base commit, live or alias, must still be live or covered by an alias. The base defaults to the upstream branch, so the check covers unpushed commits and uncommitted edits, and CI on a pull request passes the target branch. It reads the base docs with `git archive`, so it needs nothing beyond git (D13). It doesn't catch two sections swapping numbers, which keeps both IDs defined, so `restructure` maps every move before making it.
 

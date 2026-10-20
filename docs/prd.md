@@ -61,7 +61,7 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 - **R14. Only the lifecycle.** Every skill devkit ships produces, updates or depends on a lifecycle doc. devkit leaves general coding advice and views across projects to other tools. The skills that maintain devkit itself live in its repo.
 - **R15. History by kind of change.** Every commit says what kind of change it is. Each reader filters history to what they care about with git alone. A release's notes come from the commits, in words users read.
 - **R16. Docs current with the code.** A commit holds its code, tests and docs together. A finished milestone leaves no planned markers, and its user docs, UX and design describe what was built.
-- **R17. Every change traces.** Using IDs and git alone, a reader goes from any requirement, UX or design section to the commits, code and plan tasks that cite it. From any commit or cited code, they find the sections behind it. `just lint` finds citations to sections that don't exist.
+- **R17. Every change traces.** Using IDs and git alone, a reader goes from any requirement, UX or design section to the commits, code and plan tasks that cite it. From any commit or cited code, they find the sections behind it. `just lint` finds citations to sections that don't exist. Reorganizing a doc never breaks a citation.
 
 ## Non-goals
 

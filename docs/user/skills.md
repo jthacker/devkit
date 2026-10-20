@@ -13,6 +13,7 @@ Ask in plain words. You can also call a skill by name.
 | `devkit:fix-bug` | Fixes a bug, starting from a failing test |
 | `devkit:proposal` | Writes a proposal for a change not yet decided |
 | `devkit:design-review` | Writes a decided change into the docs for review |
+| `devkit:restructure` | Merges, splits or reorders sections without breaking IDs |
 | `devkit:analysis` | Writes up what a spike showed |
 | `devkit:user-docs` | Writes or updates the user guide |
 | `devkit:finish-milestone` | Checks the docs and closes a finished milestone |

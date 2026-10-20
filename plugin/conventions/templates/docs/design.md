@@ -23,7 +23,7 @@ The technical requirements that follow from the PRD, citing the R numbers they s
 
 ## 4. Architecture
 
-The components, how they connect and what each owns. Add numbered sections after this one for each area of the design: data model, key flows, interfaces, storage, error handling, security, testing and so on. Each records the rule, the reasoning, and any measurements that justify it. A section not built yet starts with `**Planned:** M<n>`.
+The components, how they connect and what each owns. Add a section after this one for each area of the design, each taking the next free number: data model, key flows, interfaces, storage, error handling, security, testing and so on. Each records the rule, the reasoning, and any measurements that justify it. A section not built yet starts with `**Planned:** M<n>`.
 
 ## 5. Alternatives considered
 

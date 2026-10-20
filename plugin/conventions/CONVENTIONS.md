@@ -28,7 +28,7 @@ A project starts with the PRD. The design follows a reviewed PRD, and the plan a
 
 Docs and code cite each other by IDs that don't change when text moves: `R3.2` for requirements in the PRD, `U3.2` for sections of `ux.md`, `D4.2` for design sections, and `M2.3` for plan milestones and tasks. Code comments, commits and docs use them, as in `// Retry with backoff, D8.3`.
 
-Never renumber a cited section. New sections go at the end of their level, and a removed section's number stays unused. Each ID is defined once. When a change on a branch takes a number that main took first, renumber it on rebase, since nothing on main cites it yet. An ID in another repo is qualified by that repo's short name, as in `api:D4.2` (section 15).
+An ID never changes meaning and never leaves its doc. A number is a label, not a position, so sections may sit in any order. New sections take the next free number at their level. A merged, moved or removed section's ID is kept as an alias (section 18). Each ID is defined once, live or as an alias. When a change on a branch takes a number that main took first, renumber it on rebase, since nothing on main cites it yet. An ID in another repo is qualified by that repo's short name, as in `api:D4.2` (section 15).
 
 ## 3. Lifecycles
 
@@ -115,7 +115,8 @@ devkit manages that block, `.devkit/lint-docs.sh` and `.devkit/check-commits.sh`
   - `run *args` runs the project from the checkout.
   - `setup` installs what a fresh checkout needs, such as toolchains and dependencies, and is safe to run again.
   - `install` builds something the user runs on their own machine, such as a CLI, app or plugin, and installs it from the checkout, such as with `cargo install --path` or a copy to `~/.local/bin`. Running it again updates it. Libraries and services deployed elsewhere don't have one.
-- `.devkit/lint-docs.sh` checks the docs for em dashes, docs past 600 lines, broken links, docs missing from their index, R, U and D citations to sections that don't exist, IDs defined twice, and planned markers naming a milestone the plan doesn't have or sitting in user docs. IDs in backticks count as examples, and qualified IDs such as `api:D4.2` aren't checked.
+- `.devkit/lint-docs.sh` checks the docs for em dashes, docs past 600 lines, broken links, docs missing from their index, R, U and D citations to sections that don't exist or that cite an alias, IDs defined twice, IDs that were defined at the base commit and are now gone, and planned markers naming a milestone the plan doesn't have or sitting in user docs. IDs in backticks count as examples, and qualified IDs such as `api:D4.2` aren't checked.
+- `.devkit/lint-docs.sh [root [base]]` takes the base commit for the check on gone IDs. It defaults to the upstream branch, or `HEAD` without one. CI on a pull request passes the target branch.
 - `.devkit/check-commits.sh [range]` checks the trailers of section 17 on each commit in a git range, by default those not yet on the upstream branch. It skips merges and commits made before it was added.
 - Paths in the project never contain spaces.
 
@@ -227,3 +228,23 @@ Changelog: Edits made offline are no longer lost if the connection drops.
 | `internal` | Refactors, tests, build, tooling and dependencies | None |
 
 Filter with `git log --grep '^Change: fixed' v1.2.0..`, and read the notes with `git log --format='%(trailers:key=Changelog,valueonly)' v1.2.0..`.
+
+## 18. Restructuring docs
+
+The PRD, `ux.md` and design can be reorganized as they grow. Sections merge, split, move between chapters or change order, and chapters are added. Restructuring changes where text sits, not what it says. A change to what a section says is a design review.
+
+Every ID survives a restructure, since code, commits and other repos cite it. The section that takes over an ID's text lists it on an `**Also:**` line under its heading, after any planned marker:
+
+```markdown
+### 4.2 Sync
+
+**Also:** D6.1, D6.3
+```
+
+- **Reorder.** Move the text. Numbers stay, and the contents lists sections in reading order.
+- **Merge.** One section keeps its ID, and the others become its aliases.
+- **Split.** The original ID stays with the part that keeps its main meaning. Other parts take the next free numbers.
+- **Promote or demote.** The section takes the next free number at its new level and lists its old ID. An alias covers its subsections, so with `**Also:** D4.3` under section 9, `D4.3.2` means `D9.2`.
+- **Remove.** Built text that is gone leaves its ID as an alias of the section closest in meaning. Dropped planned work moves to Alternatives considered, which lists its ID.
+
+Docs cite current IDs. Code and commits may keep citing aliases, except where a split moved the meaning to a new section. `git log --grep` finds a section's history under its ID and each alias. The restructure is one commit with `Change: docs`, whose body maps each old ID to its new one.

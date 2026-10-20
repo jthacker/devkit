@@ -22,5 +22,5 @@ Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sectio
 
 - A decided change is written through `devkit:design-review`, with new sections marked planned. Outside a design review, edit only to match what was built.
 - Read `git log --grep` for a section's ID before changing it.
-- Never renumber. New sections go at the end of their level.
+- Never renumber. New sections take the next free number at their level, and may sit where they read best. To merge, split, move or remove sections, use `devkit:restructure`.
 - Search the code for citations of changed sections and fix or flag them.

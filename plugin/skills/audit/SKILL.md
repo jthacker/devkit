@@ -14,7 +14,7 @@ If `AGENTS.md` has no `devkit:begin` block, offer `devkit:upgrade` to adopt devk
 1. Run `${CLAUDE_PLUGIN_ROOT}/conventions/templates/lint-docs.sh .`, and diff that file against `.devkit/lint-docs.sh`, and `check-commits.sh` against `.devkit/check-commits.sh`.
 2. Check what the linter can't, section by section:
    - **1, 3:** no docs outside the document set, such as `todo.md` or a decisions file. No changelogs, done lists or decision logs in docs. The plan is in milestone files. No milestone with every task ticked. No proposal the docs already contain. No planned section whose code is already built and shipped.
-   - **2:** run `git grep -nE '[^A-Za-z0-9_][DRU][0-9]+(\.[0-9]+)*'` outside `docs/`. Each citation names a section that exists and still describes that code, or a planned section the code is building. M citations to finished milestones are fine.
+   - **2:** run `git grep -nE '[^A-Za-z0-9_][DRU][0-9]+(\.[0-9]+)*'` outside `docs/`. Each citation names a section that exists, directly or through an `**Also:**` alias, and still describes that code, or a planned section the code is building. M citations to finished milestones are fine.
    - **15:** qualified citations such as `api:D4.2`, with the related repos `AGENTS.md` lists cloned. Each names a section that exists there.
    - **6:** `CLAUDE.md` is only `@AGENTS.md`. The managed block matches `${CLAUDE_PLUGIN_ROOT}/conventions/templates/agents-block.md` for the recorded version.
    - **7:** each justfile against the recipe rules.

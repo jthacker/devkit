@@ -21,8 +21,8 @@ When the design is first written and reviewed, suggest `devkit:plan`.
 ## Updating
 
 - A decided change that isn't built goes through `devkit:design-review`, as planned sections. Otherwise edit the section the change belongs in, so it describes the system as built. A decision lives in the section it governs, with its reasoning.
-- Read `git log --grep` for a section's ID before changing it.
-- Never renumber. New sections go at the end of their level.
+- Read `git log --grep` for a section's ID and its aliases before changing it.
+- Never renumber. New sections take the next free number at their level, and may sit where they read best. To merge, split, move or remove sections, use `devkit:restructure`.
 - An option the change rules out moves to Alternatives considered.
 - Search the code for citations of changed sections, such as `D4.2`, and fix or flag them.
 - Past 600 lines, propose splitting by chapter as section 5 describes.
