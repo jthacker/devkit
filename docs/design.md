@@ -135,17 +135,7 @@ flowchart LR
 
 ### 5.2 Planned sections <a id="design-5geq"></a><a id="D15.2"></a>
 
-A decided change is written straight into its final home. A section not built yet has a marker naming the milestone that builds it, as the first line under its heading:
-
-```markdown
-## 4. Sync engine <a id="design-r3wq"></a>
-
-**Planned:** M5
-
-How sync works, written as it will read once built.
-```
-
-A PRD requirement carries it after its title. A partly built section keeps its current text and adds the change as a planned subsection.
+A decided change is written straight into its final home. A section not built yet has a marker naming the milestone that builds it, `**Planned:** M5`, as the first line under its heading (CONVENTIONS section 3.6). A PRD requirement carries it after its anchor. A partly built section keeps its current text and adds the change as a planned subsection.
 
 The marker is state, so tooling keeps it honest. The linter fails when a marker names a milestone the plan doesn't have, so removing a milestone can't leave planned sections behind. `finish-milestone` removes the markers for its milestone and changes nothing else in the section. `implement` treats a planned section as a spec to build. Dropping planned work removes its sections, or moves them to Alternatives considered, in a reviewed change. `docs/user/` holds only built behavior.
 
@@ -249,14 +239,7 @@ GitHub and VS Code don't show the anchor, so a reader sees numbered headings and
 
 Links show titles, not numbers. A title changes only when someone renames the section, while a number changes whenever anything above it moves. So a reorder renumbers one doc's headings and contents and touches no other line, and a design review's diff shows the decision rather than a wave of renumbered links. Renaming a section rewrites every link to it, which shows reviewers where it is used. Numbers stay in headings, so a reader can find their way and say "see 3.2".
 
-In the PRD, each area is a heading and each requirement a numbered item whose bold lead is its title, with its anchor after the title. Bulleted items aren't requirements, so bold-led bullets elsewhere get no IDs.
-
-```markdown
-### 5.1 Sync <a id="prd-m2c7"></a>
-
-1. **Edits reach every device.** <a id="prd-4hz8"></a> An edit made offline
-   appears on the user's other devices within a minute of reconnecting.
-```
+In the PRD, each area is a heading and each requirement a numbered item whose bold lead is its title, with its anchor after the title (CONVENTIONS section 2). Bulleted items aren't requirements, so bold-led bullets elsewhere get no IDs.
 
 Code cites the bare ID, as in `// Give up after five attempts, design-7kq3.`, and commits cite IDs in a `Refs:` trailer, so subjects say what changed in words. `git grep design-7kq3` finds the code and docs about a section, and `git log --grep design-7kq3` its commits, wherever it has moved. Outside the repo, a full link is built from the ID, as in `https://github.com/<owner>/<repo>/blob/main/docs/design.md#design-7kq3`, and a GitHub autolink per doc turns bare IDs in commits, pull requests and issues into that link. Analyses cite bare IDs too. They are never rewritten, and a bare ID stays findable wherever its section moves, where a link names a doc the section may later leave.
 
@@ -282,14 +265,11 @@ Past 600 lines the linter warns instead of failing, and the doc skills look for 
 
 ### 9.5 Restructuring <a id="design-p391"></a><a id="D20.5"></a>
 
-Each move is an edit to the text followed by `just fmt`, and `restructure` does the work (CONVENTIONS section 18).
+Each move is an edit to the text followed by `just fmt`, and `restructure` does the work. CONVENTIONS section 18 lists the moves. Three choices shape them:
 
-- **Reorder.** Move the text. Numbers and contents follow, and IDs and links stay as they were.
-- **Merge.** One section's ID survives, usually the one cited most, and its heading keeps the absorbed ID as an extra anchor, as in `<a id="design-7kq3"></a><a id="design-b6tn"></a>`. Grepping the merged section's IDs then finds the absorbed section's history, and `fmt` rewrites links and code citations to the surviving ID. Subsections keep their IDs wherever they move, since IDs don't encode the hierarchy.
-- **Split.** The original ID stays with the part that keeps the main meaning, and `fmt` gives the new part an ID. Citations whose meaning moved are updated by hand in the same commit, since only a person can tell which part each one meant.
-- **Promote or demote.** The ID moves with the section, so only numbers change.
-- **Delete.** The section goes with no tombstone. A link or citation still pointing at it fails the lint, and is fixed in the same commit. Commits keep citing the ID, so `git log --grep` still shows why the section existed and when it went.
-- **Move to another doc.** The section gets that doc's ID, and its old ID stays as an extra anchor, since an ID naming another doc is allowed only as an extra anchor. Links from outside the repo name a doc, so they break when a section changes doc. Bare IDs don't, which is why code, commits and analyses use them.
+- **A merge keeps one ID** and holds the absorbed one as an extra anchor, as in `<a id="design-7kq3"></a><a id="design-b6tn"></a>`. Grepping the merged section's IDs finds both histories, and `fmt` points links and code citations at the survivor. A split keeps the original ID with the part that keeps the main meaning, and only a person can tell which part each citation meant.
+- **A delete leaves no tombstone.** Citations still pointing at it fail the lint and are fixed in the same commit, and `git log --grep` still shows why the section existed and when it went.
+- **A move to another doc takes that doc's ID**, so an ID always names the file that holds it. Links from outside the repo break on such a move, and bare IDs don't, which is why code, commits and analyses use them.
 
 The commit's `Refs:` names every ID involved, and its body says what merged, moved and was deleted.
 
@@ -385,30 +365,9 @@ IDs say what part of the product a commit touches, not what kind of change it is
 
 ### 13.1 The trailers <a id="design-rpd8"></a><a id="D19.1"></a>
 
-Every commit ends with a `Change:` trailer. A commit users notice also has a `Changelog:` trailer, one sentence written for users under section 4.1 of the conventions. A `Refs:` trailer cites the IDs the commit touches, so the subject says what changed in words ([IDs in commit subjects](#design-937p)).
+Every commit ends with a `Change:` trailer. A commit users notice also has a `Changelog:` trailer, one sentence written for users under section 4.1 of the conventions. A `Refs:` trailer cites the IDs the commit touches, so the subject says what changed in words ([Other places to cite IDs](#design-8b7e)).
 
-```text
-Retry failed syncs so edits survive a dropped connection
-
-The client gave up after one failed attempt, so offline edits were
-dropped when the connection returned mid-sync.
-
-Refs: design-7kq3, M2.3
-Change: fixed
-Changelog: Edits made offline are no longer lost if the connection drops.
-```
-
-| Value | Meaning | Changelog |
-| --- | --- | --- |
-| `added` | New behavior users see | Required |
-| `changed` | Different behavior users see | Required |
-| `deprecated` | Behavior that will be removed | Required |
-| `removed` | Behavior users relied on is gone | Required |
-| `fixed` | A bug users could hit is fixed | Required |
-| `security` | A vulnerability is fixed | Required |
-| `ops` | Config, deployment or runtime changes operators need | Optional, for operators |
-| `docs` | Docs only, including design reviews and proposals | None |
-| `internal` | Refactors, tests, build, tooling and dependencies | None |
+CONVENTIONS section 17 gives an example and the nine values. `added`, `changed`, `deprecated`, `removed`, `fixed` and `security` need a `Changelog:` line, `ops` may have one for operators, and `docs` and `internal` have none.
 
 The first six are Keep a Changelog's categories and GitLab's trailer values, so notes group the way most changelogs do and tools such as git-cliff can read them. The last three serve the other readers in [A home for each role](#design-x79v). A commit has one `Change:` value. A change that is two kinds, such as a fix that also deprecates something, is two commits.
 
@@ -439,16 +398,7 @@ Migrations are written for an agent, not a script. Most real changes, such as me
 
 ### 14.2 Where a project records its version <a id="design-m7en"></a><a id="D7.2"></a>
 
-The project's `AGENTS.md` contains a block managed by devkit:
-
-```markdown
-<!-- devkit:begin conventions=1 -->
-## Docs
-...summary of the conventions...
-<!-- devkit:end -->
-```
-
-The marker records the version, and the block gives the conventions to any agent that reads `AGENTS.md`, plugin or not ([PRD: Agents know the rules without the plugin](prd.md#prd-68zv)). Only an upgrade replaces the block, and everything outside it belongs to the project. One marker in a file the project already has avoids a separate stamp file.
+The project's `AGENTS.md` contains a block managed by devkit, from `<!-- devkit:begin conventions=1 -->` to `<!-- devkit:end -->`, summarizing the conventions. The marker records the version, and the block gives the conventions to any agent that reads `AGENTS.md`, plugin or not ([PRD: Agents know the rules without the plugin](prd.md#prd-68zv)). Only an upgrade replaces the block, and everything outside it belongs to the project. One marker in a file the project already has avoids a separate stamp file.
 
 ### 14.3 Being told, and upgrading <a id="design-8vtq"></a><a id="D7.3"></a>
 
@@ -533,161 +483,108 @@ Copier can render a project and later merge template updates into it. It handles
 
 A `docs/decisions/` folder with one file per decision. None of the projects used them. Each design section already records the decision it holds and why, and Alternatives considered records what was rejected, without another folder for agents to keep in step.
 
-### 19.3 Conventions in the global CLAUDE.md <a id="design-p18s"></a><a id="D10.3"></a>
+### 19.3 Other places for the conventions <a id="design-p18s"></a><a id="D10.3"></a><a id="design-g12q"></a><a id="D10.4"></a><a id="design-q7xy"></a><a id="D10.6"></a>
 
-Putting the rules in `~/.claude/CLAUDE.md` would load them in every session, including unrelated ones, at a context cost. It has no version, so nothing can tell a project it's behind, and other agents don't read it.
+- **Conventions in the global CLAUDE.md.** Putting the rules in `~/.claude/CLAUDE.md` would load them in every session, including unrelated ones, at a context cost. It has no version, so nothing can tell a project it's behind, and other agents don't read it.
+- **Copying the conventions into each project.** A full copy of the rules in each repo is what agents without the plugin would need. But copies drift, and that is the problem with the duplicated `CLAUDE.md` files today. The managed block is a short summary that an upgrade replaces wholesale, which keeps drift visible and fixable.
+- **A stamp file for the version.** A file such as `.devkit` could hold the version. The managed block already has to exist so agents get the rules without the plugin ([PRD: Agents know the rules without the plugin](prd.md#prd-68zv)), so its marker carries the version with no extra file.
 
-### 19.4 Copying the conventions into each project <a id="design-g12q"></a><a id="D10.4"></a>
-
-A full copy of the rules in each repo is what agents without the plugin would need. But copies drift, and that is the problem with the duplicated `CLAUDE.md` files today. The managed block is a short summary that an upgrade replaces wholesale, which keeps drift visible and fixable.
-
-### 19.5 Automatic upgrades <a id="design-at9m"></a><a id="D10.5"></a>
+### 19.4 Automatic upgrades <a id="design-at9m"></a><a id="D10.5"></a>
 
 The hook could run the upgrade itself. But migrations move and rewrite docs, possibly in the middle of other work, so the user starts them.
 
-### 19.6 A stamp file for the version <a id="design-q7xy"></a><a id="D10.6"></a>
-
-A file such as `.devkit` could hold the version. The managed block already has to exist so agents get the rules without the plugin ([PRD: Agents know the rules without the plugin](prd.md#prd-68zv)), so its marker carries the version with no extra file.
-
-### 19.7 A local marketplace only <a id="design-fz0q"></a><a id="D10.7"></a>
+### 19.5 A local marketplace only <a id="design-fz0q"></a><a id="D10.7"></a>
 
 Everyone could clone the repo and run `just install`, so the plugin always loads in place. But that needs `just` and a checkout kept up to date by hand, and users would get every unreleased commit. Installing from GitHub gives users releases, and the checkout route stays for the maintainer and forks.
 
-### 19.8 A decision log and Done list in the plan <a id="design-v77h"></a><a id="D10.8"></a>
+### 19.6 A decision log and Done list in the plan <a id="design-v77h"></a><a id="D10.8"></a>
 
 anneal kept a dated decision table, and a plan could keep finished milestones as one-line entries. Both are history, which git already keeps with the commit that made each change. In the docs they grow without bound and cost context every session, while the decision itself already lives in the design section it governs.
 
-### 19.9 markdownlint and a link checker <a id="design-9gbv"></a><a id="D10.9"></a>
+### 19.7 markdownlint and a link checker <a id="design-9gbv"></a><a id="D10.9"></a>
 
 Off-the-shelf linters would check links and Markdown style. They add a tool dependency to every project, and none know devkit's rules, such as citations or the doc index. A small script checks exactly the conventions.
 
-### 19.10 Fold proposals in at acceptance <a id="design-19nh"></a><a id="D10.10"></a>
+### 19.8 Other ways to hold decided work <a id="design-19nh"></a><a id="D10.10"></a><a id="design-aq8m"></a><a id="D10.11"></a><a id="design-hj99"></a><a id="D10.12"></a>
 
-The old rule. An accepted proposal's design was edited into the docs at once. It is simple, but main mixed built and unbuilt work with no marker, and the docs were reviewed as a proposal's prose, not as the text that landed.
+- **Fold proposals in at acceptance.** The old rule. An accepted proposal's design was edited into the docs at once. It is simple, but main mixed built and unbuilt work with no marker, and the docs were reviewed as a proposal's prose, not as the text that landed.
+- **Accepted proposals as in-flight specs.** An accepted proposal could stay on main until its work ships, then fold into the docs. But the review is still of prose, the fold rewrites the design after approval with no real review, and one feature takes proposal, code and fold changes. Planned sections give the same visibility with one review of the final text.
+- **A feature branch per feature.** Exploration, doc edits and code could live on one branch that merges once, keeping main to what is built. But in-flight work is then invisible from main, long branches drift, and dependent features need stacked branches. Treating main as the state of the process removes the reason to keep planned work off it.
 
-### 19.11 Accepted proposals as in-flight specs <a id="design-aq8m"></a><a id="D10.11"></a>
-
-An accepted proposal could stay on main until its work ships, then fold into the docs. But the review is still of prose, the fold rewrites the design after approval with no real review, and one feature takes proposal, code and fold changes. Planned sections give the same visibility with one review of the final text.
-
-### 19.12 A feature branch per feature <a id="design-hj99"></a><a id="D10.12"></a>
-
-Exploration, doc edits and code could live on one branch that merges once, keeping main to what is built. But in-flight work is then invisible from main, long branches drift, and dependent features need stacked branches. Treating main as the state of the process removes the reason to keep planned work off it.
-
-### 19.13 Separate solo and team profiles <a id="design-s789"></a><a id="D10.13"></a>
+### 19.9 Separate solo and team profiles <a id="design-s789"></a><a id="D10.13"></a>
 
 A light set of conventions and a full one would each fit better. But a solo project that gains a contributor would need a migration between them, and the two would drift apart.
 
-### 19.14 Syncing with a wiki <a id="design-pwq5"></a><a id="D10.14"></a>
+### 19.10 Syncing with a wiki <a id="design-pwq5"></a><a id="D10.14"></a>
 
 Edits made in a wiki could flow back into the repo. But that makes two places a doc can change, so neither is the source of truth, and merging prose edits needs judgment a sync can't make. A one-way mirror people can comment on is under Later in the plan.
 
-### 19.15 One docs folder per role <a id="design-nm5p"></a><a id="D10.15"></a>
+### 19.11 One docs folder per role <a id="design-nm5p"></a><a id="D10.15"></a>
 
 `docs/product/`, `docs/design/` and `docs/engineering/` would mirror how teams organize. But it moves every existing doc, and a solo developer would hop between folders for one change.
 
-### 19.16 UX inside the PRD or the design <a id="design-xt88"></a><a id="D10.16"></a>
+### 19.12 UX inside the PRD or the design <a id="design-xt88"></a><a id="D10.16"></a>
 
 It avoids a new doc. But the PRD says what and why, not how screens behave, and the design is already the longest doc. The IDs also wouldn't say which kind of decision is cited.
 
-### 19.17 A home repo per cross-repo change <a id="design-jgx4"></a><a id="D10.17"></a>
+### 19.13 A home repo per cross-repo change <a id="design-jgx4"></a><a id="D10.17"></a>
 
 A change spanning repos could live in whichever repo owns most of it. But nothing would hold product-level truth, each repo would review its part separately, and an agent in one component has no fixed place to find the rest.
 
-### 19.18 Numbered IDs <a id="design-27ev"></a><a id="D10.18"></a>
+### 19.14 Numbered IDs <a id="design-27ev"></a><a id="D10.18"></a>
 
 v1 took each ID from its heading number, as in `D4.2`, which shows a section's level and is short to cite. But a number can't both show where a section sits and name it forever, so restructuring a doc changed what citations meant, and two branches adding a section raced for the next number ([Section IDs](#design-bdk3)).
 
-### 19.19 Open pull requests as agent context <a id="design-fp55"></a><a id="D10.19"></a>
+### 19.15 Open pull requests as agent context <a id="design-fp55"></a><a id="D10.19"></a>
 
 Skills could read open pull requests to spot overlapping work early. But unreviewed work isn't part of the state of the process, it would need the Git host's CLI and credentials, and overlaps surface anyway when the later change rebases ([Many people at once](#design-5ndn)).
 
-### 19.20 Fold release into finish-milestone <a id="design-p76p"></a><a id="D10.20"></a>
+### 19.16 Other skill boundaries <a id="design-p76p"></a><a id="D10.20"></a><a id="design-cfz1"></a><a id="D10.21"></a><a id="design-34r1"></a><a id="D10.22"></a>
 
-The doc checks in `release` overlap with `finish-milestone`, and the tag rule is in CONVENTIONS section 9. But a release can ship part of a milestone or several, and outcome reviews would lose the event that prompts them, which is what feeds results back to the PRD ([The ends of the lifecycle](#design-36s7)).
+- **Fold release into finish-milestone.** The doc checks in `release` overlap with `finish-milestone`, and the tag rule is in CONVENTIONS section 9. But a release can ship part of a milestone or several, and outcome reviews would lose the event that prompts them, which is what feeds results back to the PRD ([The ends of the lifecycle](#design-36s7)).
+- **Evolve in the plugin.** Shipping `evolve` keeps "from now on" requests working in any project. But every user carries a skill that edits only in a checkout of devkit or a fork, and most never use one.
+- **A short refactor skill.** A skill holding only the refactor doc rules would trigger on every "clean up" request, for rules the managed block carries in one line.
 
-### 19.21 Evolve in the plugin <a id="design-cfz1"></a><a id="D10.21"></a>
-
-Shipping `evolve` keeps "from now on" requests working in any project. But every user carries a skill that edits only in a checkout of devkit or a fork, and most never use one.
-
-### 19.22 A short refactor skill <a id="design-34r1"></a><a id="D10.22"></a>
-
-A skill holding only the refactor doc rules would trigger on every "clean up" request, for rules the managed block carries in one line.
-
-### 19.23 The company as a project <a id="design-z0aj"></a><a id="D10.23"></a>
+### 19.17 The company as a project <a id="design-z0aj"></a><a id="D10.23"></a>
 
 A company monorepo could hold many products and shared systems as scopes under company objectives, with one priority order across teams and a trace from objective to code. devkit serves a single project and its product development instead. Scopes, objectives and cross-team priority would add rules that every solo project's agents read and skip, and there was no company repo to trial them on. Related repos ([Products across repos](#design-gh6m)) still covers one product across several repos.
 
-### 19.24 Issues in the repo <a id="design-g7pk"></a><a id="D10.24"></a>
+### 19.18 Issues in the repo <a id="design-g7pk"></a><a id="D10.24"></a>
 
 Bugs, requests and the backlog could be files in `docs/issues/` with `I` IDs and a triage step, replacing an issue tracker. devkit covers the docs that shape the product, not the queue of incoming work. Unscheduled ideas stay under Later in the plan, and a bug goes straight to `fix-bug`.
 
-### 19.25 Conventional Commits <a id="design-f5fy"></a><a id="D10.25"></a>
+### 19.19 Other ways to type commits <a id="design-f5fy"></a><a id="D10.25"></a><a id="design-vn3e"></a><a id="D10.26"></a><a id="design-jfx8"></a><a id="D10.27"></a><a id="design-p4z3"></a><a id="D10.28"></a>
 
-A `fix(sync):` prefix is the most widely tooled way to type commits, and shows in `git log --oneline`. But the prefix spends subject characters, its types describe engineering work rather than who cares, and notes generated from it are subjects written for engineers. Its tools also compute versions, which `release` leaves to judgment ([The ends of the lifecycle](#design-36s7)).
+- **Conventional Commits.** A `fix(sync):` prefix is the most widely tooled way to type commits, and shows in `git log --oneline`. But the prefix spends subject characters, its types describe engineering work rather than who cares, and notes generated from it are subjects written for engineers. Its tools also compute versions, which `release` leaves to judgment ([The ends of the lifecycle](#design-36s7)).
+- **One Changelog trailer only.** GitLab types only the commits users see, and uses the subject as the note. Untyped commits can't then be told apart, so operators and reviewers get no filter, and a forgotten trailer looks like an internal change.
+- **Pull request labels or a release-note block.** GitHub's generated notes and Kubernetes' release-note block work well for hosted teams. They live on the Git host, so an agent needs its CLI to read them ([Agent context](#design-04hv)), and a solo project committing to main has no pull requests.
+- **News fragments.** towncrier or Changesets keep one file per change with a note in user words. They add a folder that fills and empties each release, a tool per ecosystem, and a file that repeats the commit. A `Changelog:` trailer carries the same sentence in the commit itself.
 
-### 19.26 One Changelog trailer only <a id="design-vn3e"></a><a id="D10.26"></a>
+### 19.20 Other ways to restructure <a id="design-my4r"></a><a id="D10.29"></a><a id="design-3xt3"></a><a id="D10.30"></a><a id="design-x4ne"></a><a id="D10.31"></a><a id="design-zca3"></a><a id="D10.36"></a>
 
-GitLab types only the commits users see, and uses the subject as the note. Untyped commits can't then be told apart, so operators and reviewers get no filter, and a forgotten trailer looks like an internal change.
+- **Renumbering with citations rewritten.** A restructure could renumber sections in order and rewrite every citation to match. Code and docs can be rewritten, but commit messages and other repos can't, so `git log --grep` and qualified IDs would point at the wrong section.
+- **A list of retired IDs.** Old IDs could live in one table per doc. An extra anchor next to the text it names needs no lookup, moves with its section, and is read by anyone reading the section.
+- **Fixed numbers that run out of order.** v2 first kept numbers as fixed labels, with old IDs listed as `**Also:**` aliases. It needs no new script, but a restructured doc shows chapters such as 4, 15, 16, 5, which help nobody find their way and look like mistakes.
+- **Keeping every deleted ID.** Aliases kept a deleted section's ID as an anchor on the section closest in meaning, and the linter failed when an ID defined at the base commit was gone. With numbered IDs that stopped a number being reused. Random IDs are checked against history, so the rule would only force anchors onto sections they don't belong to, and citations of a deleted section fail anyway, since they name an ID that doesn't exist. What's lost is a guard for a merge that forgets its extra anchor when nothing cites the absorbed ID. The commit body still records the merge.
 
-### 19.27 Pull request labels or a release-note block <a id="design-jfx8"></a><a id="D10.27"></a>
+### 19.21 Other ID forms <a id="design-6yvs"></a><a id="D10.33"></a><a id="design-ds24"></a><a id="D10.34"></a><a id="design-y17j"></a><a id="D10.35"></a>
 
-GitHub's generated notes and Kubernetes' release-note block work well for hosted teams. They live on the Git host, so an agent needs its CLI to read them ([Agent context](#design-04hv)), and a solo project committing to main has no pull requests.
+- **A kind letter**, as in `D-7kq3`, is short and close to `D4.2`. But it means nothing in code to someone who doesn't know devkit, and a single letter matches too much to check code reliably. - **A link style**, as in `design#7kq3`, reads as a section of the design. But `#` means something to chat tools, issue trackers and Markdown at the start of a line. - **A tool prefix**, as in `devkit:D-7kq3`, says which system the ID belongs to but not which doc. It is long, and clashes with the `api:` qualifier for other repos.
+- **Names instead of random IDs.** Stable names such as `design-retry-backoff`, as the C++ standard uses, read well. But a name invites renaming when a section's scope drifts, gets long in code comments, and two sections can want the same one. A random ID has no meaning to drift from.
+- **Sequential IDs.** A counter per doc, as IBM DOORS uses, gives short IDs such as `design-47`. But they still look ordered, and two branches still race for the next one.
 
-### 19.28 News fragments <a id="design-p4z3"></a><a id="D10.28"></a>
+### 19.22 Other ways to show sections <a id="design-8wnn"></a><a id="D10.37"></a><a id="design-8qht"></a><a id="D10.38"></a><a id="design-cc1v"></a><a id="D10.32"></a>
 
-towncrier or Changesets keep one file per change with a note in user words. They add a folder that fills and empties each release, a tool per ecosystem, and a file that repeats the commit. A `Changelog:` trailer carries the same sentence in the commit itself.
+- **No section numbers.** Links already show titles, so headings could drop numbers too. But a long doc is hard to find one's way in without them, and "see 3.2" is how people talk about a section.
+- **Numbers as link text.** References could read "§3.2" and "PRD §1.2", which is short and familiar. But every reorder would rewrite the text of every link to a moved section, in every doc, plan file and proposal, so a design review that adds an early chapter would show hundreds of changed lines and conflict with every other open review. Sentences about order, such as "the sections after §3", would quietly change meaning when rewritten.
+- **Visible IDs in headings.** Headings could show the ID, as in `### 3.2 Retries [design-7kq3]`, with docs citing bare IDs. Anyone could see what to cite, but every heading and reference shows a code that means nothing to a reader, and references can't be clicked.
 
-### 19.29 Renumbering with citations rewritten <a id="design-my4r"></a><a id="D10.29"></a>
+### 19.23 Other places to cite IDs <a id="design-8b7e"></a><a id="D10.39"></a><a id="design-937p"></a><a id="D10.40"></a>
 
-A restructure could renumber sections in order and rewrite every citation to match. Code and docs can be rewritten, but commit messages and other repos can't, so `git log --grep` and qualified IDs would point at the wrong section.
+- **Paths in code citations.** Code could cite `docs/design.md#design-7kq3`, which says which file to open, and some editors open it. But the path repeats what the ID's doc name says, goes stale when a section moves to another doc, so `fmt` would rewrite code on every such move, and few editors open the section rather than the file.
+- **IDs in commit subjects.** v1 cites IDs in the subject, where `git log --oneline` shows them. A random ID is 11 characters, a sixth of the 72-character limit, and two or three crowd out what changed.
 
-### 19.30 A list of retired IDs <a id="design-3xt3"></a><a id="D10.30"></a>
-
-Old IDs could live in one table per doc. An extra anchor next to the text it names needs no lookup, moves with its section, and is read by anyone reading the section.
-
-### 19.31 Fixed numbers that run out of order <a id="design-x4ne"></a><a id="D10.31"></a>
-
-v2 first kept numbers as fixed labels, with old IDs listed as `**Also:**` aliases. It needs no new script, but a restructured doc shows chapters such as 4, 15, 16, 5, which help nobody find their way and look like mistakes.
-
-### 19.32 Visible IDs in headings <a id="design-cc1v"></a><a id="D10.32"></a>
-
-Headings could show the ID, as in `### 3.2 Retries [design-7kq3]`, with docs citing bare IDs. Anyone could see what to cite, but every heading and reference shows a code that means nothing to a reader, and references can't be clicked.
-
-### 19.33 Other ID forms <a id="design-6yvs"></a><a id="D10.33"></a>
-
-- **A kind letter**, as in `D-7kq3`, is short and close to `D4.2`. But it means nothing in code to someone who doesn't know devkit, and a single letter matches too much to check code reliably.
-- **A link style**, as in `design#7kq3`, reads as a section of the design. But `#` means something to chat tools, issue trackers and Markdown at the start of a line.
-- **A tool prefix**, as in `devkit:D-7kq3`, says which system the ID belongs to but not which doc. It is long, and clashes with the `api:` qualifier for other repos.
-
-### 19.34 Names instead of random IDs <a id="design-ds24"></a><a id="D10.34"></a>
-
-Stable names such as `design-retry-backoff`, as the C++ standard uses, read well. But a name invites renaming when a section's scope drifts, gets long in code comments, and two sections can want the same one. A random ID has no meaning to drift from.
-
-### 19.35 Sequential IDs <a id="design-y17j"></a><a id="D10.35"></a>
-
-A counter per doc, as IBM DOORS uses, gives short IDs such as `design-47`. But they still look ordered, and two branches still race for the next one.
-
-### 19.36 Keeping every deleted ID <a id="design-zca3"></a><a id="D10.36"></a>
-
-Aliases kept a deleted section's ID as an anchor on the section closest in meaning, and the linter failed when an ID defined at the base commit was gone. With numbered IDs that stopped a number being reused. Random IDs are checked against history, so the rule would only force anchors onto sections they don't belong to, and citations of a deleted section fail anyway, since they name an ID that doesn't exist. What's lost is a guard for a merge that forgets its extra anchor when nothing cites the absorbed ID. The commit body still records the merge.
-
-### 19.37 No section numbers <a id="design-8wnn"></a><a id="D10.37"></a>
-
-Links already show titles, so headings could drop numbers too. But a long doc is hard to find one's way in without them, and "see 3.2" is how people talk about a section.
-
-### 19.38 Numbers as link text <a id="design-8qht"></a><a id="D10.38"></a>
-
-References could read "§3.2" and "PRD §1.2", which is short and familiar. But every reorder would rewrite the text of every link to a moved section, in every doc, plan file and proposal, so a design review that adds an early chapter would show hundreds of changed lines and conflict with every other open review. Sentences about order, such as "the sections after §3", would quietly change meaning when rewritten.
-
-### 19.39 Paths in code citations <a id="design-8b7e"></a><a id="D10.39"></a>
-
-Code could cite `docs/design.md#design-7kq3`, which says which file to open, and some editors open it. But the path repeats what the ID's doc name says, goes stale when a section moves to another doc, so `fmt` would rewrite code on every such move, and few editors open the section rather than the file.
-
-### 19.40 IDs in commit subjects <a id="design-937p"></a><a id="D10.40"></a>
-
-v1 cites IDs in the subject, where `git log --oneline` shows them. A random ID is 11 characters, a sixth of the 72-character limit, and two or three crowd out what changed.
-
-### 19.41 Docs split by chapter <a id="design-x9tv"></a><a id="D10.41"></a>
+### 19.24 Docs split by chapter <a id="design-x9tv"></a><a id="D10.41"></a>
 
 v1 split a doc past 600 lines into one file per chapter, so agents could load only what they need. Then an ID names a doc but not a file, so links from outside the repo, autolinks and editor tools need a search to find a section, and break when it moves between chapter files. Reading by ID gives agents narrower context than a chapter file ([One file per doc](#design-a05p)).
 
