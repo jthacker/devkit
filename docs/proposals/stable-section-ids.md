@@ -2,7 +2,7 @@
 
 - **Status:** draft
 
-Give each section of the PRD, UX doc and design a short ID that names its doc and never changes, such as `design-7kq3`, and generate the section numbers readers see. Docs and code refer to sections with links to the ID, and in docs the link text is the current number, so references read naturally and stay correct after any restructure. Commits cite the bare ID, which keeps working however the docs are reorganized.
+Give each section of the PRD, UX doc and design a short ID that names its doc and never changes, such as `design-7kq3`, and generate the section numbers readers see. Docs link to sections by ID, with the section's title as the link text, so references read naturally and a reorder changes nothing but the headings it moves. Code and commits cite the bare ID, which keeps working however the docs are reorganized.
 
 1. [Problem](#1-problem)
 2. [Goals and non-goals](#2-goals-and-non-goals)
@@ -38,10 +38,12 @@ Numbered IDs also race. Two branches adding a design section both take the next 
 ### 2.1 Goals
 
 - Section numbers on the page are always in reading order.
-- References between docs read as plain section numbers and can be clicked.
-- Reordering, merging, splitting, promoting or removing sections keeps every reference and citation working.
+- References between docs read naturally and can be clicked.
+- Reordering, merging, splitting or promoting sections, or moving them to another doc or file, keeps every reference and citation working.
+- Removing a section makes the lint name every reference and citation still pointing at it.
+- A reorder changes only the headings and contents list of the doc it reorders, so it doesn't conflict with other branches' edits elsewhere.
 - An ID says which doc it belongs to, so a reader of code knows what it is and where to look.
-- IDs stay short enough to cite in a code comment or commit subject, and imply no order.
+- IDs stay short enough to cite in a code comment, and imply no order.
 - Two branches can add sections without colliding.
 - Adding a section stays as easy as writing a heading.
 
@@ -49,25 +51,26 @@ Numbered IDs also race. Two branches adding a design section both take the next 
 
 - GitHub's own heading anchors, which come from heading text and change when numbers do. Links use the ID anchors instead.
 - Plan IDs. Milestones and tasks keep `M3` and `M3.2`, as section 7 discusses.
+- CONVENTIONS.md's own numbered sections. devkit's scripts and skills cite them by number, which has the same problem, but they are devkit's internals rather than a project doc.
 - Rewriting history. Old commits keep citing old IDs, which still resolve.
 
 ## 3. Dependencies
 
-- **The unpushed v2 commits.** Local main holds `0787b4a`, which adds conventions v2 with fixed numbers and aliases (D20), and `a6ac5b2`, which upgrades devkit to it. Neither has been pushed, so no project has v2. If this proposal is accepted, v2 is rewritten to this design instead of adding v3. Not met: the commits should stay unpushed until this is decided.
+- **v2 is unpublished.** Conventions v2, which adds fixed numbers and aliases (D20), devkit's upgrade to it and this proposal are on local main and not pushed. No project has v2, so if this proposal is accepted, the design review replaces v2's content in new commits instead of adding v3, and v2 is first pushed in its new form. Met while main stays unpushed. To keep a backup in the meantime, push main to another branch name.
 
 ## 4. Proposal
 
 ### 4.1 What a reader sees
 
-A design doc renders as numbered sections with references written as section numbers:
+A design doc renders as numbered sections, with references written as the titles of the sections they point at:
 
 > **3.2 Retries**
 >
 > **Planned:** M4
 >
-> A failed sync retries with backoff, up to five attempts (PRD §1.2). Edits wait in the queue until the server confirms them (§3.1).
+> A failed sync retries with backoff, up to five attempts (PRD: Edits reach every device). Edits wait in the queue until the server confirms them (see Queue).
 
-Each § reference is a link. Clicking it goes to that section, in this doc or another. Nothing on the page is an ID.
+Each reference is a link. Clicking it goes to that section, in this doc or another. Nothing on the page is an ID.
 
 ### 4.2 What the source looks like
 
@@ -78,13 +81,16 @@ The same section in markdown:
 
 **Planned:** M4
 
-A failed sync retries with backoff, up to five attempts ([PRD §1.2](prd.md#prd-4hz8)).
-Edits wait in the queue until the server confirms them ([§3.1](#design-b6tn)).
+A failed sync retries with backoff, up to five attempts
+([PRD: Edits reach every device](prd.md#prd-4hz8)). Edits wait in the
+queue until the server confirms them (see [Queue](#design-b6tn)).
 ```
 
 - **The heading** ends with an anchor holding the section's ID. Renderers such as GitHub and VS Code don't show it, and it doesn't depend on the heading text.
-- **A reference** is a link to the ID. Its text is the target's current number, with the doc's name when it is in another doc: "§3.1", "PRD §1.2", "UX §2.1", "design §3.2".
-- **The § sign** keeps a reference from looking like an ID. `R1.2` would read like the old IDs, and someone would copy it into a code comment that breaks at the next renumber.
+- **A reference** is a link to the ID. Its text is the target's title, after the doc's name when the target is in another doc: "Queue", "PRD: Edits reach every device", "UX: Sign in". Words such as "see" go outside the link.
+- **Titles, not numbers.** A title changes only when someone renames the section, while a number changes whenever anything above it moves. With titles, a reorder renumbers one doc's headings and contents list and touches no other line, so a design review's diff shows the decision and not a wave of renumbered links. A title also tells a reader more than "§3.1", and rewriting one never changes what a sentence says about order. Numbers stay in headings, so a reader can find their way and say "see 3.2" aloud.
+
+Titles stay short, as headings should, so references don't crowd a sentence. Renaming a section rewrites every link to it, which shows reviewers where the section is used.
 
 A whole design doc:
 
@@ -99,7 +105,7 @@ A whole design doc:
 ## 1. Overview <a id="design-q2m8"></a>
 
 Notes keeps every edit on the device first and syncs in the background
-([PRD §1.1](prd.md#prd-m2c7)).
+([PRD: Sync](prd.md#prd-m2c7)).
 
 ## 2. Storage <a id="design-k9vd"></a>
 
@@ -112,41 +118,48 @@ Notes keeps every edit on the device first and syncs in the background
 ## 4. Alternatives considered <a id="design-w5jh"></a>
 ```
 
-The PRD works the same way, with an anchor after each requirement's title:
+Every heading below the title is numbered and has an ID, in the PRD, UX doc and design alike.
+
+The PRD keeps the template's chapters, with requirements in the Requirements chapter. Each area is a heading, and each requirement is a numbered list item whose bold lead is its title, with its anchor after the title:
 
 ```markdown
-### 1. Sync <a id="prd-m2c7"></a>
+## 5. Requirements <a id="prd-c8x2"></a>
+
+### 5.1 Sync <a id="prd-m2c7"></a>
 
 1. **Edits reach every device.** <a id="prd-4hz8"></a> An edit made offline
    appears on the user's other devices within a minute of reconnecting.
-2. **Conflicts never lose text.** <a id="prd-9tqe"></a> When two devices edit
-   the same note, both versions are kept.
+2. **Conflicts never lose text.** <a id="prd-9tqe"></a> When two devices
+   edit the same note, both versions are kept.
 ```
 
-Plan tasks and proposals refer to sections with the same links, such as `[design §3.2](../design.md#design-7kq3)`.
+A numbered item with a bold lead is a requirement, anywhere in the PRD. Bulleted items are not, so the bold-led bullets in Problem or Non-goals get no IDs. A planned requirement carries its marker after the anchor.
+
+Plan tasks and proposals refer to sections with the same links, such as `[Design: Retries](../design.md#design-7kq3)`.
 
 ### 4.3 Code and commits
 
-Code links to the section by its repo path and ID:
+Code cites the bare ID:
 
 ```go
-// Give up after five attempts so a dead server can't drain the battery.
-// See docs/design.md#design-7kq3.
+// Give up after five attempts so a dead server can't drain the battery,
+// design-7kq3.
 const maxAttempts = 5
 ```
 
-The path tells a reader which file to open, and editors that follow file paths open it at the section. It works the same in any language's comments, since it is plain text. `just fmt` keeps the path current when a section moves to another chapter file, as in `docs/design/sync.md#design-7kq3`. Where a path doesn't fit, such as a short inline comment, the bare ID is enough: `// design-7kq3`.
+The doc name in the ID says which doc to open, and `git grep design-7kq3` finds the section in whichever file holds it. A bare ID has no path, so it never goes stale when a doc splits or a section moves to another file, and nothing has to rewrite code when that happens. It works the same in any language's comments, since it is plain text.
 
-Commit messages cite the bare ID, since subjects are short:
+Commits cite IDs in a `Refs:` trailer, so subjects say what changed in words:
 
 ```text
-Retry failed syncs with backoff so edits survive a dropped link, design-7kq3
+Retry failed syncs with backoff so edits survive a dropped link
 
+Refs: design-7kq3, prd-4hz8
 Change: fixed
 Changelog: Edits made offline are no longer lost if the connection drops.
 ```
 
-Every form contains the same ID, so `git grep design-7kq3` finds the code and docs about a section, and `git log --grep design-7kq3` finds its commits, wherever it has moved. To find a section's ID, read its heading in the source, or copy it from any link that points there. Agents read the source, so they see IDs directly.
+`git log --grep` finds trailers as it finds subjects. Every form contains the same ID, so `git grep design-7kq3` finds the code and docs about a section, and `git log --grep design-7kq3` finds its commits, wherever it has moved. To find a section's ID, read its heading in the source, or copy it from any link that points there. Agents read the source, so they see IDs directly.
 
 ### 4.4 The ID
 
@@ -154,20 +167,21 @@ An ID is the doc's name, a hyphen, and four characters: `prd-4hz8` for a require
 
 - **The doc name** replaces the R, U and D letters. Out of context, `design-7kq3` says what it points at, where `D-7kq3` means nothing to someone who doesn't know devkit. Other repos' IDs are qualified the same way, as in `api:design-7kq3`.
 - **The same string** is the anchor, the link fragment, the code citation and the commit citation. It uses only letters, digits and a hyphen, so no comment syntax, shell, URL, YAML or chat tool treats it specially.
-- **Characters** are lowercase Crockford base32, which leaves out `i`, `l`, `o` and `u` so no two look alike. Each ID has at least one digit, so none reads as a word.
-- **There are about a million** per kind. New IDs are checked against every ID in the repo and its git history, so a clash can only happen between two branches adding sections at once, and the linter catches it on merge.
+- **Characters** are lowercase Crockford base32, which leaves out `i`, `l`, `o` and `u` so no two look alike. Each ID has at least one letter and one digit, so none reads as a word or a year.
+- **There are about 800,000** per kind. New IDs are checked against every ID in the repo and its git history, so a clash can only happen between two branches adding sections at once, and the linter catches it on merge.
 - **An ID is never reused**, even after its section is deleted, so an old commit never points at the wrong section.
 
-Four characters is the shortest that keeps cross-branch clashes rare in a doc with hundreds of sections, while staying easy to type and read aloud. The pattern `(prd|ux|design)-[0-9a-z]{4}` with a required digit matches no ordinary words, such as `design-time`, so grep and the linter find citations in code without false hits.
+Four characters is the shortest that keeps cross-branch clashes rare in a doc with hundreds of sections, while staying easy to type and read aloud. The pattern `(prd|ux|design)-[0-9a-z]{4}`, with a letter and a digit required and no letter, digit or hyphen on either side, matches no ordinary words or years, such as `design-time` or `ux-2025-redesign`, so grep and the linter find citations in code without false hits.
 
 ### 4.5 `just fmt` does the bookkeeping
 
-Nobody writes a number, an ID or a link's text by hand. A new script, `.devkit/fmt-docs.sh`, run by `just fmt`:
+Nobody writes a number or a link's text by hand. A new script, `.devkit/fmt-docs.sh`, run by `just fmt`:
 
-1. Numbers every heading in the PRD, UX doc and design in reading order.
+1. Numbers every heading in the PRD, UX doc and design in reading order, and every requirement within its area.
 2. Gives a fresh ID to any heading or requirement that lacks one.
-3. Turns each bare ID in a doc into a link, and rewrites every link's text and path to match its target. Links and code citations that point at an extra anchor are rewritten to the section's main ID.
-4. Rewrites the contents list.
+3. Turns each bare ID in a doc into a link, and rewrites every link's text to its target's title and its path to its target's file.
+4. Rewrites links and code citations that name an extra anchor to the section's main ID.
+5. Rewrites the contents list.
 
 Adding a section is writing a plain heading:
 
@@ -182,20 +196,24 @@ After `just fmt`:
 ```markdown
 ### 3.3 Conflict resolution <a id="design-h8fm"></a>
 
-Two edits to the same note are both kept ([§3.2](#design-7kq3)).
+Two edits to the same note are both kept ([Retries](#design-7kq3)).
 ```
 
 So an agent or person can write a bare ID anywhere in a doc, and `fmt` makes it a readable link.
 
-Analyses are never rewritten, so `fmt` leaves them alone. Their links keep working through the anchors, though the number in the text may be out of date.
+An author may also write a new section's anchor by hand, as in `<a id="design-h8fm"></a>`, so one edit can add several sections that link to each other, and plan tasks that cite them, without stopping to run `fmt`. `fmt` keeps a hand-written ID if it has the right form and isn't in the repo or its history, and replaces it otherwise.
 
-A split doc names its chapter files by slug, as in `docs/design/sync.md`, so renumbering never renames a file. If a section moves to another chapter file, `fmt` rewrites the paths of links to it.
+Minting needs the whole history, so in a shallow clone `fmt` refuses to mint IDs and says why. `fmt-docs.sh --check` changes nothing and mints nothing, and exits non-zero when `fmt` would change something. The linter runs it, so the two never disagree, and it works in a shallow CI checkout.
+
+Analyses are never rewritten, so `fmt` leaves them alone and doesn't turn their bare IDs into links. An analysis cites the bare ID, which stays findable wherever its section moves, where a link would name a file the section may later leave.
+
+A split doc keeps its title, contents list and first chapter in its top file, as today, and the contents list sets the order of its chapter files. Chapter files are named by slug, as in `docs/design/sync.md`, so renumbering never renames a file. If a section moves to another file, `fmt` rewrites the paths of links to it in docs. Code cites bare IDs, so it needs no change.
 
 ### 4.6 Restructuring
 
 Each move is an edit to the text followed by `just fmt`. Starting from the design in section 4.2:
 
-**Reorder.** Move Sync above Storage. Headings and every link to them now say §2 and §2.1, and the IDs don't change.
+**Reorder.** Move Sync above Storage. The headings and contents list now say 2, 2.1, 2.2 and 3. The IDs and every link elsewhere stay as they were.
 
 ```markdown
 ## 2. Sync <a id="design-r3wq"></a>
@@ -213,11 +231,11 @@ Edits wait in a local queue until the server confirms them. A failed sync
 retries with backoff.
 ```
 
-The extra anchor keeps the absorbed section's history findable from the merged one, since commits citing `design-b6tn` turn up when grepping the merged section's IDs. Old links, including those in analyses, still land in the right place. A merge keeps the meaning, so `fmt` rewrites links in docs and citations in code from `design-b6tn` to `design-7kq3`.
+The extra anchor keeps the absorbed section's history findable from the merged one, since commits citing `design-b6tn` turn up when grepping the merged section's IDs. Old links in the same file still land in the right place. A merge keeps the meaning, so `fmt` rewrites links in docs and citations in code from `design-b6tn` to `design-7kq3`.
 
 Combining chapters is the same. Subsections keep their IDs wherever they move, since IDs don't encode the hierarchy. Only the old chapter heading's ID becomes an extra anchor on its new parent.
 
-**Split.** The original ID stays with the part that keeps the main meaning. The new part gets a new ID from `fmt`. Links and citations whose meaning moved to the new part are updated by hand in the same commit, since only a person can tell which part each one meant.
+**Split.** The original ID stays with the part that keeps the main meaning. The new part gets a new ID from `fmt`. Links and citations whose meaning moved to the new part are updated by hand in the same commit, since only a person can tell which part each one meant. The commit's `Refs:` trailer names both IDs, so `git log --grep` on the new ID finds the split, whose body names the ID that holds the earlier history.
 
 **Promote or demote.** Turn Retries into its own chapter. Its ID moves with it, so only numbers change.
 
@@ -227,13 +245,15 @@ Combining chapters is the same. Subsections keep their IDs wherever they move, s
 src/offline/cache.go:8: cites design-p2x9, which doesn't exist
 ```
 
-Code that cites a deleted section is usually dead code too, so the error points at the cleanup. Commits keep citing `design-p2x9`, and `git log --grep design-p2x9` still shows why the section existed and when it went. The deleted text is in the commit that removed it. Dropped planned work moves to Alternatives considered with its anchor if a reader would wonder about it, and is deleted otherwise.
+Each one is fixed in the same commit: pointed at the section that now covers it, or removed with the code that needed it. Commits keep citing `design-p2x9`, and `git log --grep design-p2x9` still shows why the section existed and when it went. The deleted text is in the commit that removed it. Dropped planned work moves to Alternatives considered with its anchor if a reader would wonder about it, and is deleted otherwise.
 
-**Move to another doc.** A flow that moves from the design into the UX doc gets a new `ux-` ID, so its ID names the doc it is in. Its old ID stays as an extra anchor, and `fmt` rewrites links and code citations to the new ID and path. An ID naming another doc is allowed only as an extra anchor.
+**Move to another doc.** A flow that moves from the design into the UX doc gets a new `ux-` ID, so its ID names the doc it is in. Its old ID stays as an extra anchor, and `fmt` rewrites links in docs to the new ID and file, and code citations to the new ID. An ID naming another doc is allowed only as an extra anchor.
 
 ```markdown
 ### 3.4 Sign in <a id="ux-k2rf"></a><a id="design-m8wd"></a>
 ```
+
+Links from outside the repo name a file, so they break when their section moves to another file. Bare IDs don't, which is why code, commits and analyses use them.
 
 The commit body lists what merged, moved and was deleted, so history is easy to follow:
 
@@ -243,26 +263,27 @@ Fold the sync queue into retries, since one can't change without the other
 Restructure only. Merged design-b6tn into design-7kq3. Moved design-r3wq
 before design-k9vd.
 
+Refs: design-7kq3, design-b6tn, design-r3wq
 Change: docs
 ```
 
 ### 4.7 What the linter checks
 
-`lint-docs.sh` fails when `fmt` would change something, and on mistakes `fmt` can't fix:
+`lint-docs.sh` runs `fmt-docs.sh --check`, and also fails on mistakes `fmt` can't fix:
 
 ```text
 docs/design.md:14: heading 3.4 is out of sequence; run just fmt
 docs/design.md:22: heading has no ID; run just fmt
-docs/plan/M4.md:8: link says §3.1 but design-7kq3 is §3.2; run just fmt
+docs/plan/M4.md:8: link says Queue but design-b6tn is titled Sync queue; run just fmt
 docs/ux.md:31: links design-b6tn, which is now design-7kq3; run just fmt
 docs/prd.md:18: links prd-zz99, which doesn't exist
 docs/design.md:40: defines design-7kq3, which is already defined
 docs/ux.md:12: section's main ID design-m8wd names another doc; give it a ux ID with just fmt
-src/sync/retry.go:12: links docs/design.md#design-7kq3, which is in docs/design/sync.md; run just fmt
 src/sync/queue.go:4: cites design-zz99, which doesn't exist
+src/sync/retry.go:9: cites design-b6tn, which is now design-7kq3; run just fmt
 ```
 
-Today the linter leaves code to `audit`, since identifiers such as `R2` mean other things in code (D13). The new IDs can't be mistaken for anything else, so the linter checks citations in code too.
+Today the linter leaves code to `audit`, since identifiers such as `R2` mean other things in code (D13). The new IDs can't be mistaken for anything else, so the linter checks citations in code too. Code is every text file git tracks outside `docs/`. Files given the `devkit-examples` attribute in `.gitattributes` are skipped, so test fixtures, vendored code and docs about the conventions can hold example IDs. In markdown, IDs in backticks are examples, as today.
 
 ### 4.8 Moving existing projects
 
@@ -281,18 +302,22 @@ After:
 ```markdown
 ### 4.2 Retries <a id="design-7kq3"></a><a id="D4.2"></a>
 
-Up to five attempts, [PRD §1.2](prd.md#prd-4hz8).
+Up to five attempts ([PRD: Edits reach every device](prd.md#prd-4hz8)).
 ```
 
-Old citations in code and history keep resolving, since grep finds `D4.2` at the section. The migration offers to rewrite code comments to links with the new IDs, and leaves the choice to the user. After that, the project can reorder freely, and the numbers stay right.
+It also turns the PRD's `**R1.2**` items into numbered requirements.
+
+Citations in code are rewritten too, and this step isn't optional. Once the docs are reordered, heading 4.2 may be a different section, and a reader who sees `D4.2` in code would open the wrong one. `--adopt` can't tell a citation from an identifier such as `R2`, so it lists every match of the old ID pattern, and the upgrade skill rewrites those that are citations and leaves the rest, reviewed as one diff.
+
+Commits keep their old IDs. The agents block says an old-style ID such as `D4.2` is found by grepping for its anchor, `id="D4.2"`, never by reading heading numbers. A doc citing an old ID fails the lint with the new ID to use, as citing an alias does today. After that, the project can reorder freely, and the numbers stay right.
 
 ### 4.9 Docs this changes
 
-- **CONVENTIONS.md:** section 2 describes IDs, anchors, links and generated numbers. Section 5 names chapter files by slug. Section 7 adds `fmt-docs.sh` to the managed files and `just fmt`. Section 18, from v2, becomes the restructure rules above.
-- **Templates:** the PRD, UX and design templates use anchored headings and linked references. The justfile template runs `fmt-docs.sh` from `fmt`.
-- **Agents block:** link sections from code as `docs/design.md#design-7kq3`, cite the bare ID in commits, write references in docs as bare IDs or links, run `just fmt` after editing docs or moving sections, and grep a section's ID and its extra anchors for history.
-- **Skills:** `restructure` reduces to moving text, keeping anchors and running `just fmt`. The doc skills and `design-review` stop choosing numbers. `audit` and `upgrade` learn the new form.
-- **devkit's design:** D3's paragraph on stable IDs, D13 and D20 describe this. D13 gains the check of citations in code. D10.18, "IDs that can't collide", is reversed: random IDs are now the choice, and numbered IDs move to Alternatives considered. A new alternative records v2's fixed numbers.
+- **CONVENTIONS.md:** section 2 describes IDs, anchors, title links and generated numbers. Section 5 names chapter files by slug and orders them by the contents list. Section 7 adds `fmt-docs.sh` to the managed files and `just fmt`. Section 9 puts IDs in a `Refs:` trailer. Section 18, from v2, becomes the restructure rules above.
+- **Templates:** the PRD, UX and design templates use anchored headings and linked references, and the PRD template numbers requirements within their areas. The justfile template runs `fmt-docs.sh` from `fmt`.
+- **Agents block:** cite bare IDs in code and in a commit's `Refs:` trailer, write references in docs as bare IDs or links, run `just fmt` after editing docs or moving sections, grep a section's ID and its extra anchors for history, and find an old-style ID by its anchor.
+- **Skills:** `restructure` reduces to moving text, keeping anchors and running `just fmt`. The doc skills and `design-review` stop choosing numbers. `audit` and `upgrade` learn the new form, and `upgrade` rewrites old citations in code.
+- **devkit's design:** D3's paragraph on stable IDs, D13 and D20 describe this. D13 gains the check of citations in code and the `--check` mode. D10.18, "IDs that can't collide", is reversed: random IDs are now the choice, and numbered IDs move to Alternatives considered. A new alternative records v2's fixed numbers.
 - **devkit's PRD:** R17 adds that reorganizing a doc never breaks a citation, as v2 already does.
 - **devkit's own docs** migrate as any project would, which shows the result on a real 600-line design.
 
@@ -300,11 +325,11 @@ Old citations in code and history keep resolving, since grep finds `D4.2` at the
 
 One milestone, done when devkit's own docs are on the new form and `just check` passes.
 
-1. Rework `lint-docs.sh` and its tests for anchors, links, numbering order, and citations in code.
-2. Write `fmt-docs.sh` with `--adopt`, with tests for numbering, new IDs, links, contents, chapter paths in docs and code, and adoption.
-3. Check on a scratch repo that GitHub and VS Code render the anchors and follow the links in docs, and which editors open the paths in code comments.
+1. Rework `lint-docs.sh` and its tests to run `fmt-docs.sh --check` and to check citations in code, honoring `devkit-examples`.
+2. Write `fmt-docs.sh` with `--check` and `--adopt`, with tests for numbering, requirements, minted and hand-written IDs, refusing to mint in a shallow clone, title links, contents, chapter order and paths in split docs, code rewrites after a merge or move, and adoption.
+3. Check on a scratch repo that GitHub and VS Code render the anchors and follow links within and between docs, including chapter files.
 4. Rewrite v2's conventions, changelog, templates, agents block and skills.
-5. Migrate devkit's PRD and design, and restructure its design into reading order.
+5. Migrate devkit's PRD and design, rewrite their citations in code, and restructure the design into reading order.
 
 ## 6. Alternatives considered
 
@@ -342,14 +367,25 @@ A counter per kind, as IBM DOORS uses, gives short IDs like `design-47`. But the
 
 ### 6.9 Keeping every deleted ID
 
-v2 keeps a deleted section's ID as an anchor on the section closest in meaning, and fails the lint when an ID defined at the base commit is gone. With numbered IDs that stopped a number being reused. Random IDs aren't reused, so the rule only forces anchors onto sections they don't belong to. Citations to a deleted section are caught anyway, since they name an ID that doesn't exist. What's lost is a guard for a merge that forgets its extra anchor when nothing cites the absorbed ID. The commit body still records the merge.
+v2 keeps a deleted section's ID as an anchor on the section closest in meaning, and fails the lint when an ID defined at the base commit is gone. With numbered IDs that stopped a number being reused. Random IDs are checked against history, so they aren't reused, and the rule only forces anchors onto sections they don't belong to. Citations to a deleted section are caught anyway, since they name an ID that doesn't exist. What's lost is a guard for a merge that forgets its extra anchor when nothing cites the absorbed ID. The commit body still records the merge.
 
 ### 6.10 No section numbers
 
-Drop numbers and link with section titles instead. It is equally readable, but titles get long in running text, and "see 3.2" is how people talk about a long doc.
+Links already show titles, so headings could drop numbers too. References would read the same, but a long doc is hard to find one's way in without numbers, and "see 3.2" is how people talk about one.
+
+### 6.11 Numbers as link text
+
+References could read "§3.2" and "PRD §1.2", which is short and familiar. But every reorder would rewrite the text of every link to a moved section, in every doc, plan file and proposal. A design review that adds an early chapter would show hundreds of changed lines and conflict with every other open review. Sentences about order, such as "the sections after §3", would quietly change meaning when rewritten.
+
+### 6.12 Paths in code citations
+
+Code could cite `docs/design.md#design-7kq3`, which tells a reader which file to open, and some editors open it there. But the path goes stale when a doc splits or a section moves to another file, so `fmt` would have to rewrite code on every such move, and few editors open the section rather than the file. The doc name in the ID already says which doc.
+
+### 6.13 IDs in commit subjects
+
+v1 cites IDs in the subject, where `git log --oneline` shows them. A random ID is 11 characters, a sixth of the 72-character limit, and two or three crowd out what changed.
 
 ## 7. Open questions
 
-- **Opening links from code.** A path with a fragment is plain text in a comment. Some editors open it at the file, fewer at the section. Is the path worth its length where no editor follows it, or should short comments default to the bare ID? Task 3 shows what works.
-- **Link text.** Should a reference show only the number, "§3.2", or the number and title, "§3.2 Retries"? Titles help a reader decide whether to click, but make sentences longer.
-- **Plan IDs.** Milestones are reordered sometimes, and tasks are cited in commits. They could use IDs and links too. They are left alone here because the plan is ordered work that gets deleted when done, and "M3" is easy to say. Is that the right line?
+- **Copying an ID from the rendered page.** A person reading on GitHub sees no IDs, and the link icon by a heading copies GitHub's slug, which changes with the number. Reviewers who don't use git (R13) will cite what they can copy. Is a short note in the agents block and user guide enough, or should each heading show a small link to its ID?
+- **Plan IDs.** Milestones are reordered sometimes, and tasks are cited in commits. They could use IDs and links too. They are left alone here because the plan is ordered work that gets deleted when done, and "M3" is easy to say. But `M2.3` in code can't be checked, for the reason in section 6.4. Is that the right line?
