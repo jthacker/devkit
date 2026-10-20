@@ -379,4 +379,50 @@ Last part.
 Builds [queue](design.md).' "$(cd "$sections" && show "$sections.known" docs/design.md docs/plan.md)"
 same "adopt leaves no section files" "" "$(ls "$sections/docs/design" 2> /dev/null || true)"
 
+# A contents list whose items include unlinked parents with links nested
+# under them is replaced whole. A list before it without links is kept.
+nested="$tmp/nested"
+mkdir -p "$nested/docs"
+cat > "$nested/docs/design.md" <<'MD'
+# Nested: Design
+
+- Kept, since it links nothing.
+
+1. Overview
+   - [Goals](#design-g2a1)
+2. [Sync](#design-r3wq)
+3. Later
+   1. [Ideas](#design-1d3a)
+
+## 1. Overview <a id="design-a1b2"></a>
+
+### 1.1 Goals <a id="design-g2a1"></a>
+
+## 2. Sync <a id="design-r3wq"></a>
+
+## 3. Later <a id="design-c3d4"></a>
+
+### 3.1 Ideas <a id="design-1d3a"></a>
+MD
+repo "$nested"
+same "check nested contents" "docs/design.md:5: contents list is out of date; run just fmt" "$(run "$nested" --check)"
+run "$nested" > /dev/null
+same "nested contents replaced" '# Nested: Design
+
+- Kept, since it links nothing.
+
+1. [Overview](#design-a1b2)
+2. [Sync](#design-r3wq)
+3. [Later](#design-c3d4)
+
+## 1. Overview <a id="design-a1b2"></a>
+
+### 1.1 Goals <a id="design-g2a1"></a>
+
+## 2. Sync <a id="design-r3wq"></a>
+
+## 3. Later <a id="design-c3d4"></a>
+
+### 3.1 Ideas <a id="design-1d3a"></a>' "$(cat "$nested/docs/design.md")"
+
 (( failures == 0 ))

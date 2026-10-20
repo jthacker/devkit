@@ -289,6 +289,29 @@ BEGIN {
   }
   name["docs/prd.md"] = "PRD"; name["docs/ux.md"] = "UX"; name["docs/design.md"] = "Design"
   md = FILE ~ /\.(md|markdown)$/
+  if (section) find_contents()
+}
+# The contents list is the first run of list items before the first heading
+# in which each item is a link or plain text, nested or not, and at least one
+# is a link. Sets its first and last lines in cs and ce.
+function find_contents(   x, n, f, start, last, links, ok) {
+  cs = ce = 0; n = 0; f = 0; start = 0
+  while ((getline x < FILE) > 0) {
+    n++
+    if (x ~ FENCE) f = !f
+    if (!f && x ~ /^##+[ \t]/) break
+    if (!f && x ~ /^[ \t]*([0-9]+\.|[-*+])[ \t]/) {
+      if (!start) { start = n; links = 0; ok = 1 }
+      last = n
+      if (x ~ /^[ \t]*([0-9]+\.|[-*+]) \[[^]]*\]\([^)]*\)[ \t]*$/) links++
+      else if (x ~ LINKRE) ok = 0
+      continue
+    }
+    if (start && links && ok) break
+    start = 0
+  }
+  close(FILE)
+  if (start && links && ok) { cs = start; ce = last }
 }
 function change(s) { if (mode == "check") print FILE ":" FNR ": " s "; run just fmt" >> msgf }
 function err(s) { print FILE ":" FNR ": " s >> msgf }
@@ -406,10 +429,8 @@ section && /^##+[ \t]/ {
   }
   print new; next
 }
-section && !seenh && /^[ \t]*([0-9]+\.|-) \[.*\]\([^)]*\)[ \t]*$/ {
-  if (!incont && !cdone) { incont = 1; cdone = 1; cstart = FNR; oldc = $0; next }
-  if (incont) { oldc = oldc "\n" $0; next }
-}
+section && FNR == cs { incont = 1; cstart = FNR; oldc = $0; if (FNR == ce) flush(); next }
+section && incont { oldc = oldc "\n" $0; if (FNR == ce) flush(); next }
 { flush() }
 section && kind == "prd" && /^[0-9]+\. \*\*/ && parse_req($0) {
   reqn++

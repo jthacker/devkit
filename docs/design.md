@@ -251,7 +251,7 @@ Nobody writes a number or a link's text by hand. `.devkit/fmt-docs.sh`, run by `
 2. Gives a fresh ID to any heading or requirement that lacks one.
 3. Turns each bare ID in a doc into a link, and rewrites every link's text to its target's title and its path to its target's doc.
 4. Rewrites links and code citations that name an extra anchor to the section's main ID.
-5. Rewrites the contents list.
+5. Rewrites the contents list as one link per chapter. The contents list is the first run of list items before the first heading in which every item is a link or plain text and at least one is a link, so nested items and unlinked parents are replaced with it.
 
 So adding a section is writing a plain heading, and a doc can cite a bare ID anywhere. An author may also write a new anchor by hand, so one edit can add sections that cite each other. `fmt` keeps a hand-written ID that has the right form and isn't in the repo or its history, and replaces it otherwise.
 
