@@ -29,7 +29,7 @@ Users install from GitHub, which caches the plugin. Install from this checkout w
 <!-- devkit:begin conventions=3 -->
 ## Docs
 
-This project follows the devkit conventions, version 4. Only devkit's upgrade edits this block and `.devkit/`.
+This project follows the devkit conventions, version 3. Only devkit's upgrade edits this block and `.devkit/`.
 
 - `docs/README.md` indexes the docs: `prd.md` says what to build and why, `ux.md` how people experience it, `design.md` how it works, `plan.md` and `plan/` what is left. Read the design before changing behavior, and `git log --grep` a section's IDs for why it is that way.
 - Each section of the PRD, `ux.md` and design has an ID that never changes, such as `prd-4hz8`, `ux-c3pa` or `design-7kq3`, in an anchor at the end of its heading. Read one with `grep -n 'id="design-7kq3"'` and on to the next heading. Plan tasks are `M2.3`. Code comments and analyses cite bare IDs, and commits cite them in a `Refs:` trailer. Other docs link sections by title, as in `[PRD: Sync](prd.md#prd-m2c7)`. Qualify another repo's IDs, as in `api:design-7kq3`.
