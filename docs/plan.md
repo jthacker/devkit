@@ -4,13 +4,12 @@ The work left to do, in order. Tasks cite the sections they build by ID, and `ju
 
 ## Milestones
 
-1. [M7. One version at a time](plan/M7.md): skills write only to a project on the plugin's conventions version.
+None are scheduled.
 
 ## Requirement coverage
 
 | Requirement | Milestones |
 | --- | --- |
-| [PRD: One version at a time (planned)](prd.md#prd-4e1x) | M7 |
 
 ## Risks
 

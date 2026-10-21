@@ -376,9 +376,7 @@ An existing project is at v0. The v1 migration is the adoption: inventory the do
 
 ### 13.5 One version at a time <a id="design-w6fv"></a>
 
-**Planned:** M7
-
-devkit's skills follow one version of the conventions, the plugin's own ([PRD: One version at a time (planned)](prd.md#prd-4e1x)). A skill run in a project on another version would write docs in the wrong form, so every skill that writes to a project compares the `AGENTS.md` marker with `VERSION` before it changes a file. Reading and critiquing a doc still work.
+devkit's skills follow one version of the conventions, the plugin's own ([PRD: One version at a time](prd.md#prd-4e1x)). A skill run in a project on another version would write docs in the wrong form, so every skill that writes to a project compares the `AGENTS.md` marker with `VERSION` before it changes a file. Reading and critiquing a doc still work.
 
 - **The project is behind.** The skill stops, names both versions and offers `devkit:upgrade`. On a team, whoever has the newer plugin opens the upgrade pull request, and `upgrade` commits on a branch in team mode.
 - **The plugin is behind.** The skill stops and says to update the plugin.
@@ -570,7 +568,7 @@ v1 split a doc past 600 lines into chapter files. An ID then names a doc but not
 - **A copy of the plugin in each repo.** It loads by relative path and stays fixed, but gives up updates from GitHub, and each repo's skills drift on their own.
 - **Support every version until it is deprecated.** Every skill and template would branch by version, and every change to them would be tested against each one. Migrations exist to avoid that.
 
-Skills check the version instead ([One version at a time (planned)](#design-w6fv)).
+Skills check the version instead ([One version at a time](#design-w6fv)).
 
 ## 19. Open questions <a id="design-b2ea"></a><a id="D11"></a>
 
