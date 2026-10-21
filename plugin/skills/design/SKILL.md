@@ -7,6 +7,8 @@ description: In a project that uses devkit, write or update the design doc, cove
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first. The template is `${CLAUDE_PLUGIN_ROOT}/conventions/templates/docs/design.md`. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so ask before applying its structure.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 ## Writing
 
 1. Read `docs/prd.md` and `docs/ux.md` if there is one, and raise their open questions that would change the design first.

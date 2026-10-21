@@ -7,6 +7,8 @@ description: In a project that uses devkit, write or update the UX doc, docs/ux.
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 1 and 3.6. The template is `${CLAUDE_PLUGIN_ROOT}/conventions/templates/docs/ux.md`. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so ask before applying its structure.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 `docs/ux.md` says how people experience the product. The PRD says what and why, and the design how it is built. A product with no interface beyond commands may not need one, since its user docs cover the surface.
 
 ## Writing

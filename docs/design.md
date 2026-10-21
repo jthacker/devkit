@@ -378,13 +378,13 @@ An existing project is at v0. The v1 migration is the adoption: inventory the do
 
 **Planned:** M7
 
-devkit's skills follow one version of the conventions, the plugin's own ([PRD: One version at a time (planned)](prd.md#prd-4e1x)). A skill run in a project on another version would write docs in the wrong form, so every skill that writes to a project compares the `AGENTS.md` marker with `VERSION` before it starts.
+devkit's skills follow one version of the conventions, the plugin's own ([PRD: One version at a time (planned)](prd.md#prd-4e1x)). A skill run in a project on another version would write docs in the wrong form, so every skill that writes to a project compares the `AGENTS.md` marker with `VERSION` before it changes a file. Reading and critiquing a doc still work.
 
-- **The project is behind.** The skill stops, names both versions and offers `devkit:upgrade`. On a team, whoever has the newer plugin opens the upgrade pull request.
+- **The project is behind.** The skill stops, names both versions and offers `devkit:upgrade`. On a team, whoever has the newer plugin opens the upgrade pull request, and `upgrade` commits on a branch in team mode.
 - **The plugin is behind.** The skill stops and says to update the plugin.
 - **No check.** `upgrade` exists to close the gap and `new-project` starts at the current version, so neither checks. `audit` already upgrades first.
 
-The hook's message for a project that is behind says the skills won't write to it until it upgrades. The check is a line in each skill, and the consistency test fails when a skill that writes to a project lacks it.
+The hook's messages for a project behind or ahead of the plugin say which side to update, and that the skills won't change files until then. The check is a line in each skill, and the consistency test fails when a skill that writes to a project lacks it.
 
 Each skill has one version. A person with repos on different versions sees, in each one, which side to update.
 

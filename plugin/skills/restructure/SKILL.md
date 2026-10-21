@@ -7,6 +7,8 @@ description: In a project that uses devkit, restructure the PRD, UX doc or desig
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 2 and 18. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so ask before applying its structure.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 A restructure changes where text sits, not what it says. If the user also wants a section to say something different, do that as a separate change, through `devkit:design-review` when it isn't built.
 
 ## 1. Map

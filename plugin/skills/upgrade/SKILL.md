@@ -22,6 +22,6 @@ Check `git status`, and ask before touching docs with uncommitted changes. Show 
 1. Apply the approved steps in version order.
 2. Replace the managed files. In `AGENTS.md`, replace everything from `<!-- devkit:begin` to `<!-- devkit:end -->` with `${CLAUDE_PLUGIN_ROOT}/conventions/templates/agents-block.md` for the current version. When adopting, add the block at the end, creating the file if needed. Copy `${CLAUDE_PLUGIN_ROOT}/conventions/templates/lint-docs.sh`, `${CLAUDE_PLUGIN_ROOT}/conventions/templates/fmt-docs.sh` and `${CLAUDE_PLUGIN_ROOT}/conventions/templates/check-commits.sh` into `.devkit/`, executable. Never edit text outside the block unless a migration step says to.
 3. Fix links broken by moved files, in docs and code, and run `just check`.
-4. Commit as `Upgrade to devkit conventions v<N>`, or `Adopt devkit conventions v<N>` from v0, with the trailer `Change: internal`.
+4. Commit as `Upgrade to devkit conventions v<N>`, or `Adopt devkit conventions v<N>` from v0, with the trailer `Change: internal`. In team mode, commit on a branch and open a pull request, since the project's other users can't change files until it merges or they update the plugin.
 
 Report what changed and what the user deferred. Suggest `devkit:audit` to catch drift no migration covers.

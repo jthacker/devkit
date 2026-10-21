@@ -7,6 +7,8 @@ description: In a project that uses devkit, write or update end-user docs in doc
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 4.1 and 10. The index template is `${CLAUDE_PLUGIN_ROOT}/conventions/templates/docs/user/README.md`. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so ask before applying its structure.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 User docs describe the product as it behaves now, for the people who use it. No internals unless a user needs them, no plans, and nothing from a planned section until it ships.
 
 ## Pages

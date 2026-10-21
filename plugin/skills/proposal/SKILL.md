@@ -7,6 +7,8 @@ description: In a project that uses devkit, write a proposal for an undecided ch
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first. The template is `${CLAUDE_PLUGIN_ROOT}/conventions/templates/docs/proposal.md`. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so ask before applying its structure.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 A proposal is an argument for one change: the problem, the options and the case for one. It is deleted once decided, so write it to be decided on. The final wording of the docs is written at design review, not here. A change that needs no argument skips the proposal and goes to `devkit:design-review`.
 
 1. If `docs/proposals/` already has one for this change, update it instead.

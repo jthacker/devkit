@@ -7,6 +7,8 @@ description: In a project that uses devkit, write a decided change into the PRD,
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 3.5, 3.6 and 14. Act only once the user has said the change is decided, or that a proposal is rejected. `AGENTS.md` says outside the managed block whether the project is in team mode.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 ## Accepted, or no proposal needed
 
 The result is one change a reviewer reads as a diff of the docs as they will be.

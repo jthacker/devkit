@@ -7,6 +7,8 @@ description: In a project that uses devkit, cut a release as an annotated versio
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 3.3, 9 and 17.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 1. **Start green.** The working tree is clean, the branch is `main` and current, and `just check` passes. If not, stop and report it.
 2. **Gather the changes.** Read the trailers with `git log --format='%h%x09%(trailers:key=Change,valueonly)%x09%(trailers:key=Changelog,valueonly)' <last tag>..HEAD`. List the `Changelog:` sentences under headings for the `Change:` values in the order of section 17, and `ops` notes under a heading for operators. Drop `docs` and `internal` commits. For commits with no `Change:`, made before the project added the commit check, read their messages and keep the changes users see, in their words.
 3. **Check the docs.** `docs/user/` describes every change kept, and no planned marker names a milestone the release claims to ship. Fix gaps with `devkit:user-docs` first.

@@ -42,7 +42,7 @@ run current "<!-- devkit:begin conventions=3 -->" ""
 run behind "<!-- devkit:begin conventions=1 -->" "This project follows devkit conventions v1. The current version is v3. Changes since:
 - v3: Third change
 - v2: Second change
-Mention this to the user at a natural point and offer devkit:upgrade. Don't upgrade without asking."
-run ahead "<!-- devkit:begin conventions=4 -->" "This project records devkit conventions v4, newer than the installed plugin's v3. The plugin may be out of date."
+Mention this to the user at a natural point and offer devkit:upgrade. Don't upgrade without asking. Until it upgrades, devkit's skills won't change files in this project."
+run ahead "<!-- devkit:begin conventions=4 -->" "This project records devkit conventions v4, newer than the installed plugin's v3. Update the plugin. Until then, devkit's skills won't change files in this project."
 
 (( failures == 0 ))

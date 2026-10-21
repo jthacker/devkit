@@ -30,7 +30,7 @@ claude plugin marketplace update devkit
 claude plugin update devkit@devkit
 ```
 
-Start a new session to load it. When a project falls behind the conventions, Claude says so and offers to upgrade it. Nothing changes until you agree.
+Start a new session to load it. When a project falls behind the conventions, Claude says so and offers to upgrade it. Nothing changes until you agree. Until then, Claude won't change files in that project.
 
 ## Use devkit in an existing project
 

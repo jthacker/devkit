@@ -7,6 +7,8 @@ description: In a project that uses devkit, write up evidence as an analysis, fr
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first. The template is `${CLAUDE_PLUGIN_ROOT}/conventions/templates/docs/analysis.md`. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so ask before applying its structure.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 An analysis is evidence. Once written, it is never rewritten to fit later decisions, and `just fmt` leaves it alone. Set its Kind, and cite sections by bare ID, such as `design-7kq3`, never by link, since a link names a doc the section may later leave.
 
 1. Find what it is judged against. A spike or benchmark has pass bars in the plan, the design, or the proposal in git history. Research has the questions it set out to answer. An incident has the expected behavior in the user docs and design. An outcome review has the PRD's success criteria and how each is measured.

@@ -7,6 +7,8 @@ description: In a project that uses devkit, fix a bug by reproducing it, writing
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 9 and 11. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so follow its own rules instead.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 1. **Read** the user docs and design for the behavior, incident reviews in `docs/analyses/`, and `git log --grep` for the cited IDs. Behavior a planned section describes isn't built yet, so its absence isn't a bug.
 2. **Reproduce it.** Find the exact steps, the expected result and the actual one. If it won't reproduce, say what you tried and ask. Don't fix by guessing.
 3. **Write a failing test** at the lowest level that shows the bug, through a public interface. Run it and watch it fail.

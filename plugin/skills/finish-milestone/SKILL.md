@@ -7,6 +7,8 @@ description: In a project that uses devkit, close out a finished milestone, chec
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 3.4 and 3.6.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 1. **Check it's done.** Every task in its file in `docs/plan/` is ticked, the **Done when** result holds, and `just check` passes. In a product repo, every component change the tasks cite has merged. If not, stop and report what's missing.
 2. **User docs.** `docs/user/` describes every behavior the milestone added or changed. Run the commands the pages show. Fix mismatches with `devkit:user-docs`.
 3. **UX and design.** Compare what was built with the U and D sections the tasks cite. Where they differ, ask whether the code or the doc is right, and update the doc to match, with the reasoning for any decision made along the way.

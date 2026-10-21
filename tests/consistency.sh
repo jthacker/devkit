@@ -31,6 +31,13 @@ for skill in skills/*/SKILL.md; do
     *) grep -q '^description: In a project that uses devkit, ' "$skill" \
          || fail "$skill: description doesn't start with 'In a project that uses devkit'" ;;
   esac
+  # Skills follow only the plugin's conventions version, so each one that
+  # changes a project checks the project's version first (design-w6fv).
+  case $name in
+    new-project|upgrade) ;;
+    *) grep -qF 'If the plugin is behind, stop and say to update the plugin.' "$skill" \
+         || fail "$skill: doesn't check the project's conventions version" ;;
+  esac
   grep -q "devkit:$name\`" ../docs/user/skills.md || fail "docs/user/skills.md doesn't list devkit:$name"
   # Every path a skill names under the plugin root must exist.
   # shellcheck disable=SC2016 # the variable is matched literally

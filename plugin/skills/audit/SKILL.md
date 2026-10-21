@@ -7,7 +7,9 @@ description: In a project that uses devkit, check it against the current convent
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first. `devkit:upgrade` applies migrations between versions. An audit compares the project with the rules as they are now, to catch drift that no migration covers.
 
-If `AGENTS.md` has no `devkit:begin` block, offer `devkit:upgrade` to adopt devkit instead. If it records an older version, upgrade first.
+If `AGENTS.md` has no `devkit:begin` block, offer `devkit:upgrade` to adopt devkit instead. If it records an older version, upgrade first, since an audit checks the current rules.
+
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
 
 ## 1. Check
 

@@ -42,7 +42,9 @@ Report a bug in plain words. Claude writes a failing test first. If the design w
 
 ## Let devkit tell you when to upgrade
 
-Claude says at the start of a session when a project is behind the conventions. Accept the upgrade when it is convenient. Ask for an audit afterwards to catch anything left over.
+Claude says at the start of a session when a project is behind the conventions. It won't change files in the project until it upgrades. Accept the upgrade before your next task. Ask for an audit afterwards to catch anything left over.
+
+A project can also be ahead of your plugin. That happens when someone else upgraded it first. Claude asks you to update the plugin, and the steps are in [Get updates](getting-started.md#get-updates).
 
 ## Change a rule
 

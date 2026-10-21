@@ -7,6 +7,8 @@ description: In a project that uses devkit, implement a plan task, such as M2.3 
 
 Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sections 2, 3.6, 9, 11 and 14. If `AGENTS.md` has no `devkit:begin` block, the project doesn't use devkit, so follow its own rules instead.
 
+Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with `${CLAUDE_PLUGIN_ROOT}/conventions/VERSION`. If the project is behind, stop, name both versions and offer `devkit:upgrade`. If the plugin is behind, stop and say to update the plugin.
+
 1. **Pick the task.** Take the one the user names, or the first unchecked task in the milestone files `docs/plan.md` lists, in order, that nothing blocks. Work with no task that is more than a small change gets one in the plan first, through `devkit:design-review` if it changes what the docs say, or a proposal with `devkit:proposal` if it isn't decided.
 2. **Read** the task, the sections it cites, the built sections they depend on, and the code it touches. A section marked `**Planned:**` is the spec to build, not a description of existing code. Read `git log --grep` for the cited IDs to learn why they say what they do. If the docs don't say how, or the task conflicts with them, ask rather than deciding silently.
 3. **Start green.** Run `just check`. If it fails before any change, report it and stop.
