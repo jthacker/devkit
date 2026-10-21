@@ -64,6 +64,7 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 15. **History by kind of change.** <a id="prd-6v2e"></a><a id="R15"></a> Every commit says what kind of change it is. Each reader filters history to what they care about with git alone. A release's notes come from the commits, in words users read.
 16. **Docs current with the code.** <a id="prd-2c17"></a><a id="R16"></a> A commit holds its code, tests and docs together. A finished milestone leaves no planned markers, and its user docs, UX and design describe what was built.
 17. **Every change traces.** <a id="prd-x3qg"></a><a id="R17"></a> Using IDs and git alone, a reader goes from any requirement, UX or design section to the commits, code and plan tasks that cite it. From any commit or cited code, they find the sections behind it. `just lint` finds citations to sections that don't exist, in docs and code. Reorganizing a doc never breaks a citation.
+18. **One version at a time.** <a id="prd-4e1x"></a> **Planned:** M7. devkit's skills write only to a project on the plugin's conventions version. A project that is behind upgrades first, and a plugin that is behind is updated first. Repos on different versions share one machine, and each says which side to update.
 
 ## 5. Non-goals <a id="prd-f08m"></a>
 
@@ -76,5 +77,4 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 
 - **Do the product manager and designer need Claude Code?** [Feedback without git](#prd-kb8q) covers reviewing, not starting a change. Someone who wants to change a requirement can edit the markdown in the Git host's web editor, which skips `just fmt` and the checks, or ask an agent, which runs against a clone.
 - **Who decides when owners disagree?** A design review that changes the PRD and UX needs both owners to approve. Nothing says who decides when they don't.
-- **How do repos on different versions share one machine?** A person works in several repos, each on the conventions version it records, and teammates update the plugin on different days. Claude Code registers a marketplace and its pinned ref once per user, so it has no documented way to pin devkit per project. The options are a copy of the plugin in each repo, a plugin that supports every version until it is deprecated, or skills that stop in a project on another version until one side is upgraded.
 - **When does a team write a proposal?** A team's design review waits on every role it touches. A proposal settles what and why first, but nothing says when a team should write one rather than go straight to design review.

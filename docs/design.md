@@ -374,6 +374,20 @@ At session start, the hook reads the marker and `VERSION`. If the project is beh
 
 An existing project is at v0. The v1 migration is the adoption: inventory the docs, map them onto the document set, list where the project differs on purpose, and propose all of it before changing anything. Project rules that conflict with the conventions, such as omnix's ban on proposals, are the user's call: they stay as project rules outside the block or give way.
 
+### 13.5 One version at a time <a id="design-w6fv"></a>
+
+**Planned:** M7
+
+devkit's skills follow one version of the conventions, the plugin's own ([PRD: One version at a time (planned)](prd.md#prd-4e1x)). A skill run in a project on another version would write docs in the wrong form, so every skill that writes to a project compares the `AGENTS.md` marker with `VERSION` before it starts.
+
+- **The project is behind.** The skill stops, names both versions and offers `devkit:upgrade`. On a team, whoever has the newer plugin opens the upgrade pull request.
+- **The plugin is behind.** The skill stops and says to update the plugin.
+- **No check.** `upgrade` exists to close the gap and `new-project` starts at the current version, so neither checks. `audit` already upgrades first.
+
+The hook's message for a project that is behind says the skills won't write to it until it upgrades. The check is a line in each skill, and the consistency test fails when a skill that writes to a project lacks it.
+
+Each skill has one version. A person with repos on different versions sees, in each one, which side to update.
+
 ## 14. Changing the conventions <a id="design-7z28"></a><a id="D8"></a>
 
 Conventions will change as projects find better ways. The `evolve` skill makes the change in one place, in a session in the devkit repo ([PRD: Conventions evolve in one place](prd.md#prd-by6e), [Where evolve lives](#design-79rj)):
@@ -549,6 +563,14 @@ devkit covers the docs that shape the product, not the queue of incoming work. I
 ### 18.24 Docs split by chapter <a id="design-x9tv"></a><a id="D10.41"></a>
 
 v1 split a doc past 600 lines into chapter files. An ID then names a doc but not a file, so links from outside the repo need a search and break when a section moves between files. Reading by ID gives agents narrower context than a chapter file.
+
+### 18.25 Other ways to run several versions <a id="design-35ck"></a>
+
+- **Pin the plugin per project.** Claude Code registers a marketplace and its pinned ref once per user, so it has no documented way to load two versions of devkit for two repos.
+- **A copy of the plugin in each repo.** It loads by relative path and stays fixed, but gives up updates from GitHub, and each repo's skills drift on their own.
+- **Support every version until it is deprecated.** Every skill and template would branch by version, and every change to them would be tested against each one. Migrations exist to avoid that.
+
+Skills check the version instead ([One version at a time (planned)](#design-w6fv)).
 
 ## 19. Open questions <a id="design-b2ea"></a><a id="D11"></a>
 
