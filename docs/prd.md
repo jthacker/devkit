@@ -74,4 +74,7 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 
 ## 6. Open questions <a id="prd-4dvg"></a>
 
-None yet.
+- **Do the product manager and designer need Claude Code?** [Feedback without git](#prd-kb8q) covers reviewing, not starting a change. Someone who wants to change a requirement can edit the markdown in the Git host's web editor, which skips `just fmt` and the checks, or ask an agent, which runs against a clone.
+- **Who decides when owners disagree?** A design review that changes the PRD and UX needs both owners to approve. Nothing says who decides when they don't.
+- **How do repos on different versions share one machine?** A person works in several repos, each on the conventions version it records, and teammates update the plugin on different days. Claude Code registers a marketplace and its pinned ref once per user, so it has no documented way to pin devkit per project. The options are a copy of the plugin in each repo, a plugin that supports every version until it is deprecated, or skills that stop in a project on another version until one side is upgraded.
+- **When does a team write a proposal?** A team's design review waits on every role it touches. A proposal settles what and why first, but nothing says when a team should write one rather than go straight to design review.
