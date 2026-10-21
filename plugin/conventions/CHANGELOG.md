@@ -12,6 +12,8 @@ Planned work is harder to mistake for built work (section 3.6). Every heading an
 
 Unscheduled ideas and follow-ups now go in `docs/ideas.md`, one line each, not under the plan's Later (section 3.2). A growing list of ideas buried the scheduled work, and the plan should hold only what helps decide what to do next.
 
+The plan template names `plan/` as a path instead of linking it. The folder is gone once the last milestone file is deleted, so the link failed the lint.
+
 The PRD template's section on the core idea is now `## Approach`, not `## What we're building`. The old heading read as a casual aside, and Approach says how the product meets the problem without reading as the design.
 
 ### Migration from v2
@@ -25,6 +27,7 @@ The PRD template's section on the core idea is now `## Approach`, not `## What w
 7. If `docs/plan.md` has a Later section with items, move them to `docs/ideas.md` under a `# <Name>: Ideas` heading, from the template, one line each. Keep their wording and links, adjusting relative links for the new file. Remove the Later section from the plan.
 8. Move ideas kept anywhere else in the plan, such as in Risks or a milestone's notes, only if the user agrees.
 9. Add `docs/ideas.md` to `docs/README.md`, and point links to the plan's Later at it.
+10. If `docs/plan.md` links `[plan/](plan/)`, write it as `` `plan/` `` instead.
 
 ## v2: Section IDs that never change, with generated numbers
 

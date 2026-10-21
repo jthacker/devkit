@@ -1,6 +1,6 @@
 # {{NAME}}: Plan
 
-The work left to do, in order. Each milestone has its own file in [plan/](plan/), and this file lists them. Tasks cite the sections they build by ID, and `just fmt` turns each one into a link titled with its section. Task IDs are stable so code and commits can cite them. When a milestone is done, delete its file and its line here.
+The work left to do, in order. Each milestone has its own file in `plan/`, and this file lists them. Tasks cite the sections they build by ID, and `just fmt` turns each one into a link titled with its section. Task IDs are stable so code and commits can cite them. When a milestone is done, delete its file and its line here.
 
 ## Milestones
 
