@@ -286,6 +286,7 @@ Retries R2 with backoff. The [plan](../plan.md) has more.
 MD
 printf '# Plan\n\nBuilds D2.1, in [Sync](design/2-sync.md).\n' > "$v1/docs/plan.md"
 printf '// Retry with backoff, D2.1. R2D2 is a name.\n' > "$v1/src/sync.go"
+printf '{"part": "R2D2"}' > "$v1/src/quote.json"
 repo "$v1"
 known "$v1"
 same "adopt" 'joined docs/design/2-sync.md into docs/design.md
@@ -323,6 +324,7 @@ Retries [PRD: Sync](prd.md#prd-new3) with backoff. The [plan](plan.md) has more.
 
 Builds [Design: Retries](design.md#design-new3), in [Sync](design.md).' "$(cd "$v1" && show "$v1.known" docs/prd.md docs/design.md docs/plan.md)"
 same "adopt leaves no old design dir" "" "$(ls "$v1/docs/design" 2> /dev/null || true)"
+same "adopt leaves a file with nothing to cite unchanged" '{"part": "R2D2"}.' "$(cat "$v1/src/quote.json"; echo .)"
 
 # A v1 design split into one file per section, named by section number,
 # with two files the contents list doesn't link, which follow in number

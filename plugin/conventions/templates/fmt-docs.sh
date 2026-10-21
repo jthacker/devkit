@@ -28,6 +28,17 @@ git=0
 git rev-parse --is-inside-work-tree > /dev/null 2>&1 && git=1
 idpat='(prd|ux|design)-[0-9a-z]{4}'
 
+# Replaces a file with $tmp/out if they differ. awk and sed end every line
+# with a newline, so a file without a final newline keeps going without one.
+put() { # file
+  local s
+  if [[ -s "$1" && -n $(tail -c 1 "$1") ]]; then
+    s=$(cat "$tmp/out")
+    printf '%s' "$s" > "$tmp/out"
+  fi
+  cmp -s "$tmp/out" "$1" || cat "$tmp/out" > "$1"
+}
+
 # Shared awk: ID patterns and parsing of headings, requirements and anchors.
 common='
 function setup() {
@@ -133,7 +144,7 @@ if [[ $mode == adopt ]]; then
     # Links to a chapter file now go to the doc.
     find docs -name '*.md' -type f | while read -r f; do
       sed -E "s|\]\(((\.\./)*)$k/[0-9]+(\.[0-9]+)*-[^)#]*\.md|](\1$k.md|g" "$f" > "$tmp/out"
-      cmp -s "$tmp/out" "$f" || cat "$tmp/out" > "$f"
+      put "$f"
     done
   done
 
@@ -173,7 +184,7 @@ if [[ $mode == adopt ]]; then
         print out; next
       }
       { print }' "docs/$k.md" > "$tmp/out"
-    cmp -s "$tmp/out" "docs/$k.md" || cat "$tmp/out" > "docs/$k.md"
+    put "docs/$k.md"
   done
 fi
 
@@ -454,7 +465,7 @@ for f in $docs; do
   case "$f" in docs/prd.md | docs/ux.md | docs/design.md) section=1; kind=$(basename "$f" .md) ;; esac
   awk -v ctx=doc -v FILE="$f" -v section="$section" -v kind="$kind" -v mode="$mode" -v adopt=0 \
     -v idsf="$tmp/ids" -v tablef="$tmp/table" -v msgf="$tmp/msgs" -v oldf="$tmp/old" "$common$rewrite" "$f" > "$tmp/out"
-  [[ $mode == check ]] || cmp -s "$tmp/out" "$f" || cat "$tmp/out" > "$f"
+  [[ $mode == check ]] || put "$f"
 done
 
 # Code is every text file outside docs/ that git tracks or would track,
@@ -469,7 +480,7 @@ if (( git )); then
   for f in $code; do
     awk -v ctx=code -v FILE="$f" -v section=0 -v kind="" -v mode="$mode" -v adopt="$adopt" \
       -v idsf="$tmp/ids" -v tablef="$tmp/table" -v msgf="$tmp/msgs" -v oldf="$tmp/old" "$common$rewrite" "$f" > "$tmp/out"
-    [[ $mode == check ]] || cmp -s "$tmp/out" "$f" || cat "$tmp/out" > "$f"
+    [[ $mode == check ]] || put "$f"
   done
 fi
 
