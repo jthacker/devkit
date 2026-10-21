@@ -10,10 +10,12 @@ Code has the tools to change safely: review, history, blame and tests. The rest 
 - **Experts work apart.** Product, design, engineering, writing and operations each use their own tools and vocabulary. Handoffs lose context. Review happens in some places and not others. Each expert's agent sees only what that person gives it.
 - **Agents start without context.** Each session begins empty. A person re-explains whatever the agent can't find written down, or the agent guesses. Guesses become code.
 - **Work is split across tools.** Requirements sit in a doc tool, screens in a design tool, tasks in a tracker, decisions in chat and code in git. Each holds part of the picture and none links to the others. An agent sees only the repo.
+- **Design flaws surface late.** When the design lives in one place and parts of the system live in others, no one can check a design against the whole system before building it. Flaws show up during implementation or in production, where they cost the most to fix.
 - **Change is either heavy or invisible.** Review boards and ticket workflows can't keep pace with agents. Without them, decisions happen implicitly in code. No one can tell what was decided, what is built and what is only planned.
 - **Nothing traces.** From a line of code there is no path back to the requirement or decision behind it. From a requirement there is no path forward to the code, tests and user docs that serve it.
 - **History is lost.** Requirements and design decisions have no blame. The reason something works the way it does lives in a thread or someone's memory.
 - **Docs trail the change.** Teams write docs after the code, if at all, as a chore they skip under pressure. Docs drift from what was built. Stale docs mislead agents more than missing ones.
+- **Testers guess.** Without current requirements and design, testers and test agents infer the expected behavior from the code. They test what was built, not what was meant. Acceptance testing becomes an argument about intent.
 
 Agents make docs cheap to write. Two things are missing. One is a standard for which docs a project keeps and what goes in each. The other is a process that changes them with the same care as code, as part of every change rather than after it.
 
@@ -33,13 +35,13 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 
 **One standard.** Every project has the same docs in the same places, the same ID scheme, the same commit format and the same `just` recipes, whatever its language or domain. A person or agent who knows one devkit project knows where to look in any other. A linter checks the parts that can be checked mechanically.
 
-**The repo is the record.** Each role has a doc in the project's repo: the PRD for what and why, UX for how people experience it, the design for how it works, the plan for what is left, analyses for evidence and user docs for how to use it. These docs change the way code does, through reviewed diffs. Main holds the reviewed state of the whole product, and git holds how it got there. An agent starts at `AGENTS.md` and follows links to what it needs.
+**The repo is the record.** Each role has a doc in the project's repo: the PRD for what and why, UX for how people experience it, the design for how it works, the plan for what is left, analyses for evidence and user docs for how to use it. These docs change the way code does, through reviewed diffs. Main holds the reviewed state of the whole product, and git holds how it got there. An agent starts at `AGENTS.md` and follows links to what it needs. With the docs and code of the whole system in the repo, an agent can check a proposal against the code, or test it with a spike, before anyone builds it.
 
 **Change is lightweight.** An idea goes under Later in the plan. A change that needs an argument becomes a proposal. A decided change is one design review, reviewed as a single diff. It rewrites the docs as they will read once built, marks unbuilt sections planned and adds the plan tasks. Commits that implement it cite its IDs. Finishing a milestone removes its planned markers. A release lists what users will notice, and an outcome review checks the success criteria. Each step has a skill, so an agent does the paperwork and a person makes the decisions.
 
 **Everything is traceable.** Requirements, UX sections, design sections and plan tasks have stable IDs. Code comments, commits and docs cite them. A reader can go from code to the decision behind it, or from a requirement to everything that serves it. `git log --grep` on an ID gives a section its history. Each commit also says what kind of change it is, so readers can filter history and releases draw their notes from it.
 
-**Docs come with the change.** A decided change goes into the docs before anyone builds it. A commit holds its code, tests and docs together. A milestone isn't done until the user docs, UX and design describe what was built. Each doc type has a template and a skill that writes it to the same bar. Quality doesn't depend on who or what wrote it.
+**Docs come with the change.** A decided change goes into the docs before anyone builds it. A commit holds its code, tests and docs together. A milestone isn't done until the user docs, UX and design describe what was built. Each doc type has a template and a skill that writes it to the same bar. Quality doesn't depend on who or what wrote it. Testers and test agents check the build against the PRD, UX and design instead of guessing at intent.
 
 **The conventions evolve.** The conventions carry a version, and each project records the version it follows. A hook tells a project when it is behind. Each version has a migration that brings a project up to date.
 
