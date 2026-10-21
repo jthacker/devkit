@@ -21,6 +21,6 @@ Read `${CLAUDE_PLUGIN_ROOT}/conventions/CONVENTIONS.md` first, especially sectio
 - Tick tasks as they land. New tasks go at the end of their milestone. Never renumber.
 - A decision goes into the design section it governs, and leaves Decisions needed.
 - A finished milestone goes through `devkit:finish-milestone`.
-- Unscheduled ideas go under Later.
+- Unscheduled ideas and follow-ups go in `docs/ideas.md`, from `${CLAUDE_PLUGIN_ROOT}/conventions/templates/docs/ideas.md`, never in the plan. Remove an idea there when a task, proposal or design review takes it up.
 
 Asked what's next, answer with the first unblocked task and what it needs, and offer `devkit:implement`.

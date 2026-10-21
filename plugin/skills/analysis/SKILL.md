@@ -14,4 +14,4 @@ An analysis is evidence. Once written, it is never rewritten to fit later decisi
 3. Look at the output as well as the numbers, and record defects found by looking.
 4. Put screenshots and data in `docs/analyses/<slug>/`. Make Reproducing complete enough to run it again.
 5. Add it to `docs/README.md`.
-6. Apply the recommendation only as far as the user agrees. Recommendations that change what the docs say go through `devkit:proposal` or `devkit:design-review`, and unscheduled ones go under the plan's Later.
+6. Apply the recommendation only as far as the user agrees. Recommendations that change what the docs say go through `devkit:proposal` or `devkit:design-review`, and unscheduled ones go in `docs/ideas.md`.

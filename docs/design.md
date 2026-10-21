@@ -57,7 +57,8 @@ The conventions in [CONVENTIONS.md](../plugin/conventions/CONVENTIONS.md) codify
 | --- | --- | --- |
 | `docs/prd.md` | fisc, mycraft and inbox PRDs | Requirements with IDs, so the design and plan can cite them |
 | `docs/design.md` | fisc, omnix, anneal and kerfu designs, and the design-doc skill | One file, however long, since agents load one section by its ID ([One file per doc](#design-a05p)) |
-| `docs/plan.md` | omnix's task IDs, grafos's shrinking plan | One plan file, holding the remaining work and the backlog, in place of `todo.md` and `ideas.md` |
+| `docs/plan.md` | omnix's task IDs, grafos's shrinking plan | One plan, holding only the remaining work, in place of `todo.md` |
+| `docs/ideas.md` | New | Unscheduled ideas, kept out of the plan so it shows only scheduled work |
 | `docs/proposals/` | anneal, kerfu, grafos | Temporary, deleted once decided |
 | `docs/analyses/` | anneal's spike results | Kept as evidence |
 | `docs/user/` | mycraft and grafos | Indexed by a README table, organized by task |
@@ -85,7 +86,7 @@ devkit treats product development as version control ([PRD: Lightweight change m
 
 | Stage | On main as | Skills |
 | --- | --- | --- |
-| Idea | A line under the plan's Later | `plan` |
+| Idea | A line in `docs/ideas.md` | `plan` |
 | Under consideration | A proposal in `docs/proposals/` | `proposal` |
 | Decided, not built | Sections in the PRD, UX and design in final form, marked planned | `design-review` |
 | Being built | The same sections, cited by open plan tasks | `implement`, `fix-bug` |
@@ -476,7 +477,7 @@ A solo project that gains a contributor would need a migration between them, and
 
 ### 18.10 Syncing with a wiki <a id="design-pwq5"></a><a id="D10.14"></a>
 
-Two places a doc can change means neither is the source of truth, and merging prose edits needs judgment a sync can't make. A one-way mirror people can comment on is under Later in the plan.
+Two places a doc can change means neither is the source of truth, and merging prose edits needs judgment a sync can't make. A one-way mirror people can comment on is in the ideas file.
 
 ### 18.11 One docs folder per role <a id="design-nm5p"></a><a id="D10.15"></a>
 
@@ -510,7 +511,7 @@ A company monorepo could hold many products as scopes under company objectives. 
 
 ### 18.18 Issues in the repo <a id="design-g7pk"></a><a id="D10.24"></a>
 
-devkit covers the docs that shape the product, not the queue of incoming work. Ideas go under Later in the plan, and a bug goes straight to `fix-bug`.
+devkit covers the docs that shape the product, not the queue of incoming work. Ideas go in `docs/ideas.md`, and a bug goes straight to `fix-bug`.
 
 ### 18.19 Other ways to type commits <a id="design-f5fy"></a><a id="D10.25"></a><a id="design-vn3e"></a><a id="D10.26"></a><a id="design-jfx8"></a><a id="D10.27"></a><a id="design-p4z3"></a><a id="D10.28"></a>
 

@@ -10,6 +10,7 @@ The rules every devkit project follows. Their version is in [VERSION](VERSION), 
 | `docs/ux.md` | How do people experience it? | Durable. Starts with the first interface beyond commands. |
 | `docs/design.md` | How does it work, and why this way? | Durable. Built and planned sections. |
 | `docs/plan.md`, `docs/plan/M<n>.md` | What is left, in what order? | Durable. Shrinks as work finishes. |
+| `docs/ideas.md` | What might we do later? | Durable. Starts with the first idea. |
 | `docs/proposals/<slug>.md` | Should we change something, and why? | Deleted once decided. |
 | `docs/analyses/<slug>.md` | What did a spike, study, incident or release show? | Permanent evidence. |
 | `docs/user/` | How do I use it? | Durable. Only built behavior. |
@@ -60,7 +61,7 @@ A spike proposal is accepted when the spike is approved. Its results come back a
 
 ### 3.2 The plan shrinks
 
-The plan holds only what helps decide what to do next. `docs/plan.md` lists the milestones in order, each linking to its file in `docs/plan/`, such as `docs/plan/M5.md`, and holds the requirement coverage, decisions needed, risks and Later. A milestone file holds its goal, its **Done when** result and its tasks. Tasks are checked off as they land, and a finished milestone's file is deleted. Unscheduled ideas go under Later. There is no `todo.md`, and the plan never names who works on a task.
+The plan holds only what helps decide what to do next. `docs/plan.md` lists the milestones in order, each linking to its file in `docs/plan/`, such as `docs/plan/M5.md`, and holds the requirement coverage, decisions needed and risks. A milestone file holds its goal, its **Done when** result and its tasks. Tasks are checked off as they land, and a finished milestone's file is deleted. Unscheduled ideas and follow-ups go in `docs/ideas.md`, one line each, so the plan holds only scheduled work. An idea leaves that file when a milestone, proposal or design review takes it up, or when it is dropped. There is no `todo.md`, and the plan never names who works on a task.
 
 ### 3.3 Analyses are kept
 

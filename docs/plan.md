@@ -31,7 +31,3 @@ The work left to do, in order. Tasks cite the sections they build by ID, and `ju
 - **Skill descriptions that trigger too often.** Once installed, devkit's skills are offered in every project, including ones that don't use devkit. The doc skills check for the managed block and ask first, but a skill could still be picked for an unrelated request. Watch for it during M2, and after M4.4.
 - **Publishing before the trial.** M4 can land before M2 is done, so other people may find the first rough edges.
 - **Migrations that don't fit.** Agent-run migrations depend on clear steps. The v0 adoption is the hardest and is first tried in M3.2.
-
-## Later
-
-- Mirrors for feedback outside git: publish a proposal or design review's docs as a copy to a tool people comment in, and pull the comments back as proposed edits, never syncing edits back ([Design: Syncing with a wiki](design.md#design-pwq5)).

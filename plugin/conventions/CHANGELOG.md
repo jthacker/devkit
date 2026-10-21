@@ -4,6 +4,16 @@ Each version of the conventions gets a section, newest first. The heading is `##
 
 A migration must be safe to run on a project with work in progress. It moves and rewrites docs rather than deleting content, and says so when a step needs the user's judgment.
 
+## v4: Ideas move out of the plan into docs/ideas.md
+
+Unscheduled ideas and follow-ups now go in `docs/ideas.md`, one line each, not under the plan's Later (section 3.2). A growing list of ideas buried the scheduled work, and the plan should hold only what helps decide what to do next.
+
+### Migration from v3
+
+1. If `docs/plan.md` has a Later section with items, move them to `docs/ideas.md` under a `# <Name>: Ideas` heading, from the template, one line each. Keep their wording and links, adjusting relative links for the new file. Remove the Later section from the plan.
+2. Move ideas kept anywhere else in the plan, such as in Risks or a milestone's notes, only if the user agrees.
+3. Add `docs/ideas.md` to `docs/README.md`, and point links to the plan's Later at it.
+
 ## v3: The linter checks links to anchors, and the PRD has an Approach section
 
 `lint-docs.sh` now fails on a link to an anchor that its Markdown file doesn't define, such as `[Retries](#42-retries)` after fmt renumbered that heading. An anchor is an HTML `id` or `name`, or the slug GitHub gives a heading. Before, it checked only that the file existed, so links to old heading slugs passed `just check` after the v2 upgrade.

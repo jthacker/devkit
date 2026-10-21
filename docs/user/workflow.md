@@ -4,7 +4,7 @@ devkit keeps every stage of product work in the repo. Main shows what is built a
 
 ## Have an idea
 
-Ask Claude to add it to the plan. It waits under Later until you schedule it.
+Ask Claude to note it. It waits in `docs/ideas.md` until you schedule it.
 
 ## Argue for a change
 

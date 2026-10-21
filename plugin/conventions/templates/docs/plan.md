@@ -18,7 +18,3 @@ Open choices that block or shape upcoming work, each with the options and what d
 ## Risks
 
 What could go wrong, how likely it is, and what would show it early.
-
-## Later
-
-Ideas and follow-ups that aren't scheduled. Move an item into a milestone when it is.
