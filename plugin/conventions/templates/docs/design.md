@@ -23,7 +23,7 @@ The technical requirements that follow from the PRD, citing the requirements the
 
 ## Architecture
 
-The components, how they connect and what each owns. Add a section after this one for each area of the design, such as data model, key flows, interfaces, storage, error handling, security and testing. Write each as a plain heading, and `just fmt` numbers it and gives it an ID. Each records the rule, the reasoning, and any measurements that justify it. A section not built yet starts with `**Planned:** M<n>`.
+The components, how they connect and what each owns. Add a section after this one for each area of the design, such as data model, key flows, interfaces, storage, error handling, security and testing. Write each as a plain heading, and `just fmt` numbers it and gives it an ID. Each records the rule, the reasoning, and any measurements that justify it. A section not built yet starts with `**Planned:** M<n>`, and so does each heading inside it.
 
 ## Alternatives considered
 

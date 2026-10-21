@@ -30,7 +30,7 @@ To cite a section in a comment, copy its ID from the doc's source. GitHub's link
 
 ## Keep the plan current
 
-Finish a milestone when its tasks are ticked. That removes its planned markers so the docs match the product. Drop planned work you no longer want in a design review. Stale planned sections mislead agents.
+Finish a milestone when its tasks are ticked. That removes its planned markers so the docs match the product. Drop planned work you no longer want in a design review. Stale planned sections mislead agents. An audit asks about milestones nobody has touched in 90 days.
 
 ## Bring outside talk back
 

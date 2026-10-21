@@ -148,7 +148,7 @@ aren'"'"'t checked, and neither are other repos, as in api:design-7kq3.
 ## An example heading design-7kq3
 ```
 == docs/plan/M4.md
-- [ ] **M4.1** Retry failed syncs, [Design: Retries](../design.md#design-7kq3) and [PRD: Conflicts never lose text](../prd.md#prd-9tqe).
+- [ ] **M4.1** Retry failed syncs, [Design: Retries](../design.md#design-7kq3) and [PRD: Conflicts never lose text (planned)](../prd.md#prd-9tqe).
 == docs/analyses/spike.md
 Measured design-7kq3.
 == src/sync.go
@@ -312,13 +312,13 @@ same "adopt result" '== docs/prd.md
 
 ## 1. Overview <a id="design-new1"></a><a id="D1"></a>
 
-Serves [PRD: Start in one request](prd.md#prd-new2) and [PRD: Users can import notes](prd.md#prd-new6), as [Retries](#design-new3) says. See [sync](design.md).
+Serves [PRD: Start in one request](prd.md#prd-new2) and [PRD: Users can import notes (planned)](prd.md#prd-new6), as [Retries](#design-new3) says. See [sync](design.md).
 
 ## 2. Sync <a id="design-new2"></a><a id="D2"></a>
 
 ### 2.1 Retries <a id="design-new3"></a><a id="D2.1"></a>
 
-Retries [PRD: Sync](prd.md#prd-new3) with backoff. The [plan](plan.md) has more.
+Retries [PRD: Sync (planned)](prd.md#prd-new3) with backoff. The [plan](plan.md) has more.
 == docs/plan.md
 # Plan
 
@@ -426,5 +426,54 @@ same "nested contents replaced" '# Nested: Design
 ## 3. Later <a id="design-c3d4"></a>
 
 ### 3.1 Ideas <a id="design-1d3a"></a>' "$(cat "$nested/docs/design.md")"
+
+
+# Links and contents entries for planned sections say so, and lose it once
+# the marker is removed.
+planned="$tmp/planned"
+mkdir -p "$planned/docs"
+cat > "$planned/docs/design.md" <<'MD'
+# Planned: Design
+
+1. [Overview](#design-a1b2)
+2. [Sync](#design-r3wq)
+
+## 1. Overview <a id="design-a1b2"></a>
+
+Built. Sync waits on design-r3wq and [the queue](#design-b6tn).
+
+## 2. Sync <a id="design-r3wq"></a>
+
+**Planned:** M2
+
+### 2.1 Queue <a id="design-b6tn"></a>
+
+**Planned:** M2
+MD
+repo "$planned"
+same "check planned" "docs/design.md:3: contents list is out of date; run just fmt
+docs/design.md:8: cites design-r3wq without a link; run just fmt
+docs/design.md:8: link says the queue but should say Queue (planned); run just fmt" "$(run "$planned" --check)"
+run "$planned" > /dev/null
+same "planned labels" '# Planned: Design
+
+1. [Overview](#design-a1b2)
+2. [Sync (planned)](#design-r3wq)
+
+## 1. Overview <a id="design-a1b2"></a>
+
+Built. Sync waits on [Sync (planned)](#design-r3wq) and [Queue (planned)](#design-b6tn).
+
+## 2. Sync <a id="design-r3wq"></a>
+
+**Planned:** M2
+
+### 2.1 Queue <a id="design-b6tn"></a>
+
+**Planned:** M2' "$(cat "$planned/docs/design.md")"
+sed -i.bak '/^\*\*Planned:\*\* M2$/d' "$planned/docs/design.md" && rm "$planned/docs/design.md.bak"
+same "check built" "docs/design.md:3: contents list is out of date; run just fmt
+docs/design.md:8: link says Sync (planned) but should say Sync; run just fmt
+docs/design.md:8: link says Queue (planned) but should say Queue; run just fmt" "$(run "$planned" --check)"
 
 (( failures == 0 ))

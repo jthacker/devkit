@@ -4,9 +4,11 @@ Each version of the conventions gets a section, newest first. The heading is `##
 
 A migration must be safe to run on a project with work in progress. It moves and rewrites docs rather than deleting content, and says so when a step needs the user's judgment.
 
-## v3: The linter checks links to anchors, and ideas get their own file
+## v3: Stricter checks on links and planned sections, and an ideas file
 
 `lint-docs.sh` now fails on a link to an anchor that its Markdown file doesn't define, such as `[Retries](#42-retries)` after fmt renumbered that heading. An anchor is an HTML `id` or `name`, or the slug GitHub gives a heading. Before, it checked only that the file existed, so links to old heading slugs passed `just check` after the v2 upgrade.
+
+Planned work is harder to mistake for built work (section 3.6). Every heading and requirement inside a planned section carries its own marker, and the linter fails on one that doesn't, since a reader who follows a link to a subsection never sees its parent's marker. `fmt-docs.sh` adds "(planned)" to links and contents entries that point at a planned section, so a link from built text doesn't read as built. Overviews, diagrams and tables show only what is built, and a planned change to one goes in a planned subsection.
 
 Unscheduled ideas and follow-ups now go in `docs/ideas.md`, one line each, not under the plan's Later (section 3.2). A growing list of ideas buried the scheduled work, and the plan should hold only what helps decide what to do next.
 
@@ -14,12 +16,15 @@ The PRD template's section on the core idea is now `## Approach`, not `## What w
 
 ### Migration from v2
 
-1. Replace `.devkit/lint-docs.sh` with the current one, executable.
-2. Run `just lint`. For each broken link it reports, find the section the old anchor named, usually by its title in the slug, and link it by ID, as in `[Retries](#design-7kq3)`, or by a heading that exists. Then run `just fmt` to title the links. Ask the user about any link whose target is unclear.
-3. If `docs/prd.md` has a `What we're building` heading, offer to rename it to `Approach`, keeping its number and ID anchor. Run `just fmt` so links titled with the old heading take the new one. The user may keep the old heading.
-4. If `docs/plan.md` has a Later section with items, move them to `docs/ideas.md` under a `# <Name>: Ideas` heading, from the template, one line each. Keep their wording and links, adjusting relative links for the new file. Remove the Later section from the plan.
-5. Move ideas kept anywhere else in the plan, such as in Risks or a milestone's notes, only if the user agrees.
-6. Add `docs/ideas.md` to `docs/README.md`, and point links to the plan's Later at it.
+1. Replace `.devkit/lint-docs.sh` and `.devkit/fmt-docs.sh` with the current ones, executable.
+2. Run `just lint`. For each broken link it reports, find the section the old anchor named, usually by its title in the slug, and link it by ID, as in `[Retries](#design-7kq3)`, or by a heading that exists. Ask the user about any link whose target is unclear.
+3. For each heading or requirement it reports inside a planned section without a marker, add the marker, usually naming its parent's milestone. If one is already built, ask the user, since the parent's marker may be wrong.
+4. Run `just fmt`. It titles the fixed links and adds "(planned)" to links to planned sections.
+5. Read the overviews, diagrams and tables in the PRD, `ux.md` and design for planned work shown as built. With the user's agreement, move each into a planned subsection of its section.
+6. If `docs/prd.md` has a `What we're building` heading, offer to rename it to `Approach`, keeping its number and ID anchor. Run `just fmt` so links titled with the old heading take the new one. The user may keep the old heading.
+7. If `docs/plan.md` has a Later section with items, move them to `docs/ideas.md` under a `# <Name>: Ideas` heading, from the template, one line each. Keep their wording and links, adjusting relative links for the new file. Remove the Later section from the plan.
+8. Move ideas kept anywhere else in the plan, such as in Risks or a milestone's notes, only if the user agrees.
+9. Add `docs/ideas.md` to `docs/README.md`, and point links to the plan's Later at it.
 
 ## v2: Section IDs that never change, with generated numbers
 

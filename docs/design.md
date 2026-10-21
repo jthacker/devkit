@@ -108,9 +108,9 @@ flowchart LR
 
 ### 4.2 Planned sections <a id="design-5geq"></a><a id="D15.2"></a>
 
-A decided change is written straight into its final home. A section not built yet has a marker naming the milestone that builds it, `**Planned:** M5`, as the first line under its heading (CONVENTIONS section 3.6). A PRD requirement carries it after its anchor. A partly built section keeps its current text and adds the change as a planned subsection.
+A decided change is written straight into its final home. A section not built yet has a marker naming the milestone that builds it, `**Planned:** M5`, as the first line under its heading (CONVENTIONS section 3.6). A PRD requirement carries it after its anchor. Every heading and requirement inside a planned section carries its own marker, since a reader who follows a link to a subsection never sees its parent's. A partly built section keeps its current text and adds the change as a planned subsection. Overviews, diagrams and tables can't carry a marker, so they show only what is built, and a planned change to one goes in a planned subsection.
 
-The marker is state, so tooling keeps it honest. The linter fails when a marker names a milestone the plan doesn't have, so removing a milestone can't leave planned sections behind. `finish-milestone` removes the markers for its milestone and changes nothing else in the section. `implement` treats a planned section as a spec to build. Dropping planned work removes its sections, or moves them to Alternatives considered, in a reviewed change. `docs/user/` holds only built behavior.
+The marker is state, so tooling keeps it honest. The linter fails when a marker names a milestone the plan doesn't have, so removing a milestone can't leave planned sections behind, and when a heading or requirement inside a planned section has no marker. `fmt` adds "(planned)" to links and contents entries for a planned section, so a link from built text doesn't read as built. A marker doesn't say whether its milestone is still active, so `audit` asks about milestones with no commits in 90 days. `finish-milestone` removes the markers for its milestone and changes nothing else in the section. `implement` treats a planned section as a spec to build. Dropping planned work removes its sections, or moves them to Alternatives considered, in a reviewed change. `docs/user/` holds only built behavior.
 
 ### 4.3 Design review <a id="design-vb0a"></a><a id="D15.3"></a>
 
@@ -221,7 +221,7 @@ Nobody writes a number or a link's text by hand. `.devkit/fmt-docs.sh`, run by `
 
 1. Numbers every heading in the PRD, `ux.md` and design in reading order, and every requirement within its area.
 2. Gives a fresh ID to any heading or requirement that lacks one.
-3. Turns each bare ID in a doc into a link, and rewrites every link's text to its target's title and its path to its target's doc.
+3. Turns each bare ID in a doc into a link, and rewrites every link's text to its target's title, with "(planned)" for a planned section, and its path to its target's doc.
 4. Rewrites links and code citations that name an extra anchor to the section's main ID.
 5. Rewrites the contents list as one link per chapter. The contents list is the first run of list items before the first heading where each item is a link or plain text and at least one is a link.
 
@@ -391,7 +391,7 @@ The change reaches new projects at once. Existing projects learn of it at their 
 
 ## 15. The doc linter <a id="design-0sxx"></a><a id="D13"></a>
 
-`lint-docs.sh` and `fmt-docs.sh` are plain bash scripts, compatible with the bash 3.2 that ships with macOS, using only POSIX awk and git. The linter checks the docs for em dashes, broken relative links, docs missing from their index, planned markers naming a milestone the plan doesn't have, and planned markers in user docs, and warns about docs past 600 lines ([One file per doc](#design-a05p)). A link to an anchor in a Markdown file, its own or another, must name an HTML `id` or `name` in that file or the slug GitHub gives one of its headings. Slugs are checked because heading links written before section IDs break silently when fmt renumbers a heading. Links to section IDs in the docs fmt rewrites are left to `fmt-docs.sh --check`, so each problem is reported once. M citations aren't checked, since finished milestones leave the plan.
+`lint-docs.sh` and `fmt-docs.sh` are plain bash scripts, compatible with the bash 3.2 that ships with macOS, using only POSIX awk and git. The linter checks the docs for em dashes, broken relative links, docs missing from their index, planned markers naming a milestone the plan doesn't have, planned markers in user docs, and headings and requirements inside a planned section without their own marker, and warns about docs past 600 lines ([One file per doc](#design-a05p)). A link to an anchor in a Markdown file, its own or another, must name an HTML `id` or `name` in that file or the slug GitHub gives one of its headings. Slugs are checked because heading links written before section IDs break silently when fmt renumbers a heading. Links to section IDs in the docs fmt rewrites are left to `fmt-docs.sh --check`, so each problem is reported once. M citations aren't checked, since finished milestones leave the plan.
 
 It runs `fmt-docs.sh --check` and fails on what it reports: anything `fmt` would change, a link or citation naming an ID that doesn't exist, and an ID defined twice ([`just fmt` does the bookkeeping](#design-4kkx)). The two never disagree, since one script does both. IDs in Markdown backticks are examples and aren't checked, and neither are qualified IDs such as `api:design-7kq3`, which name another repo ([Products across repos](#design-gh6m)). Analyses aren't checked, since they are never rewritten.
 

@@ -48,6 +48,7 @@ function setup() {
   OLDRE = "[DRU][0-9]+([.][0-9]+)*"
   FENCE = "^[ \t]*(```|~~~)"
   LINKRE = "\\[[^]]*\\]\\([^)]*\\)"
+  PLANNED = "^\\*\\*Planned:\\*\\* M[0-9]+"
 }
 # A section ID of the given doc, or of any doc when kind is empty.
 function valid(id, kind,   s) {
@@ -188,18 +189,22 @@ if [[ $mode == adopt ]]; then
   done
 fi
 
-# Every heading and requirement, with its title and anchors.
+# Every heading and requirement, with its title, anchors and whether it is
+# planned. A heading is planned when its first line is a planned marker.
 section_files=""
 for k in $kinds; do section_files="$section_files docs/$k.md"; done
 : > "$tmp/rows"
 if [[ -n "$section_files" ]]; then
   awk "$common"'
     BEGIN { setup(); OFS = "\t" }
-    FNR == 1 { fence = 0; kind = FILENAME; sub(/^docs\//, "", kind); sub(/\.md$/, "", kind) }
-    $0 ~ FENCE { fence = !fence; next }
-    fence { next }
-    /^##+[ \t]/ { parse_heading($0); print kind, FILENAME, FNR, "h", H_LEVEL, H_TITLE, H_ANCH; next }
-    kind == "prd" && /^[0-9]+\. \*\*/ && parse_req($0) { print kind, FILENAME, FNR, "r", 0, R_TITLE, R_ANCH }
+    function resolve(planned) { if (pend != "") print pend, planned; pend = "" }
+    FNR == 1 { resolve(0); fence = 0; kind = FILENAME; sub(/^docs\//, "", kind); sub(/\.md$/, "", kind) }
+    $0 ~ FENCE { resolve(0); fence = !fence; next }
+    fence || /^[ \t]*$/ { next }
+    /^##+[ \t]/ { resolve(0); parse_heading($0); pend = kind OFS FILENAME OFS FNR OFS "h" OFS H_LEVEL OFS H_TITLE OFS H_ANCH; next }
+    { resolve($0 ~ PLANNED) }
+    kind == "prd" && /^[0-9]+\. \*\*/ && parse_req($0) { print kind, FILENAME, FNR, "r", 0, R_TITLE, R_ANCH, (R_REST ~ PLANNED) }
+    END { resolve(0) }
   ' $section_files > "$tmp/rows"
 fi
 
@@ -252,7 +257,7 @@ awk -v mode="$mode" -v shallow="$shallow" -v seed="$seed" -v msgf="$tmp/msgs" -v
     return kind "-" s
   }
   {
-    kind = $1; file = $2; line = $3; level = $5; title = $6
+    kind = $1; file = $2; line = $3; level = $5; title = $6; planned = $8
     n = split($7, a, " ")
     where = file ":" line ": "
     what = ($4 == "h") ? "heading" : "requirement"
@@ -260,7 +265,7 @@ awk -v mode="$mode" -v shallow="$shallow" -v seed="$seed" -v msgf="$tmp/msgs" -v
       if (mode != "check" && !(a[1] in head) && (a[1] in hist)) {
         new = mint(kind)
         print where a[1] " is in the history, so the section is now " new > "/dev/stderr"
-        print a[1], new, file, title > idsf
+        print a[1], new, file, title, planned > idsf
         a[1] = new
       }
     } else if (mode == "check") {
@@ -273,10 +278,10 @@ awk -v mode="$mode" -v shallow="$shallow" -v seed="$seed" -v msgf="$tmp/msgs" -v
     anch = ""
     for (i = 1; i <= n; i++) {
       if (a[i] in seen) msg(where "defines " a[i] ", which is already defined")
-      else { seen[a[i]] = 1; print a[i], a[1], file, title > idsf }
+      else { seen[a[i]] = 1; print a[i], a[1], file, title, planned > idsf }
       anch = anch (i > 1 ? " " : "") a[i]
     }
-    print file, line, level, title, anch > tablef
+    print file, line, level, title, anch, planned > tablef
   }
 ' "$tmp/rows" || status=$?
 (( status == 3 )) && exit 1
@@ -289,14 +294,14 @@ rewrite='
 BEGIN {
   setup()
   while ((getline x < idsf) > 0) {
-    split(x, f, "\t"); mainof[f[1]] = f[2]; fileof[f[2]] = f[3]; titleof[f[2]] = f[4]
+    split(x, f, "\t"); mainof[f[1]] = f[2]; fileof[f[2]] = f[3]; titleof[f[2]] = f[4]; planof[f[2]] = f[5]
   }
   nch = 0
   while (section && (getline x < tablef) > 0) {
     split(x, f, "\t")
     if (f[1] != FILE) continue
     tline[f[2]] = f[5]
-    if (f[3] == 2) { chap[++nch] = f[4]; chapid[nch] = first(f[5]) }
+    if (f[3] == 2) { chap[++nch] = f[4] (f[6] ? " (planned)" : ""); chapid[nch] = first(f[5]) }
   }
   name["docs/prd.md"] = "PRD"; name["docs/ux.md"] = "UX"; name["docs/design.md"] = "Design"
   md = FILE ~ /\.(md|markdown)$/
@@ -326,7 +331,10 @@ function find_contents(   x, n, f, start, last, links, ok) {
 }
 function change(s) { if (mode == "check") print FILE ":" FNR ": " s "; run just fmt" >> msgf }
 function err(s) { print FILE ":" FNR ": " s >> msgf }
-function label(m) { return fileof[m] == FILE ? titleof[m] : name[fileof[m]] ": " titleof[m] }
+# A link names its section, and says so when the section is still planned.
+function label(m) {
+  return (fileof[m] == FILE ? titleof[m] : name[fileof[m]] ": " titleof[m]) (planof[m] ? " (planned)" : "")
+}
 function rel(f,   n, p, t) {
   if (f == FILE) return ""
   t = FILE; n = gsub("/", "/", t); p = ""

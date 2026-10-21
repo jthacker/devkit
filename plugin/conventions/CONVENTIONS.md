@@ -42,7 +42,7 @@ The ID sits in an anchor at the end of the section's heading, as in `### 3.2 Ret
 - An ID never changes meaning, and is never reused after its section is deleted. A heading may hold extra anchors after its main ID, for sections merged into it or its ID in another doc (section 18). Each ID is defined once.
 - An ID in another repo is qualified by that repo's short name, as in `api:design-7kq3` (section 15).
 
-Nobody writes section numbers, IDs or link text by hand. `just fmt` runs `.devkit/fmt-docs.sh`, which numbers every heading of the PRD, `ux.md` and design in reading order and every requirement within its area, gives an ID to any heading or requirement without one, turns bare IDs in docs into links, rewrites each link's text and path to match its target, points links and code citations that name an extra anchor at the main ID, and rewrites the contents list. It leaves analyses alone. So a new section is a plain heading, and a doc may cite a bare ID for `fmt` to link. An author may write a new section's anchor by hand, and `fmt` keeps it if it has the right form and isn't in the repo or its history. New IDs are checked against the history, so `fmt` won't mint them in a shallow clone.
+Nobody writes section numbers, IDs or link text by hand. `just fmt` runs `.devkit/fmt-docs.sh`, which numbers every heading of the PRD, `ux.md` and design in reading order and every requirement within its area, gives an ID to any heading or requirement without one, turns bare IDs in docs into links, rewrites each link's text and path to match its target, marking links to planned sections, points links and code citations that name an extra anchor at the main ID, and rewrites the contents list. It leaves analyses alone. So a new section is a plain heading, and a doc may cite a bare ID for `fmt` to link. An author may write a new section's anchor by hand, and `fmt` keeps it if it has the right form and isn't in the repo or its history. New IDs are checked against the history, so `fmt` won't mint them in a shallow clone.
 
 To read a section, grep for its anchor, as in `grep -n 'id="design-7kq3"' docs/design.md`, and read to the next heading. `git log --grep design-7kq3` finds its history, and each extra anchor finds the history of what merged into it. An old ID such as `D4.2` is an extra anchor too, found the same way and never by heading number.
 
@@ -81,9 +81,11 @@ Before merging, a design review is checked against what is new on main. Two revi
 
 ### 3.6 Planned sections
 
-A section decided but not built has a marker naming the milestone that builds it, such as `**Planned:** M5`, as the first line under its heading.
+A section decided but not built has a marker naming the milestone that builds it, such as `**Planned:** M5`, as the first line under its heading. Every heading and requirement inside a planned section carries its own marker, so a reader who lands on one by its ID sees it.
 
-A PRD requirement carries it after its anchor, as in `1. **Sync.** <a id="prd-m2c7"></a> **Planned:** M5. Edits reach every device.` A change to a built section is a planned subsection, and the built text stays as it is until the change ships.
+A PRD requirement carries it after its anchor, as in `1. **Sync.** <a id="prd-m2c7"></a> **Planned:** M5. Edits reach every device.` A change to a built section is a planned subsection, and the built text stays as it is until the change ships. Overviews, diagrams and tables also show only what is built, and a planned change to one goes in a planned subsection.
+
+`just fmt` adds "(planned)" to the text of each link to a planned section and to its contents entry, so a link from built text doesn't read as built. Once the marker is removed, `just fmt` takes it away.
 
 The marker names a milestone in the plan. `docs/user/` has no markers, since it describes only what is built. Dropping planned work removes its sections, or moves them to Alternatives considered, in a reviewed change.
 
@@ -125,7 +127,7 @@ devkit manages that block, `.devkit/lint-docs.sh`, `.devkit/fmt-docs.sh` and `.d
   - `run *args` runs the project from the checkout.
   - `setup` installs what a fresh checkout needs, such as toolchains and dependencies, and is safe to run again.
   - `install` builds something the user runs on their own machine, such as a CLI, app or plugin, and installs it from the checkout, such as with `cargo install --path` or a copy to `~/.local/bin`. Running it again updates it. Libraries and services deployed elsewhere don't have one.
-- `.devkit/lint-docs.sh [root]` checks the docs for em dashes, broken links, links to an anchor a Markdown file doesn't have, docs missing from their index, and planned markers naming a milestone the plan doesn't have or sitting in user docs, and warns about docs past 600 lines. It runs `.devkit/fmt-docs.sh --check`, which changes nothing and fails where `fmt` would change something, where a link or citation in docs or code names an ID that doesn't exist, and where an ID is defined twice. It needs no history, so it runs in a shallow CI checkout.
+- `.devkit/lint-docs.sh [root]` checks the docs for em dashes, broken links, links to an anchor a Markdown file doesn't have, docs missing from their index, planned markers naming a milestone the plan doesn't have or sitting in user docs, and headings and requirements inside a planned section without their own marker, and warns about docs past 600 lines. It runs `.devkit/fmt-docs.sh --check`, which changes nothing and fails where `fmt` would change something, where a link or citation in docs or code names an ID that doesn't exist, and where an ID is defined twice. It needs no history, so it runs in a shallow CI checkout.
 - Code is every text file git tracks outside `docs/`. Files given the `devkit-examples` attribute in `.gitattributes`, such as test fixtures, aren't checked. In Markdown, IDs in backticks are examples. Qualified IDs such as `api:design-7kq3` aren't checked.
 - `.devkit/check-commits.sh [range]` checks the trailers of section 17 on each commit in a git range, by default those not yet on the upstream branch. It skips merges and commits made before it was added.
 - Paths in the project never contain spaces.

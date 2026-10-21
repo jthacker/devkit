@@ -20,7 +20,7 @@ Approving that diff is the decision. Reviewers see the design before any code ex
 
 One decision often takes many tasks to build. Each task reads the agreed design from main. Without it, every agent would work from a proposal or a chat.
 
-The docs stay honest until the work ships. A planned section says on its first line that it isn't built. It also names the milestone that builds it. User docs describe only what is built.
+The docs stay honest until the work ships. A planned section says on its first line that it isn't built. It also names the milestone that builds it. Links to it say it is planned. User docs describe only what is built.
 
 A small change skips this step. Ask Claude to make it. The docs change in the same commit as the code.
 

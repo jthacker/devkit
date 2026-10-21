@@ -133,6 +133,38 @@ expect drift "$drift" "docs/plan.md: doesn't link plan/M3.md
 docs/design.md:8: planned for M7, which isn't in the plan
 docs/user/README.md:2: planned marker in user docs"
 
+# Inside a planned section, every heading and requirement is marked too.
+nesting="$tmp/nesting"
+cp -R "$lifecycle" "$nesting"
+cat >> "$nesting/docs/prd.md" <<'MD'
+## 2. Import <a id="prd-k7m3"></a>
+**Planned:** M2
+1. **Users can import notes.** <a id="prd-p9w4"></a> From files.
+2. **Imports keep folders.** <a id="prd-h3v8"></a> **Planned:** M2. They do.
+MD
+cat >> "$nesting/docs/design.md" <<'MD'
+## 2. Sync <a id="design-r3wq"></a>
+
+**Planned:** M2
+
+### 2.1 Queue <a id="design-b6tn"></a>
+
+Edits wait.
+
+### 2.2 Retries <a id="design-x4k2"></a>
+
+**Planned:** M2
+
+#### 2.2.1 Backoff <a id="design-h2m9"></a>
+
+## 3. Storage <a id="design-a05p"></a>
+
+Built.
+MD
+expect nesting "$nesting" "docs/prd.md:5: requirement inside a planned section has no planned marker
+docs/design.md:12: heading inside a planned section has no planned marker
+docs/design.md:20: heading inside a planned section has no planned marker"
+
 # Citations in code are checked, except in files marked as examples.
 code="$tmp/code"
 cp -R "$lifecycle" "$code"

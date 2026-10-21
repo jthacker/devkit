@@ -142,5 +142,30 @@ while IFS=: read -r f n m; do
   esac
 done <<< "$planned"
 
+# Inside a planned section, every heading and requirement carries its own
+# marker, so a reader who lands on one by its ID sees it isn't built.
+while IFS= read -r problem; do
+  [[ -n "$problem" ]] && fail "$problem"
+done < <(awk '
+  function inside(lvl,   k) { for (k = 1; k < lvl; k++) if (planned[k]) return 1; return 0 }
+  function resolve(mark) {
+    if (!pend) return
+    pend = 0; planned[plvl] = mark
+    if (!mark && inside(plvl)) print pfile ":" pline ": heading inside a planned section has no planned marker"
+  }
+  FNR == 1 { resolve(0); fence = 0; split("", planned) }
+  /^[ \t]*(```|~~~)/ { resolve(0); fence = !fence; next }
+  fence || /^[ \t]*$/ { next }
+  /^#+[ \t]/ {
+    resolve(0); match($0, /^#+/)
+    for (k = RLENGTH; k <= 9; k++) planned[k] = 0
+    pend = 1; plvl = RLENGTH; pline = FNR; pfile = FILENAME; next
+  }
+  { resolve($0 ~ /^\*\*Planned:\*\* M[0-9]+/) }
+  FILENAME ~ /prd\.md$/ && /^[0-9]+\. \*\*/ && inside(10) && !/\*\*Planned:\*\* M[0-9]+/ {
+    print FILENAME ":" FNR ": requirement inside a planned section has no planned marker"
+  }
+  END { resolve(0) }' $(existing docs/prd.md docs/ux.md docs/design.md) /dev/null)
+
 (( failures == 0 )) && echo "ok   docs"
 (( failures == 0 ))
