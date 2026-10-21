@@ -40,12 +40,62 @@ links() {
       } }' "$@"
 }
 
-# Relative links that point nowhere.
+# Relative links that point nowhere, and anchors in a Markdown file that it
+# doesn't define. fmt-docs.sh checks links to section IDs in the docs it
+# rewrites, so those are left to it.
+idlike='^((prd|ux|design)-[0-9a-z]{4}|[DRU][0-9]+(\.[0-9]+)*)$'
+anchored=""
 while IFS=: read -r f n target; do
-  case "$target" in http:* | https:* | mailto:* | '#'* | *'{{'*) continue ;; esac
+  case "$target" in http:* | https:* | mailto:* | *'{{'*) continue ;; esac
   path="${target%%#*}"
-  [[ -e "$(dirname "$f")/$path" ]] || fail "$f:$n: broken link to $target"
+  dest="$(dirname "$f")/$path"; [[ -n "$path" ]] || dest=$f
+  if [[ ! -e "$dest" ]]; then fail "$f:$n: broken link to $target"; continue; fi
+  [[ "$target" == *'#'* && -f "$dest" && "$dest" == *.md ]] || continue
+  frag="${target#*#}"
+  case "$f" in docs/analyses/*) ;; docs/*) [[ "$frag" =~ $idlike ]] && continue ;; esac
+  anchored="$anchored$f"$'\t'"$n"$'\t'"$target"$'\t'"$dest"$'\t'"$frag"$'\n'
 done < <(links $files)
+
+# Of the links above, those whose anchor isn't in their file. A file's
+# anchors are its HTML ids and names, and the slugs GitHub gives its
+# headings, with and without the space an anchor tag leaves at the end.
+while IFS= read -r problem; do
+  [[ -n "$problem" ]] && fail "$problem"
+done < <(printf '%s' "$anchored" | awk -F '\t' '
+  function slug(s,   t) {
+    while (match(s, /\[[^]]*\]\([^)]*\)/)) {
+      t = substr(s, RSTART + 1, RLENGTH); sub(/\]\(.*/, "", t)
+      s = substr(s, 1, RSTART - 1) t substr(s, RSTART + RLENGTH)
+    }
+    gsub(/<[^>]*>/, "", s); s = tolower(s)
+    gsub(/-/, "\001", s); gsub(/_/, "\002", s); gsub(/[[:punct:]]/, "", s)
+    gsub(/\001/, "-", s); gsub(/\002/, "_", s); gsub(/ /, "-", s)
+    return s
+  }
+  function add(file, a) { if (a != "") has[file, a] = 1 }
+  function heading(file, s,   base, k) {
+    sub(/^#+[ \t]*/, "", s); sub(/[ \t]+#+[ \t]*$/, "", s); sub(/[ \t]+$/, "", s)
+    base = slug(s); k = seen[file, base]++
+    add(file, k ? base "-" k : base)
+    sub(/[ \t]*(<[^>]*>[ \t]*)+$/, "", s)
+    add(file, slug(s))
+  }
+  function load(file,   x, fence, t, a) {
+    loaded[file] = 1; fence = 0
+    while ((getline x < file) > 0) {
+      if (x ~ /^[ \t]*(```|~~~)/) { fence = !fence; continue }
+      if (fence) continue
+      if (x ~ /^#+[ \t]/) heading(file, x)
+      t = x; gsub(/`[^`]*`/, "", t)
+      while (match(t, /(id|name)="[^"]*"/)) {
+        a = substr(t, RSTART, RLENGTH); sub(/^[a-z]*="/, "", a); sub(/"$/, "", a)
+        add(file, a); t = substr(t, RSTART + RLENGTH)
+      }
+    }
+    close(file)
+  }
+  { if (!($4 in loaded)) load($4)
+    if (!(($4, $5) in has)) print $1 ":" $2 ": broken link to " $3 }')
 
 # Every doc is listed in its index (section 1).
 indexed() { # index, doc path relative to the index

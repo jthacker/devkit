@@ -40,6 +40,36 @@ MD
 printf '# Guide\n' > "$good/docs/user/README.md"
 expect good "$good" "ok   docs"
 
+# Anchors: HTML ids and GitHub's heading slugs, in the file and in others.
+anchors="$tmp/anchors"
+cp -R "$good" "$anchors"
+cat > "$anchors/README.md" <<'MD'
+# Tool
+
+## Get `started`, now!
+
+## Notes
+
+## Notes
+
+[Start](#get-started-now) [Again](#notes-1) [Design](docs/design.md#11-detail-)
+[Overview](docs/design.md#design-q2m8) [Box](docs/user/README.md#box)
+[Gone](#setup) [Old](docs/design.md#12-retries) [Twice](#notes-2) [Fenced](#hidden)
+```
+## Hidden
+```
+MD
+printf '# Guide\n\n<a name="box"></a>\n' > "$anchors/docs/user/README.md"
+printf '[Old](#hidden) [Old](old.md)\n' >> "$anchors/docs/user/README.md"
+printf '[Old](../design.md#2-overview) [ID](../design.md#design-zz9z)\n' > "$anchors/docs/user/old.md"
+expect anchors "$anchors" "README.md:11: broken link to #setup
+README.md:11: broken link to docs/design.md#12-retries
+README.md:11: broken link to #notes-2
+README.md:11: broken link to #hidden
+docs/user/README.md:4: broken link to #hidden
+docs/user/old.md:1: broken link to ../design.md#2-overview
+docs/user/old.md:1: links design-zz9z, which doesn't exist"
+
 bad="$tmp/bad"
 mkdir -p "$bad/docs/proposals"
 printf '[gone](missing.md)\n' > "$bad/README.md"
