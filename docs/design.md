@@ -282,9 +282,9 @@ The skills are:
 | `audit` | Find a project's drift from the current rules ([Finding drift](#design-njs0)) |
 | `restructure` | Merge, split, move or reorder sections, keeping every ID ([Restructuring](#design-p391)) |
 
-Each skill names its template and the conventions by `${CLAUDE_PLUGIN_ROOT}` paths and reads them when it runs. A skill's description says when to use it, so plain requests such as "write a proposal for switching to SQLite" find the right one. Every description except those of `new-project` and `upgrade` starts with "In a project that uses devkit", so the skills aren't offered in projects that don't ([PRD: Existing projects are untouched until adopted](prd.md#prd-4svd)).
+Each skill names its template and the conventions by `${CLAUDE_PLUGIN_ROOT}` paths and reads them when it runs. A skill's description says when to use it, so plain requests such as "write a proposal for switching to SQLite" find the right one. Every description except those of `new-project` and `upgrade` starts with "In a project that uses devkit", so the skills aren't offered in projects that don't ([PRD: Quiet outside devkit projects](prd.md#prd-4svd)).
 
-The doc skills check for the managed block in `AGENTS.md` first. In a project without it, they say the project doesn't use devkit and ask before applying its structure ([PRD: Existing projects are untouched until adopted](prd.md#prd-4svd)).
+The doc skills check for the managed block in `AGENTS.md` first. In a project without it, they say the project doesn't use devkit and ask before applying its structure ([PRD: Quiet outside devkit projects](prd.md#prd-4svd)).
 
 ### 9.1 What the plugin ships <a id="design-0qqy"></a><a id="D5.1"></a>
 
