@@ -25,7 +25,7 @@ The people are product managers, designers, engineers, writers and operators. On
 
 The agents need to find the right doc, know what is built and what is only planned, and know where new material goes, without being told each session.
 
-## 3. What we're building <a id="prd-88c1"></a>
+## 3. Approach <a id="prd-88c1"></a>
 
 A Claude Code plugin that holds conventions, templates and skills in one repo.
 

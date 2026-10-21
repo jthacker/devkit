@@ -10,7 +10,7 @@ What is wrong or missing today, and for whom. Be specific about the person and t
 
 Who uses it, in what situation, and what they are trying to get done. Name the primary user first.
 
-## What we're building
+## Approach
 
 The core idea in a few paragraphs. Describe the mechanism and the experience, not every feature.
 

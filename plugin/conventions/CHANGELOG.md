@@ -4,14 +4,17 @@ Each version of the conventions gets a section, newest first. The heading is `##
 
 A migration must be safe to run on a project with work in progress. It moves and rewrites docs rather than deleting content, and says so when a step needs the user's judgment.
 
-## v3: The linter checks links to anchors
+## v3: The linter checks links to anchors, and the PRD has an Approach section
 
 `lint-docs.sh` now fails on a link to an anchor that its Markdown file doesn't define, such as `[Retries](#42-retries)` after fmt renumbered that heading. An anchor is an HTML `id` or `name`, or the slug GitHub gives a heading. Before, it checked only that the file existed, so links to old heading slugs passed `just check` after the v2 upgrade.
+
+The PRD template's section on the core idea is now `## Approach`, not `## What we're building`. The old heading read as a casual aside, and Approach says how the product meets the problem without reading as the design.
 
 ### Migration from v2
 
 1. Replace `.devkit/lint-docs.sh` with the current one, executable.
 2. Run `just lint`. For each broken link it reports, find the section the old anchor named, usually by its title in the slug, and link it by ID, as in `[Retries](#design-7kq3)`, or by a heading that exists. Then run `just fmt` to title the links. Ask the user about any link whose target is unclear.
+3. If `docs/prd.md` has a `What we're building` heading, offer to rename it to `Approach`, keeping its number and ID anchor. Run `just fmt` so links titled with the old heading take the new one. The user may keep the old heading.
 
 ## v2: Section IDs that never change, with generated numbers
 
