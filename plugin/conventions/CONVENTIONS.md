@@ -28,11 +28,9 @@ A project starts with the PRD. The design follows a reviewed PRD, and the plan a
 
 Every section of the PRD, `ux.md` and design has an ID that never changes: the doc's name, a hyphen and four characters, such as `prd-4hz8`, `ux-c3pa` or `design-7kq3`. The characters are lowercase Crockford base32, with at least one letter and one digit. Plan milestones and tasks are `M2` and `M2.3`.
 
-The ID sits in an anchor at the end of the section's heading. In the PRD, each requirement is a numbered item whose bold lead is its title, with its anchor after it. Bulleted items aren't requirements.
+The ID sits in an anchor at the end of the section's heading, as in `### 3.2 Retries <a id="design-7kq3"></a>`. In the PRD, each requirement is a numbered item whose bold lead is its title, with its anchor after it. Bulleted items aren't requirements.
 
 ```markdown
-### 3.2 Retries <a id="design-7kq3"></a>
-
 1. **Edits reach every device.** <a id="prd-4hz8"></a> An edit made offline
    appears on the user's other devices within a minute of reconnecting.
 ```
@@ -82,13 +80,7 @@ Before merging, a design review is checked against what is new on main. Two revi
 
 ### 3.6 Planned sections
 
-A section decided but not built has a marker naming the milestone that builds it, as the first line under its heading:
-
-```markdown
-## 4. Sync engine <a id="design-r3wq"></a>
-
-**Planned:** M5
-```
+A section decided but not built has a marker naming the milestone that builds it, such as `**Planned:** M5`, as the first line under its heading.
 
 A PRD requirement carries it after its anchor, as in `1. **Sync.** <a id="prd-m2c7"></a> **Planned:** M5. Edits reach every device.` A change to a built section is a planned subsection, and the built text stays as it is until the change ships.
 

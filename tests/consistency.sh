@@ -45,6 +45,15 @@ for skill in skills/*/SKILL.md; do
 done
 
 if grep -rn '—' conventions skills; then fail "em dashes above"; fi
+# Agents find sections by grepping for headings, so an example heading in a
+# fence reads as a real one. Templates are skipped, since their docs hold
+# real headings.
+fenced=$(find conventions/CONVENTIONS.md conventions/CHANGELOG.md skills -name '*.md' -exec awk '
+  FNR == 1 { fence = 0 }
+  /^[ \t]*(```|~~~)/ { fence = !fence; next }
+  fence && /^#/ { print FILENAME ":" FNR ": " $0 }' {} +)
+[[ -z "$fenced" ]] || fail "example headings in fences, which read as real ones; write them inline:
+$fenced"
 
 (( failures == 0 )) && echo "ok   consistency"
 (( failures == 0 ))
