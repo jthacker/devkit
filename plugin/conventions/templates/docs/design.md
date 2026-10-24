@@ -35,4 +35,6 @@ What it is, in a sentence or two. The concrete trade-off that ruled it out, or w
 
 ## Open questions
 
-Questions that could change the design, each with what would answer it.
+Questions that could change the design, numbered so they can be named in discussion.
+
+- **Q1. <Short title>.** <The question, and what would answer it.>

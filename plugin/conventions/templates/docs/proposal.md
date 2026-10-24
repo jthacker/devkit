@@ -37,3 +37,7 @@ The phases or tasks it adds to the plan, and what shows each one is done.
 What it is, and the concrete trade-off that ruled it out.
 
 ## 7. Open questions
+
+Questions to settle before the change is accepted, numbered so they can be named in discussion.
+
+- **Q1. <Short title>.** <The question, and what would answer it.>

@@ -16,6 +16,8 @@ The plan template names `plan/` as a path instead of linking it. The folder is g
 
 The PRD template's section on the core idea is now `## Approach`, not `## What we're building`. The old heading read as a casual aside, and Approach says how the product meets the problem without reading as the design.
 
+Open questions in the PRD, `ux.md`, design and proposals are numbered, as in `- **Q2. Retries.** ...`, so people can name one in discussion (section 19). The numbers are local to the doc and may change as questions are settled.
+
 ### Migration from v2
 
 1. Replace `.devkit/lint-docs.sh` and `.devkit/fmt-docs.sh` with the current ones, executable.
@@ -28,6 +30,7 @@ The PRD template's section on the core idea is now `## Approach`, not `## What w
 8. Move ideas kept anywhere else in the plan, such as in Risks or a milestone's notes, only if the user agrees.
 9. Add `docs/ideas.md` to `docs/README.md`, and point links to the plan's Later at it.
 10. If `docs/plan.md` links `[plan/](plan/)`, write it as `` `plan/` `` instead.
+11. Number the open questions in `docs/prd.md`, `docs/ux.md`, `docs/design.md` and each proposal from Q1, in their current order, as list items that start `**Q<n>. <Short title>.**`. Keep each question's wording, and give a short title to one that has none. A numbered list in the PRD becomes a bulleted one, since `just fmt` treats a numbered item with a bold lead there as a requirement.
 
 ## v2: Section IDs that never change, with generated numbers
 

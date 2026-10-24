@@ -572,9 +572,9 @@ Skills check the version instead ([One version at a time](#design-w6fv)).
 
 ## 19. Open questions <a id="design-b2ea"></a><a id="D11"></a>
 
-- **Product repo size.** A product split over two repos may not need a third. A component repo could act as the product repo.
-- **Attribution.** Docs never name people, but feedback comes from people. Naming them in commit bodies may be enough.
-- **Outcome timing.** Some success criteria take weeks to measure. The plan could carry a task for each outcome review.
-- **Fork versions.** A fork that evolves bumps `VERSION` on its own, so merging upstream conflicts. For now forks stay forks.
-- **Copying an ID from the rendered page.** GitHub shows no IDs, and its heading link copies a slug that changes with the number. A note in the agents block may be enough, or each heading could show a link to its ID.
-- **Plan IDs.** Tasks are cited in commits, but `M2.3` in code can't be checked ([Other ID forms](#design-6yvs)).
+- **Q1. Product repo size.** A product split over two repos may not need a third. A component repo could act as the product repo.
+- **Q2. Attribution.** Docs never name people, but feedback comes from people. Naming them in commit bodies may be enough.
+- **Q3. Outcome timing.** Some success criteria take weeks to measure. The plan could carry a task for each outcome review.
+- **Q4. Fork versions.** A fork that evolves bumps `VERSION` on its own, so merging upstream conflicts. For now forks stay forks.
+- **Q5. Copying an ID from the rendered page.** GitHub shows no IDs, and its heading link copies a slug that changes with the number. A note in the agents block may be enough, or each heading could show a link to its ID.
+- **Q6. Plan IDs.** Tasks are cited in commits, but `M2.3` in code can't be checked ([Other ID forms](#design-6yvs)).

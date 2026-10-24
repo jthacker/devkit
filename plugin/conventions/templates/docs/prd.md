@@ -33,7 +33,9 @@ What this deliberately doesn't do, at least for now, and why when it isn't obvio
 
 ## Open questions
 
-Questions that change the requirements, each with who or what can answer it.
+Questions that change the requirements, numbered so they can be named in discussion.
+
+- **Q1. <Short title>.** <The question, and who or what can answer it.>
 
 ## References
 

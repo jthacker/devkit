@@ -41,4 +41,6 @@ What it is, and the concrete trade-off that ruled it out.
 
 ## Open questions
 
-Questions that could change the experience, each with what would answer it.
+Questions that could change the experience, numbered so they can be named in discussion.
+
+- **Q1. <Short title>.** <The question, and what would answer it.>

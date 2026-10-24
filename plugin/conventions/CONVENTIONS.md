@@ -254,3 +254,7 @@ The PRD, `ux.md` and design can be reorganized as they grow. Restructuring chang
 - **Move to another doc.** `fmt` gives the section that doc's ID and keeps its old ID as an extra anchor, then points links and code citations at the new ID. An ID naming another doc is allowed only as an extra anchor.
 
 A restructure is one commit with `Change: docs`. Its `Refs:` names every ID involved, and its body says what merged, moved and was deleted, such as `Merged design-b6tn into design-7kq3`.
+
+## 19. Open questions
+
+The PRD, `ux.md`, design and proposals end with their open questions. Each is a list item that starts with its number and a short title, as in `- **Q2. Retries.** Should a failed sync retry, and what would show it?`, so people can name it in discussion. A new question takes the next number. A number names a question only within its doc and only for now, so the rest may be renumbered when one is settled. Name another doc's question with the doc, as in design Q2, and never cite one in code or commits.
