@@ -18,6 +18,8 @@ The PRD template's section on the core idea is now `## Approach`, not `## What w
 
 Open questions in the PRD, `ux.md`, design and proposals are numbered, as in `- **Q2. Retries.** ...`, so people can name one in discussion (section 19). The numbers are local to the doc and may change as questions are settled.
 
+When a decision is the user's, agents take each question on its own (section 20). They research it, give the options with pros and cons, and recommend one when one is better. The managed block carries the rule, and the new `devkit:decide` skill walks a doc's open questions this way. Before, only a design review gave research and a recommendation.
+
 ### Migration from v2
 
 1. Replace `.devkit/lint-docs.sh` and `.devkit/fmt-docs.sh` with the current ones, executable.

@@ -258,3 +258,14 @@ A restructure is one commit with `Change: docs`. Its `Refs:` names every ID invo
 ## 19. Open questions
 
 The PRD, `ux.md`, design and proposals end with their open questions. Each is a list item that starts with its number and a short title, as in `- **Q2. Retries.** Should a failed sync retry, and what would show it?`, so people can name it in discussion. A new question takes the next number. A number names a question only within its doc and only for now, so the rest may be renumbered when one is settled. Name another doc's question with the doc, as in design Q2, and never cite one in code or commits.
+
+## 20. Decisions
+
+When a decision is the user's, such as an open question, a choice between options, or code and docs that disagree, the agent takes each question on its own:
+
+1. Research it just before asking, since earlier answers can change it. Read the docs, analyses, `git log --grep` on the cited IDs, and the code. Search the web only when the answer turns on outside facts, such as a library's limits or a platform's behavior.
+2. Say briefly what was found and where.
+3. Give the options with their pros and cons. Recommend one with the reason when one is better. When none is, say so rather than forcing one. When only evidence can settle it, offer a spike.
+4. Ask for one answer, the recommended option first. The user can also defer it or answer otherwise. Where the agent has a tool for structured questions, use it.
+
+Ask first the questions others depend on. No question is settled without the user, and one left unanswered stays open. A fact only the user knows, such as where a project lives, is asked plainly, together with the others. Approving a diff stays one approval.

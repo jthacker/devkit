@@ -11,7 +11,7 @@ Before changing any file, compare the `conventions=N` marker in `AGENTS.md` with
 
 ## Writing
 
-1. Read `docs/prd.md` and `docs/ux.md` if there is one, and raise their open questions that would change the design first.
+1. Read `docs/prd.md` and `docs/ux.md` if there is one, and raise their open questions that would change the design first, offering `devkit:decide` to settle them.
 2. Read the existing code and analyses.
 3. Most of the length goes to the chosen solution: architecture, data model, key flows, interfaces, and the rules the code must follow. Each section gives the rule, the reasoning, and any measurement behind it.
 4. Cite the requirements and UX sections each part serves by ID. Write new sections as plain headings, and run `just fmt` to number them, give them IDs and link the citations. A requirement served nowhere becomes an open question. Where a threat model matters, give it a Security section.

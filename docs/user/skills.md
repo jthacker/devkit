@@ -12,6 +12,7 @@ Ask in plain words. You can also call a skill by name.
 | `devkit:implement` | Builds a plan task with tests and docs |
 | `devkit:fix-bug` | Fixes a bug, starting from a failing test |
 | `devkit:proposal` | Writes a proposal for a change not yet decided |
+| `devkit:decide` | Walks you through open questions one at a time |
 | `devkit:design-review` | Writes a decided change into the docs for review |
 | `devkit:restructure` | Merges, splits or reorders sections without breaking IDs |
 | `devkit:analysis` | Writes up what a spike showed |

@@ -43,4 +43,4 @@ Draft `docs/prd.md` with `devkit:prd` from the pitch, the idea doc and the conve
 
 ## 5. Commit and hand off
 
-Commit as `Start <name> with devkit conventions v<N>`, with the trailer `Change: internal`. Tell the user where the project is, what the PRD needs from them, and that the design comes next with `devkit:design`.
+Commit as `Start <name> with devkit conventions v<N>`, with the trailer `Change: internal`. Tell the user where the project is, what the PRD needs from them, and that the design comes next with `devkit:design`. Offer to settle the PRD's open questions with `devkit:decide`.

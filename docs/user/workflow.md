@@ -14,6 +14,8 @@ Ask for a proposal when a change needs a decision. Claude writes it in `docs/pro
 
 Say you accept the proposal, or describe a change you have already decided. Claude writes the change into the docs as they will read once it is built. Sections that aren't built yet are marked as planned. Claude also adds the work to the plan. You review all of it as one diff.
 
+Ask Claude to go through open questions before you decide. It takes them one at a time. For each it says what it found and what each option costs. It recommends one when one is better. You can answer a question or leave it for later.
+
 ### Why the decision comes before the code
 
 Approving that diff is the decision. Reviewers see the design before any code exists. Rejecting it throws away no work.

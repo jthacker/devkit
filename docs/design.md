@@ -116,11 +116,19 @@ The marker is state, so tooling keeps it honest. The linter fails when a marker 
 
 A proposal is an argument: the problem, the options and the case for one. It is optional, since a change that needs no argument skips it.
 
-The decision is one reviewed change, made by `design-review`. It first takes each of the proposal's open questions to the user, with pros and cons and a recommendation, or as a spike when only evidence can settle it, so none is settled silently. A spike becomes a plan task ahead of the work that depends on it. It then writes the PRD, UX and design into their final wording with planned markers, writes new sections as headings that `just fmt` numbers and gives IDs, adds the plan tasks, moves rejected options into Alternatives considered, and deletes the proposal. Reviewers see the docs as they will read, as a diff against main, so approving and merging it is the decision. Nothing rewrites that text after approval except removing the marker when it ships.
+The decision is one reviewed change, made by `design-review`. It first takes each of the proposal's open questions to the user ([Decisions](#design-p6qj)), or as a spike when only evidence can settle it, so none is settled silently. A spike becomes a plan task ahead of the work that depends on it. It then writes the PRD, UX and design into their final wording with planned markers, writes new sections as headings that `just fmt` numbers and gives IDs, adds the plan tasks, moves rejected options into Alternatives considered, and deletes the proposal. Reviewers see the docs as they will read, as a diff against main, so approving and merging it is the decision. Nothing rewrites that text after approval except removing the marker when it ships.
 
 Exploration before it can take any number of commits on a branch, and none of it reaches main. A proposal may be merged on its own when it is worth wider discussion. Building takes as many changes as the work needs, and a small feature can put the design review and the code in one change.
 
-### 4.4 The ends of the lifecycle <a id="design-36s7"></a><a id="D15.4"></a>
+### 4.4 Decisions <a id="design-p6qj"></a>
+
+People decide and agents assist, so an agent that needs a decision brings it in a form that is quick to answer well ([PRD: Guided decisions](prd.md#prd-afr3)). It takes one question at a time, since an answer often changes the next question and a batch invites skimming. It researches each just before asking, says what it found, gives the options with their pros and cons, and recommends one when one is better. A recommendation forced where the options are even would sound more certain than the evidence. Research starts in the repo, since most questions turn on the project's own docs, history and code, and reaches the web only when the answer turns on outside facts.
+
+The rule is CONVENTIONS section 20, and the managed block carries a line for it, so an agent asked a question in plain chat follows it too. Neither names a tool, since other agents read `AGENTS.md`. The skills ask with Claude Code's AskUserQuestion tool, which puts the recommended option first and leaves room for any other answer.
+
+`decide` walks a doc's open questions on request. Answers that change the docs go to `design-review`, so a decision still lands as one reviewed change. A fact only the user knows, such as where a project lives, is asked plainly, and approving a diff stays one approval.
+
+### 4.5 The ends of the lifecycle <a id="design-36s7"></a><a id="D15.4"></a>
 
 A release is an annotated tag listing user-visible changes. `release` builds them from the commits' `Changelog:` trailers since the last tag ([Release notes](#design-fs7z)), checks that `docs/user/` covers them, and writes the tag. An incident review is an analysis of what happened, the cause and what changes. Each PRD success criterion says how it is measured, and an outcome review checks the criteria after a release. Its recommendations become ideas or proposals, which closes the loop.
 
@@ -275,6 +283,7 @@ The skills are:
 | `new-project` | Start a project and draft its PRD ([Starting a project](#design-076f)) |
 | `prd`, `design`, `plan`, `proposal`, `analysis`, `user-docs` | Write and update one doc type each |
 | `ux`, `release` | Write the UX doc, and tag a release ([Roles and team size](#design-460p), [The ends of the lifecycle](#design-36s7)) |
+| `decide` | Walk the user through open questions one at a time, with research and a recommendation ([Decisions](#design-p6qj)) |
 | `design-review` | Write a decided change into the docs as planned sections, or reject a proposal ([Design review](#design-vb0a)) |
 | `finish-milestone` | Check docs match a milestone, then remove it from the plan |
 | `implement`, `fix-bug` | Build a task, and fix a bug from a failing test ([The development workflow](#design-xn06)) |
@@ -515,6 +524,7 @@ Unreviewed work isn't part of the state of the process, reading it needs the Git
 
 - **Fold release into finish-milestone.** A release can ship part of a milestone or several, and outcome reviews would lose the event that prompts them.
 - **Evolve in the plugin.** Every user would carry a skill that only edits in a checkout of devkit or a fork.
+- **Open questions in design-review.** It already settles a proposal's questions, so it could settle any doc's. Going through open questions is a task of its own, and a skill named for it is easier to find.
 - **A short refactor skill.** It would trigger on every "clean up" request, for rules the managed block carries in one line.
 
 ### 18.17 The company as a project <a id="design-z0aj"></a><a id="D10.23"></a>

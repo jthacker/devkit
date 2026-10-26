@@ -21,6 +21,7 @@ This project follows the devkit conventions, version {{VERSION}}. Only devkit's 
 - Prefer existing dependencies. A new one that shapes the design is recorded in the design. Commit lock files.
 - Never commit secrets. Local settings go in a gitignored `.env`, documented by a committed `.env.example`.
 - Releases are annotated `v<semver>` tags listing user-visible changes.
+- When a decision is the user's, take each question on its own. Research it in the repo, and on the web when it turns on outside facts. Give the options with pros and cons, and recommend one when one is better. Never settle one silently.
 
 ## Tooling
 

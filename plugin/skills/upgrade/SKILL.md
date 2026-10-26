@@ -15,7 +15,7 @@ Read the `<!-- devkit:begin conventions=N -->` marker in `AGENTS.md`. With no ma
 
 Collect the migrations from N+1 to the current version and work out what each step means here: which files move, which sections change, and what needs the user's judgment.
 
-Check `git status`, and ask before touching docs with uncommitted changes. Show the user a short list of concrete changes and the questions that need answers, and wait for approval. A migration that only replaces the managed files can go ahead without asking.
+Check `git status`, and ask before touching docs with uncommitted changes. Show the user a short list of concrete changes and wait for approval. Take the questions that need answers one at a time, as CONVENTIONS section 20 says. A migration that only replaces the managed files can go ahead without asking.
 
 ## 3. Apply
 

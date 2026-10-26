@@ -65,6 +65,7 @@ A Claude Code plugin that holds conventions, templates and skills in one repo.
 16. **Docs current with the code.** <a id="prd-2c17"></a><a id="R16"></a> A commit holds its code, tests and docs together. A finished milestone leaves no planned markers, and its user docs, UX and design describe what was built.
 17. **Every change traces.** <a id="prd-x3qg"></a><a id="R17"></a> Using IDs and git alone, a reader goes from any requirement, UX or design section to the commits, code and plan tasks that cite it. From any commit or cited code, they find the sections behind it. `just lint` finds citations to sections that don't exist, in docs and code. Reorganizing a doc never breaks a citation.
 18. **One version at a time.** <a id="prd-4e1x"></a> devkit's skills write only to a project on the plugin's conventions version. A project that is behind upgrades first, and a plugin that is behind is updated first. Repos on different versions share one machine, and each says which side to update.
+19. **Guided decisions.** <a id="prd-afr3"></a> When a decision is the user's, the agent takes each question on its own. It says what it found, gives the options' trade-offs and recommends one when one is better. No question is settled without the user.
 
 ## 5. Non-goals <a id="prd-f08m"></a>
 

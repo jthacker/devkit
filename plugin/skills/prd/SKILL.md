@@ -27,4 +27,4 @@ The PRD says what and why: the problem, the users, what good looks like, the req
 3. Say which design and plan sections a change affects.
 4. Never edit a requirement's ID. New ones are numbered items in their area, and `just fmt` gives them IDs. To merge, split or move requirements, use `devkit:restructure`. A decided requirement that isn't built goes through `devkit:design-review`, marked planned.
 
-End by naming, by number, the open questions that most need the user's answer.
+End by naming, by number, the open questions that most need the user's answer, and offer to settle them with `devkit:decide`.
