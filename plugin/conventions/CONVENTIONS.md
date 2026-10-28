@@ -109,7 +109,7 @@ Text users read is stricter. That covers `docs/user/`, the README and every mess
 
 These rules apply to every doc. Section 4.1 adds its limits for text users read.
 
-- One idea per sentence. Split a sentence that joins two claims, and put the main clause first.
+- One idea per sentence. Split a sentence that joins two claims. Put the main clause first.
 - The actor is the subject and the action is the verb. Write "the hook checks the version", not "a check of the version is performed". Avoid opening with "there is" or "it is".
 - Start a sentence with what the reader already knows and end it with what is new.
 - Call each thing by one name. Define a term where it first appears and don't swap in synonyms for variety. Replace an unclear "it" or "this" with its noun.
