@@ -4,6 +4,17 @@ Each version of the conventions gets a section, newest first. The heading is `##
 
 A migration must be safe to run on a project with work in progress. It moves and rewrites docs rather than deleting content, and says so when a step needs the user's judgment.
 
+## v4: Rules for building sentences and paragraphs
+
+The conventions said what to leave out of a sentence but not how to build one, so docs passed the linter and still buried their point. New section 4.2 says how to build sentences and paragraphs in every doc. Each sentence carries one idea, with the actor as its subject. Each thing has one name. Each paragraph opens with its point. The rules draw on Google's technical writing courses and Williams's *Style*. They set no word counts, and no linter checks them.
+
+The managed block gains one sentence carrying the three core rules. `devkit:audit` reads paragraphs changed since the last upgrade against them.
+
+### Migration from v3
+
+1. Nothing to move. Existing docs follow the rules as they are written or edited.
+2. Offer to audit the docs against section 4.2 with `devkit:audit`. Fix only what the user approves.
+
 ## v3: Stricter checks on links and planned sections, and an ideas file
 
 `lint-docs.sh` now fails on a link to an anchor that its Markdown file doesn't define, such as `[Retries](#42-retries)` after fmt renumbered that heading. An anchor is an HTML `id` or `name`, or the slug GitHub gives a heading. Before, it checked only that the file existed, so links to old heading slugs passed `just check` after the v2 upgrade.

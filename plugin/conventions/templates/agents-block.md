@@ -9,7 +9,7 @@ This project follows the devkit conventions, version {{VERSION}}. Only devkit's 
 - Main holds the reviewed state of the whole process. Undecided changes are proposals in `docs/proposals/`. A decided change is one design review: the PRD, UX and design in final wording, unbuilt sections marked `**Planned:** M<n>`, plan tasks added, and the proposal deleted. A planned section is a spec to build, not existing code.
 - Evidence goes in `docs/analyses/` and is never rewritten: spikes, research, incident and outcome reviews. Unscheduled ideas go in `docs/ideas.md`, not the plan.
 - A milestone is done when `docs/user/`, the UX and the design match what was built, its planned markers are gone and its plan file is deleted.
-- Docs describe the current state of the process. Git keeps the history. Write plainly and briefly: no em dashes, marketing, time estimates or real names. Each doc is one file. Past 600 lines, move what belongs elsewhere.
+- Docs describe the current state of the process. Git keeps the history. Write plainly and briefly: no em dashes, marketing, time estimates or real names. Open each paragraph with its point, give each sentence one idea and call each thing by one name. Each doc is one file. Past 600 lines, move what belongs elsewhere.
 - Text users read, in `docs/user/`, the README or the product, uses short sentences that each say one thing, with no colons, em dashes or lists of three. The README sells the project: a summary line, why it is worth using, the fewest steps to start, and links.
 
 ## Workflow

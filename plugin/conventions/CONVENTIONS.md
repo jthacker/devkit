@@ -105,6 +105,18 @@ The marker names a milestone in the plan. `docs/user/` has no markers, since it 
 
 Text users read is stricter. That covers `docs/user/`, the README and every message the product shows. Each sentence is short and says one thing. No colons, no em dashes and no lists of three.
 
+### 4.2 Sentences and paragraphs
+
+These rules apply to every doc. Section 4.1 adds its limits for text users read.
+
+- One idea per sentence. Split a sentence that joins two claims, and put the main clause first.
+- The actor is the subject and the action is the verb. Write "the hook checks the version", not "a check of the version is performed". Avoid opening with "there is" or "it is".
+- Start a sentence with what the reader already knows and end it with what is new.
+- Call each thing by one name. Define a term where it first appears and don't swap in synonyms for variety. Replace an unclear "it" or "this" with its noun.
+- Put a goal or condition before the instruction, as in "To add a section, write a plain heading."
+- A paragraph opens with its point, so a reader who reads only first sentences follows the argument. It covers one topic in a few sentences, and each sentence follows from the one before.
+- A list holds parallel items or steps, numbered when order matters. Its items share one grammatical form, and a sentence introduces it.
+
 ## 5. Size
 
 The PRD, `ux.md` and design are each one file, so an ID's doc name is also its file. An agent loads one section by its ID rather than a whole doc. Past 600 lines, the linter warns about any doc. Move what belongs elsewhere: evidence to an analysis, how-to to `docs/user/`, and long Alternatives considered trimmed. A design that keeps growing may describe a system ready to split into components (section 15).
