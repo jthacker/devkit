@@ -68,6 +68,12 @@ The conventions in [CONVENTIONS.md](../plugin/conventions/CONVENTIONS.md) codify
 
 Analyses hold every kind of evidence: spikes, benchmarks, user research, incident reviews and outcome reviews. Stable IDs tie the docs and code together ([Section IDs](#design-bdk3)). The writing style comes from the user's global preferences, with stricter rules for text users read.
 
+### 2.1 Writing rules <a id="design-cwe4"></a>
+
+**Planned:** M8
+
+The writing rules in CONVENTIONS section 4 draw on Google's technical writing courses and developer documentation style guide and on Williams's *Style*, where those sources agree. Section 4.2 covers how sentences and paragraphs are built: one idea per sentence, the actor as subject, one name per thing and a paragraph that opens with its point. Agents write fluent sentences but bury a paragraph's point, chain claims and drift between terms, and the rules about what to leave out catch none of these. The managed block carries the three rules agents break most. The rules set no word counts, and `audit` reads for them, since no linter can tell whether a paragraph opens with its point ([Other ways to set the writing rules](#design-k4wr)).
+
 ## 3. Document lifecycles <a id="design-01c5"></a><a id="D4"></a>
 
 The key decision is which docs are permanent. Agents treat everything in the repo as current, so a finished proposal or a stale plan item misleads them. Docs therefore hold only the current state of the process, and git holds the history. The one exception is checking off plan tasks while a milestone is in progress. The current state includes what is decided but not built, marked as planned ([Planned sections](#design-5geq)).
@@ -579,6 +585,13 @@ v1 split a doc past 600 lines into chapter files. An ID then names a doc but not
 - **Support every version until it is deprecated.** Every skill and template would branch by version, and every change to them would be tested against each one. Migrations exist to avoid that.
 
 Skills check the version instead ([One version at a time](#design-w6fv)).
+
+### 18.26 Other ways to set the writing rules <a id="design-k4wr"></a>
+
+- **Mechanical checks.** Vale with a published style package adds a binary and a style download to every project, so `just test` would need the network, and flags hundreds of word choices beyond these rules. Lint warnings for long sentences are noisy, since POSIX awk splits Markdown into sentences badly around code spans, links and abbreviations.
+- **A style guide by reference.** The Google guide is too long to load as context, and parts conflict with devkit's rules for user text.
+- **Word and sentence counts.** They are easy to check, but a hard limit invites splitting a sentence at the wrong place.
+- **Rules only in the skills, or a guide copied into each project.** Agents that don't load the plugin read only the managed block, and each copy drifts from the conventions.
 
 ## 19. Open questions <a id="design-b2ea"></a><a id="D11"></a>
 

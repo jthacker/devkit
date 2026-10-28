@@ -4,7 +4,7 @@ The work left to do, in order. Tasks cite the sections they build by ID, and `ju
 
 ## Milestones
 
-None are scheduled.
+1. [M8. Rules for sentences and paragraphs](plan/M8.md): the conventions say how to build sentences and paragraphs, not only what to leave out.
 
 ## Requirement coverage
 
