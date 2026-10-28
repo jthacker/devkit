@@ -49,7 +49,7 @@ flowchart LR
 
 *The skills read the conventions when they run and write the project's docs. The hook compares the version a project records with the current one.*
 
-## 2. The document set <a id="design-80rq"></a><a id="D3"></a>
+## 2. The document set <a id="design-80rq"></a><a id="D3"></a><a id="design-cwe4"></a>
 
 The conventions in [CONVENTIONS.md](../plugin/conventions/CONVENTIONS.md) codify what the existing projects already converged on, and settle the points where they differed, so each doc type has one template and one set of rules ([PRD: One format](prd.md#prd-830w)).
 
@@ -66,13 +66,9 @@ The conventions in [CONVENTIONS.md](../plugin/conventions/CONVENTIONS.md) codify
 | `docs/plan/` | New | One file per milestone, so parallel work doesn't collide in one plan file ([Many people at once](#design-5ndn)) |
 | `docs/ops/` | New | Runbooks for projects that run as a service. Optional. |
 
-Analyses hold every kind of evidence: spikes, benchmarks, user research, incident reviews and outcome reviews. Stable IDs tie the docs and code together ([Section IDs](#design-bdk3)). The writing style comes from the user's global preferences, with stricter rules for text users read.
+Analyses hold every kind of evidence: spikes, benchmarks, user research, incident reviews and outcome reviews. Stable IDs tie the docs and code together ([Section IDs](#design-bdk3)).
 
-### 2.1 Writing rules <a id="design-cwe4"></a>
-
-**Planned:** M8
-
-The writing rules in CONVENTIONS section 4 draw on Google's technical writing courses and developer documentation style guide and on Williams's *Style*, where those sources agree. Section 4.2 covers how sentences and paragraphs are built: one idea per sentence, the actor as subject, one name per thing and a paragraph that opens with its point. Agents write fluent sentences but bury a paragraph's point, chain claims and drift between terms, and the rules about what to leave out catch none of these. The managed block carries the three rules agents break most. The rules set no word counts, and `audit` reads for them, since no linter can tell whether a paragraph opens with its point ([Other ways to set the writing rules](#design-k4wr)).
+The writing rules in CONVENTIONS section 4 draw on Google's technical writing courses and developer documentation style guide and on Williams's *Style*, where those sources agree, with stricter rules for text users read. Section 4.2 covers how sentences and paragraphs are built: one idea per sentence, the actor as subject, one name per thing and a paragraph that opens with its point. Agents write fluent sentences but bury a paragraph's point, chain claims and drift between terms, and the rules about what to leave out catch none of these. The managed block carries the three rules agents break most. The rules set no word counts, and `audit` reads for them, since no linter can tell whether a paragraph opens with its point ([Other ways to set the writing rules](#design-k4wr)).
 
 ## 3. Document lifecycles <a id="design-01c5"></a><a id="D4"></a>
 
