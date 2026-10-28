@@ -68,7 +68,7 @@ The conventions in [CONVENTIONS.md](../plugin/conventions/CONVENTIONS.md) codify
 
 Analyses hold every kind of evidence: spikes, benchmarks, user research, incident reviews and outcome reviews. Stable IDs tie the docs and code together ([Section IDs](#design-bdk3)).
 
-The writing rules in CONVENTIONS section 4 draw on Google's technical writing courses and developer documentation style guide and on Williams's *Style*, where those sources agree, with stricter rules for text users read. Section 4.2 covers how sentences and paragraphs are built: one idea per sentence, the actor as subject, one name per thing and a paragraph that opens with its point. Agents write fluent sentences but bury a paragraph's point, chain claims and drift between terms, and the rules about what to leave out catch none of these. The managed block carries the three rules agents break most. The rules set no word counts, and `audit` reads for them, since no linter can tell whether a paragraph opens with its point ([Other ways to set the writing rules](#design-k4wr)).
+The writing rules in CONVENTIONS section 4 draw on Google's technical writing courses and developer documentation style guide and on Williams's *Style*, where those sources agree. Text users read gets stricter rules. Section 4.2 covers how sentences and paragraphs are built: one idea per sentence, the actor as subject, one name per thing and a paragraph that opens with its point. Agents write fluent sentences but bury a paragraph's point, chain claims and drift between terms. The rules about what to leave out catch none of these. The managed block carries the three rules agents break most. The rules set no word counts. No linter can tell whether a paragraph opens with its point, so `audit` reads for them instead ([Other ways to set the writing rules](#design-k4wr)).
 
 ## 3. Document lifecycles <a id="design-01c5"></a><a id="D4"></a>
 
@@ -584,7 +584,7 @@ Skills check the version instead ([One version at a time](#design-w6fv)).
 
 ### 18.26 Other ways to set the writing rules <a id="design-k4wr"></a>
 
-- **Mechanical checks.** Vale with a published style package adds a binary and a style download to every project, so `just test` would need the network, and flags hundreds of word choices beyond these rules. Lint warnings for long sentences are noisy, since POSIX awk splits Markdown into sentences badly around code spans, links and abbreviations.
+- **Mechanical checks.** Vale with a published style package adds a binary and a style download to every project, so `just test` would need the network. It also flags hundreds of word choices beyond these rules. Lint warnings for long sentences are noisy, since POSIX awk splits Markdown into sentences badly around code spans, links and abbreviations.
 - **A style guide by reference.** The Google guide is too long to load as context, and parts conflict with devkit's rules for user text.
 - **Word and sentence counts.** They are easy to check, but a hard limit invites splitting a sentence at the wrong place.
 - **Rules only in the skills, or a guide copied into each project.** Agents that don't load the plugin read only the managed block, and each copy drifts from the conventions.
